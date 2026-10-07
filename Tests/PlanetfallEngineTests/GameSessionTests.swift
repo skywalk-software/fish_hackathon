@@ -178,6 +178,17 @@ struct GameSessionTests {
         }
         #expect(session.artTags == ["webbing"])
 
+        // The ocean planet swings into view, and stays the backdrop until the pod lands.
+        for _ in 0..<4 where !turns.contains(where: { $0.text.contains("planet swings into view") }) {
+            try await play("wait")
+        }
+        #expect(session.artTags == ["planet", "webbing"])
+        for _ in 0..<15 where !turns.contains(where: { $0.text.contains("lands with a thud") }) {
+            try await play("wait")
+        }
+        #expect(turns.contains { $0.text.contains("lands with a thud") })
+        #expect(session.artTags == ["webbing"])
+
         // Standing up (any way out of the web) drops the webbing art.
         try await play("stand")
         #expect(session.playerHolder == "Escape Pod")

@@ -143,6 +143,7 @@ Rooms can have alternate art for story moments, picked from **tags**:
 | Tag | On when | Off when |
 |---|---|---|
 | `explosion` | "A massive explosion rocks the ship" | The pod clears the ship ("…you see the Feinstein dwindle…") |
+| `planet` | "…a nearby planet swings into view through the port" | The pod lands ("The pod lands with a thud") |
 | `webbing` | You're in the safety web | You leave the web |
 
 For each room, the app tries `Art/Rooms/<room>-<tags>` with the active tags in the order they began, most specific first, then the plain room art:
@@ -152,6 +153,7 @@ For each room, the app tries `Art/Rooms/<room>-<tags>` with the active tags in t
 | Deck Nine after the first explosion | explosion | `deck-nine-explosion.jpg` |
 | In the webbing while the ship is exploding | explosion, webbing | `escape-pod-explosion-webbing.jpg` |
 | In the webbing after launch | webbing | `escape-pod-webbing.jpg` |
+| In the webbing, approaching the planet | planet, webbing | `escape-pod-planet-webbing.jpg` |
 | Out of the webbing | none | `escape-pod.jpg` |
 
 Changing art takes no code: name the image for the room plus its tags. Tags reset when the game restarts, including RESTART typed in the game. One limitation: RESTORE doesn't reset them.

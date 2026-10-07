@@ -14,6 +14,10 @@ public struct StoryEvent: Identifiable, Hashable, Sendable {
         // pod has launched and the ship is behind you.
         StoryEvent(id: "explosion", trigger: "A massive explosion rocks the ship",
                    endedBy: "Through the viewport of the pod you see the Feinstein dwindle"),
+        // After the launch, the planet comes into view through the pod's viewport; it's in
+        // view (or, briefly, behind a polarized viewport) until the pod touches down.
+        StoryEvent(id: "planet", trigger: "a nearby planet swings into view through the port",
+                   endedBy: "The pod lands with a thud"),
     ]
 
     /// Art tags for being inside an object, keyed by the object's name in dfrotz's
