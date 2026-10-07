@@ -33,8 +33,8 @@ public struct VoiceCast: Equatable, Sendable {
         self.characters = characters
     }
 
-    /// Fish voice library picks, plus "arnold" for Blather. Arnold is private to Gaurav's Fish
-    /// account, so other accounts need their own clone in FISH_VOICE_BLATHER; the rest are public.
+    /// Fish voice library picks, plus "arnold" for Blather. Arnold is an unlisted voice in Gaurav's
+    /// Fish account: usable with any API key that has its id, but not listed in Fish's library.
     public static let defaults = VoiceCast(
         narratorVoiceID: "e686ae649ee44f219a108aacba206c1a",  // "calm storyteller male"
         sidekickVoiceID: "fe5b8eaa8b754a5b8d895265def9e5b2",  // "Robot": monotone sci-fi drone

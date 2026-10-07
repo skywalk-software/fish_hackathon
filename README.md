@@ -77,7 +77,7 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 | Veldina | "Measured Storyteller" `8906b5268cae414fb9b8d3da6e84413d` | `FISH_VOICE_VELDINA` |
 | SNARK-9 | "Robot" `fe5b8eaa8b754a5b8d895265def9e5b2` | `FISH_VOICE_SIDEKICK` |
 
-- **Arnold is private to Gaurav's Fish account.** Anyone else needs their own clone in `FISH_VOICE_BLATHER`. The other voices are public, from Fish's voice library.
+- **Arnold is an unlisted voice in Gaurav's Fish account.** Any Fish API key can use it by id (Fish's library doesn't list it), so it works for the whole team. The other voices are public, from Fish's voice library. To use a different Blather voice, set `FISH_VOICE_BLATHER`.
 - **Finding character lines:** `DialogueExtractor` gives a quote to the nearest voiced name in its paragraph (`Blather shouts "…"`, `"…" bellows Blather`). Quotes near "labelled", "reads" or "embossed" are signs, so they stay with the narrator.
 - **Adding a character:** add a `CharacterVoice` (id, the names the game uses for them, Fish voice id) to `VoiceCast.defaults`.
 - **Why SNARK-9 isn't a Fish Agent:** Fish's hosted Agents can take text (`user.message` with `audio: true`). But they need the LiveKit WebRTC SDK, an agent configured in Fish's agent platform, and a session open for the whole game (Fish bills agents at $0.06/min). Their audio would also bypass the shared speaker queue. SNARK-9 already writes the commentary with Claude, so it gets a Fish voice instead.
