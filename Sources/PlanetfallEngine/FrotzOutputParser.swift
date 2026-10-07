@@ -22,6 +22,8 @@ public struct GameTurn: Equatable, Sendable {
     public var status: StatusLine?
     /// How the game is waiting for input after this turn.
     public var prompt: Prompt
+    /// Objects the game moved this turn, from dfrotz's `-o` trace, in order.
+    public var objectEvents: [ObjectEvent] = []
 
     public enum Prompt: Equatable, Sendable {
         /// The normal `>` command prompt.
@@ -30,6 +32,16 @@ public struct GameTurn: Equatable, Sendable {
         /// The question text is the last line of `text`.
         case question
     }
+}
+
+/// A line from dfrotz's `-o` object-movement trace. Names are the objects' short
+/// descriptions, so `.moved` holds "<object> <destination>" unsplit: both can contain
+/// spaces, and only a caller who knows the object names can split them.
+public enum ObjectEvent: Equatable, Sendable {
+    /// `@move_obj Ensign First Class Deck Nine`
+    case moved(String)
+    /// `@remove_obj Ensign First Class`
+    case removed(String)
 }
 
 /// Splits dfrotz's stdout into turns. Feed it raw chunks as they arrive.
@@ -74,22 +86,39 @@ public struct FrotzOutputParser {
 
     static func makeTurn(from raw: String, prompt: GameTurn.Prompt) -> GameTurn {
         var status: StatusLine?
+        var objectEvents: [ObjectEvent] = []
         var kept: [Substring] = []
         for line in raw.split(separator: "\n", omittingEmptySubsequences: false) {
             if let parsed = parseStatusLine(line) {
                 status = parsed
+            } else if let (event, before) = parseObjectEvent(line) {
+                objectEvents.append(event)
+                if !before.isEmpty { kept.append(before) }
             } else {
                 kept.append(line)
             }
         }
         let text = kept.joined(separator: "\n")
             .trimmingCharacters(in: .newlines)
-        return GameTurn(text: text, status: status, prompt: prompt)
+        return GameTurn(text: text, status: status, prompt: prompt, objectEvents: objectEvents)
     }
 
     // Status lines start with a space, then the room name, a wide gap, and "Score: N   Moves: N".
     nonisolated(unsafe) private static let statusPattern =
         /^ (?<location>\S.*?)\s{2,}Score:\s*(?<score>-?\d+)\s+Moves:\s*(?<moves>\d+)\s*$/
+
+    // dfrotz prints trace lines indented by three spaces. They normally sit on their own
+    // line, but we also accept one at the end of a line of game text.
+    nonisolated(unsafe) private static let objectEventPattern =
+        /^(?<before>.*?) {3}@(?<op>move_obj|remove_obj) (?<args>.+)$/
+
+    /// Returns the event plus any game text that preceded it on the same line.
+    static func parseObjectEvent(_ line: Substring) -> (ObjectEvent, Substring)? {
+        guard let match = line.wholeMatch(of: objectEventPattern) else { return nil }
+        let args = String(match.args)
+        let event: ObjectEvent = match.op == "move_obj" ? .moved(args) : .removed(args)
+        return (event, match.before)
+    }
 
     static func parseStatusLine(_ line: Substring) -> StatusLine? {
         guard let match = line.wholeMatch(of: statusPattern),

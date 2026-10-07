@@ -47,4 +47,51 @@ struct GameSessionTests {
         #expect(turns[3].prompt == .command)
         #expect(FileManager.default.fileExists(atPath: saves.appendingPathComponent("planetfall.qzl").path))
     }
+
+    @Test(.enabled(if: GameLocator.dfrotzURL() != nil && GameLocator.storyURL() != nil))
+    func tracksCharactersComingAndGoing() async throws {
+        let saves = FileManager.default.temporaryDirectory
+            .appendingPathComponent("planetfall-tests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: saves) }
+
+        let session = GameSession(dfrotzURL: GameLocator.dfrotzURL()!,
+                                  storyURL: GameLocator.storyURL()!,
+                                  savesDirectory: saves,
+                                  randomSeed: 8)
+        var turnCount = 0
+        session.addObserver { event in
+            if case .turn = event { turnCount += 1 }
+        }
+        try session.start()
+        defer { session.stop() }
+
+        func play(_ command: String) async throws {
+            let target = turnCount + 1
+            session.send(command)
+            for _ in 0..<100 where turnCount < target {
+                try await Task.sleep(for: .milliseconds(20))
+            }
+            try #require(turnCount >= target)
+        }
+        for _ in 0..<100 where turnCount < 1 { try await Task.sleep(for: .milliseconds(20)) }
+        #expect(session.presentCharacters.isEmpty)
+
+        // The game randomly sends Blather, the alien ambassador, or nobody to Deck Nine.
+        // With seed 8, Blather swaggers in on the fourth turn.
+        for _ in 0..<8 where session.presentCharacters.isEmpty {
+            try await play("wait")
+        }
+        #expect(session.presentCharacters.map(\.id) == ["blather"])
+        #expect(session.characterLocations["blather"] == "Deck Nine")
+        // The narration shouldn't contain dfrotz's trace lines.
+        #expect(!session.transcript.contains { entry in
+            if case .narration(_, let text) = entry { text.contains("@move_obj") } else { false }
+        })
+
+        // Leaving the room hides him; he's still on Deck Nine.
+        try await play("up")
+        #expect(session.status?.location == "Gangway")
+        #expect(session.presentCharacters.isEmpty)
+        #expect(session.characterLocations["blather"] == "Deck Nine")
+    }
 }

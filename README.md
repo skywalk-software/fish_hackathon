@@ -58,7 +58,8 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `WAV` | [Sources/PlanetfallEngine/WAV.swift](Sources/PlanetfallEngine/WAV.swift) | Encodes recorded samples as 16-bit mono WAV. |
 | `PushToTalk`, `MicrophoneRecorder` | [Sources/Planetfall/](Sources/Planetfall/) | Hold-⌥ / mic-button recording with AVAudioEngine, then speech-to-text, then `session.send`. |
 | App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history and a mic button. |
-| `RoomArt` | [Sources/Planetfall/RoomArt.swift](Sources/Planetfall/RoomArt.swift) | Finds the illustration for the current room. |
+| `GameCharacter` | [Sources/PlanetfallEngine/GameCharacter.swift](Sources/PlanetfallEngine/GameCharacter.swift) | The game's characters (Blather, Floyd, the ambassador…) and the in-game object names used to track them. |
+| `Artwork` | [Sources/Planetfall/Artwork.swift](Sources/Planetfall/Artwork.swift) | Finds the illustration for a room or character. |
 
 `PlanetfallEngine` has no UI code, so voice features can build on it directly.
 
@@ -67,6 +68,28 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 When you're in a room that has art, the app shows it above the transcript and crossfades between rooms. Rooms without art just show text.
 
 To add art, drop an image into [Art/Rooms/](Art/Rooms/), named after the room as it appears in the status bar: lowercase, with hyphens between words. For example, **Deck Nine** → `deck-nine.jpg` and **Escape Pod** → `escape-pod.png`. JPG, PNG and WebP work, and about 16:9 crops best. No code changes are needed. `swift run` picks images up from the repo, and `build-app.sh` copies them into the app.
+
+## Character portraits
+
+When a character is in the same room as you, their portrait appears in the top-right corner. Several characters can appear at once, side by side. This way room art never has to be drawn both with and without each character.
+
+The app knows where characters are because dfrotz runs with `-o`, which reports every object the game moves (`@move_obj Ensign First Class Deck Nine`). The engine strips those lines from the narration and keeps `session.characterLocations` up to date. A portrait stays up while the character is present, even on turns that don't mention them.
+
+To add a portrait, drop a square image into [Art/NPCs/](Art/NPCs/), named by the character's `id`:
+
+| id | Character | In-game object name |
+|---|---|---|
+| `blather` | Ensign Blather | Ensign First Class |
+| `ambassador` | Alien Ambassador | alien ambassador |
+| `floyd` | Floyd | multiple purpose robot |
+| `rat-ant` | Rat-Ant | rat-like, ant-like man-sized monster |
+| `troll` | Hairy Biped | hairy growling biped |
+| `grue` | Grue | lurking fanged creature |
+| `microbe` | Microbe | microbe |
+
+A head-and-shoulders shot on a plain dark background works best at inset size.
+
+The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession` to get the same game every time. For example, with seed 8, Blather arrives on turn 4.
 
 ## Hooking up voice
 
@@ -91,6 +114,8 @@ session.addObserver { event in
 // Voice input is already wired up: PushToTalk sends each transcript with
 session.send("open the pod")
 ```
+
+`session.presentCharacters` lists who is in the room right now, and `turn.objectEvents` has the raw movements for that turn. Use them to pick a character's voice.
 
 Notes for voice:
 - **Text output**: dfrotz runs 255 columns wide, so paragraphs rarely contain hard line breaks. Lists (like inventory) do keep their newlines. The first turn also includes the title/copyright banner, which you may want to skip.

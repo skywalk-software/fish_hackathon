@@ -47,10 +47,20 @@ public final class GameSession {
     public private(set) var status: StatusLine?
     public private(set) var isAwaitingInput = false
     public private(set) var isRunning = false
+    /// Where each character is (character id -> room name), tracked from dfrotz's
+    /// object-movement trace. Characters not yet seen or removed from play are absent.
+    public private(set) var characterLocations: [String: String] = [:]
+
+    /// Characters in the same room as the player, in `GameCharacter.all` order.
+    public var presentCharacters: [GameCharacter] {
+        guard let here = status?.location else { return [] }
+        return GameCharacter.all.filter { characterLocations[$0.id] == here }
+    }
 
     private let dfrotzURL: URL
     private let storyURL: URL
     private let savesDirectory: URL
+    private let randomSeed: Int?
 
     @ObservationIgnored private var process: Process?
     @ObservationIgnored private var stdin: FileHandle?
@@ -63,10 +73,13 @@ public final class GameSession {
     /// How long output must be quiet before we treat it as a non-`>` prompt.
     private static let questionQuietPeriod: Duration = .milliseconds(300)
 
-    public init(dfrotzURL: URL, storyURL: URL, savesDirectory: URL) {
+    /// `randomSeed` makes the game's random events repeat exactly (useful for tests and
+    /// demos); nil plays a different game each time.
+    public init(dfrotzURL: URL, storyURL: URL, savesDirectory: URL, randomSeed: Int? = nil) {
         self.dfrotzURL = dfrotzURL
         self.storyURL = storyURL
         self.savesDirectory = savesDirectory
+        self.randomSeed = randomSeed
     }
 
     /// Finds dfrotz and the story file in their usual places.
@@ -89,8 +102,11 @@ public final class GameSession {
         let process = Process()
         process.executableURL = dfrotzURL
         // -q quiet startup, -m no MORE prompts, -p plain ASCII, -w wide so the
-        // game rarely hard-wraps (the UI wraps instead).
-        process.arguments = ["-q", "-m", "-p", "-w", "255", storyURL.path]
+        // game rarely hard-wraps (the UI wraps instead), -o trace object movement
+        // so we know where characters are.
+        var arguments = ["-q", "-m", "-p", "-o", "-w", "255"]
+        if let randomSeed { arguments += ["-s", String(randomSeed)] }
+        process.arguments = arguments + [storyURL.path]
         // Save files land here because the game asks for a bare filename.
         process.currentDirectoryURL = savesDirectory
 
@@ -147,6 +163,7 @@ public final class GameSession {
         parser = FrotzOutputParser()
         transcript = []
         status = nil
+        characterLocations = [:]
         isAwaitingInput = false
         isRunning = false
         try start()
@@ -172,6 +189,7 @@ public final class GameSession {
     }
 
     private func deliver(_ turn: GameTurn) {
+        for event in turn.objectEvents { GameCharacter.apply(event, to: &characterLocations) }
         if let newStatus = turn.status { status = newStatus }
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true

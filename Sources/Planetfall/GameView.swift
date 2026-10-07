@@ -13,9 +13,16 @@ struct GameView: View {
     var body: some View {
         VStack(spacing: 0) {
             StatusBar(status: session.status)
-            RoomArtView(location: session.status?.location)
-            Divider()
-            TranscriptView(entries: session.transcript)
+            VStack(spacing: 0) {
+                RoomArtView(location: session.status?.location)
+                Divider()
+                TranscriptView(entries: session.transcript)
+            }
+            // Characters in the room appear as portraits over the top corner, so room
+            // art never has to be drawn with and without each character.
+            .overlay(alignment: .topTrailing) {
+                CharacterInsets(characters: session.presentCharacters)
+            }
             Divider()
             inputBar
         }
@@ -152,7 +159,7 @@ private struct RoomArtView: View {
     let location: String?
 
     var body: some View {
-        let image = location.flatMap(RoomArt.image(for:))
+        let image = location.flatMap(Artwork.room)
         // A fixed-size box with the image as an overlay, so the fill-scaled image
         // gets clipped to the box instead of growing the layout.
         Color.clear
@@ -177,6 +184,52 @@ private struct RoomArtView: View {
             }
             .clipped()
             .animation(.easeInOut(duration: 0.4), value: location)
+    }
+}
+
+/// Portraits of the characters in the room, top-right. Characters without art are skipped.
+private struct CharacterInsets: View {
+    let characters: [GameCharacter]
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            ForEach(characters) { character in
+                if let image = Artwork.character(character.id) {
+                    CharacterPortrait(name: character.name, image: image)
+                        .transition(.scale(scale: 0.85, anchor: .topTrailing).combined(with: .opacity))
+                }
+            }
+        }
+        .padding(16)
+        .animation(.spring(duration: 0.35), value: characters.map(\.id))
+    }
+}
+
+private struct CharacterPortrait: View {
+    let name: String
+    let image: NSImage
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Image(nsImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 150, height: 150)
+                .clipped()
+            Text(name)
+                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .foregroundStyle(Theme.background)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 4)
+                .background(Theme.accent)
+        }
+        .frame(width: 150)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.accent, lineWidth: 2))
+        .shadow(color: .black.opacity(0.6), radius: 10, y: 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(name)
     }
 }
 

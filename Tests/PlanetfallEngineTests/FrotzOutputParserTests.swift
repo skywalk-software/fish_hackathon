@@ -41,4 +41,32 @@ struct FrotzOutputParserTests {
         #expect(FrotzOutputParser.parseStatusLine(line) == StatusLine(location: "Escape Pod", score: -5, moves: 12))
         #expect(FrotzOutputParser.parseStatusLine("You are carrying:") == nil)
     }
+
+    @Test func extractsObjectEventsFromText() {
+        var parser = FrotzOutputParser()
+        let turns = parser.consume("""
+        \(status)
+
+        Time passes...
+           @move_obj Ensign First Class Deck Nine
+
+        Ensign First Class Blather swaggers in.
+        The door slides open.   @remove_obj Ensign First Class
+
+        >
+        """)
+        #expect(turns.count == 1)
+        #expect(turns[0].objectEvents == [.moved("Ensign First Class Deck Nine"), .removed("Ensign First Class")])
+        #expect(turns[0].text == "Time passes...\n\nEnsign First Class Blather swaggers in.\nThe door slides open.")
+    }
+
+    @Test func tracksCharacterLocations() {
+        var locations: [String: String] = [:]
+        GameCharacter.apply(.moved("Ensign First Class Deck Nine"), to: &locations)
+        GameCharacter.apply(.moved("multiple purpose robot Robot Shop"), to: &locations)
+        GameCharacter.apply(.moved("player Gangway"), to: &locations)
+        #expect(locations == ["blather": "Deck Nine", "floyd": "Robot Shop"])
+        GameCharacter.apply(.removed("Ensign First Class"), to: &locations)
+        #expect(locations == ["floyd": "Robot Shop"])
+    }
 }
