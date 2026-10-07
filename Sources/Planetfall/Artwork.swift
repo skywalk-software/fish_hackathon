@@ -17,6 +17,18 @@ enum Artwork {
         image(.room, slug: slug(for: location))
     }
 
+    /// The art for a room at this point in the story: the newest event's variant if there
+    /// is one ("deck-nine-explosion"), otherwise the room's normal art. Returns the slug
+    /// used too, so callers can tell when the picture changes within a room.
+    static func room(_ location: String, events: [String]) -> (slug: String, image: NSImage)? {
+        let base = slug(for: location)
+        for event in events.reversed() {
+            let variant = "\(base)-\(event)"
+            if let image = image(.room, slug: variant) { return (variant, image) }
+        }
+        return image(.room, slug: base).map { (base, $0) }
+    }
+
     static func character(_ id: String) -> NSImage? {
         image(.character, slug: id)
     }

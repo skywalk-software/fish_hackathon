@@ -50,6 +50,8 @@ public final class GameSession {
     /// Where each character is (character id -> room name), tracked from dfrotz's
     /// object-movement trace. Characters not yet seen or removed from play are absent.
     public private(set) var characterLocations: [String: String] = [:]
+    /// Ids of the `StoryEvent`s that have happened this game, oldest first.
+    public private(set) var storyEvents: [String] = []
 
     /// Characters in the same room as the player, in `GameCharacter.all` order.
     public var presentCharacters: [GameCharacter] {
@@ -167,6 +169,7 @@ public final class GameSession {
         transcript = []
         status = nil
         characterLocations = [:]
+        storyEvents = []
         isAwaitingInput = false
         isRunning = false
         try start()
@@ -192,7 +195,16 @@ public final class GameSession {
     }
 
     private func deliver(_ turn: GameTurn) {
+        // A fresh game (including RESTART typed in the game) starts over: forget where
+        // characters were and which story events happened.
+        if turn.text.contains(StoryEvent.gameStartMarker) {
+            characterLocations = [:]
+            storyEvents = []
+        }
         for event in turn.objectEvents { GameCharacter.apply(event, to: &characterLocations) }
+        for event in StoryEvent.triggered(by: turn.text) where !storyEvents.contains(event.id) {
+            storyEvents.append(event.id)
+        }
         if let newStatus = turn.status { status = newStatus }
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true

@@ -94,4 +94,44 @@ struct GameSessionTests {
         #expect(session.presentCharacters.isEmpty)
         #expect(session.characterLocations["blather"] == "Deck Nine")
     }
+
+    @Test(.enabled(if: GameLocator.dfrotzURL() != nil && GameLocator.storyURL() != nil))
+    func tracksTheExplosionAndForgetsItOnRestart() async throws {
+        let saves = FileManager.default.temporaryDirectory
+            .appendingPathComponent("planetfall-tests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: saves) }
+
+        let session = GameSession(dfrotzURL: GameLocator.dfrotzURL()!,
+                                  storyURL: GameLocator.storyURL()!,
+                                  savesDirectory: saves,
+                                  randomSeed: 8)
+        var turnCount = 0
+        session.addObserver { event in
+            if case .turn = event { turnCount += 1 }
+        }
+        try session.start()
+        defer { session.stop() }
+
+        func play(_ command: String) async throws {
+            let target = turnCount + 1
+            session.send(command)
+            for _ in 0..<100 where turnCount < target {
+                try await Task.sleep(for: .milliseconds(20))
+            }
+            try #require(turnCount >= target)
+        }
+        for _ in 0..<100 where turnCount < 1 { try await Task.sleep(for: .milliseconds(20)) }
+
+        // With seed 8 the Feinstein starts exploding on the ninth turn.
+        for _ in 0..<8 { try await play("wait") }
+        #expect(session.storyEvents.isEmpty)
+        try await play("wait")
+        #expect(session.storyEvents == ["explosion"])
+
+        // RESTART typed in the game asks to confirm, then prints the title banner again.
+        try await play("restart")
+        try await play("y")
+        #expect(session.storyEvents.isEmpty)
+        #expect(session.characterLocations.isEmpty)
+    }
 }

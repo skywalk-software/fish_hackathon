@@ -18,7 +18,7 @@ struct GameView: View {
         VStack(spacing: 0) {
             StatusBar(status: session.status)
             VStack(spacing: 0) {
-                RoomArtView(location: session.status?.location)
+                RoomArtView(location: session.status?.location, storyEvents: session.storyEvents)
                 Divider()
                 TranscriptTextView(entries: session.transcript)
             }
@@ -185,9 +185,11 @@ private struct StatusBar: View {
 /// and collapses entirely in rooms without art.
 private struct RoomArtView: View {
     let location: String?
+    let storyEvents: [String]
 
     var body: some View {
-        let image = location.flatMap(Artwork.room)
+        let art = location.flatMap { Artwork.room($0, events: storyEvents) }
+        let image = art?.image
         // A fixed-size box with the image as an overlay, so the fill-scaled image
         // gets clipped to the box instead of growing the layout.
         Color.clear
@@ -199,7 +201,8 @@ private struct RoomArtView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .accessibilityLabel(location)
-                        .id(location)
+                        // Keyed by the art shown, so a story event crossfades the room too.
+                        .id(art?.slug)
                         .transition(.opacity)
                 }
             }
@@ -211,7 +214,7 @@ private struct RoomArtView: View {
                 }
             }
             .clipped()
-            .animation(.easeInOut(duration: 0.4), value: location)
+            .animation(.easeInOut(duration: 0.4), value: art?.slug)
     }
 }
 

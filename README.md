@@ -115,6 +115,18 @@ When you're in a room that has art, the app shows it above the transcript and cr
 
 To add art, drop an image into [Art/Rooms/](Art/Rooms/), named after the room as it appears in the status bar: lowercase, with hyphens between words. For example, **Deck Nine** → `deck-nine.jpg` and **Escape Pod** → `escape-pod.png`. JPG, PNG and WebP work, and about 16:9 crops best. No code changes are needed. `swift run` picks images up from the repo, and `build-app.sh` copies them into the app.
 
+### Art that changes with the story
+
+Some moments change how rooms look. When the game prints a story event's trigger text, that event stays active for the rest of the game, and any room with an `Art/Rooms/<room>-<event>` image switches to it (crossfading if you're in that room). For example, after "A massive explosion rocks the ship", Deck Nine shows `deck-nine-explosion.jpg`. Rooms without an event version keep their normal art.
+
+Events are listed in [Sources/PlanetfallEngine/StoryEvent.swift](Sources/PlanetfallEngine/StoryEvent.swift):
+
+| Event id | Triggered by | Art |
+|---|---|---|
+| `explosion` | "A massive explosion rocks the ship" | `deck-nine-explosion.jpg` |
+
+To add a moment, add a `StoryEvent` with a sentence the game prints exactly once at that point, then drop in `<room>-<id>` images. Events reset when the game restarts, including RESTART typed in the game. One limitation: RESTORE doesn't reset them, so restoring a save from before the explosion keeps the explosion art.
+
 ## Character portraits
 
 When a character is in the same room as you, their portrait appears in the top-right corner. Several characters can appear at once, side by side. Click a portrait to see it close up, filling the window; close it with the ✕ or Escape. This way room art never has to be drawn both with and without each character.
