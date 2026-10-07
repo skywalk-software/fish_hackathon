@@ -145,7 +145,7 @@ For each room, the app tries `Art/Rooms/<room>-<tags>` with the active tags in t
 | Moment | Tags | Art used |
 |---|---|---|
 | Deck Nine after the first explosion | explosion | `deck-nine-explosion.jpg` |
-| In the webbing while the ship is exploding | explosion, webbing | `escape-pod-explosion-webbing.jpg` if present, else `escape-pod-webbing.jpg` |
+| In the webbing while the ship is exploding | explosion, webbing | `escape-pod-explosion-webbing.jpg` |
 | In the webbing after launch | webbing | `escape-pod-webbing.jpg` |
 | Out of the webbing | none | `escape-pod.jpg` |
 
