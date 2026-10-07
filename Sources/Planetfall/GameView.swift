@@ -40,7 +40,8 @@ struct GameView: View {
         .animation(.easeInOut(duration: 0.25), value: closeup)
         .onAppear {
             inputFocused = true
-            pushToTalk.activate(canListen: { session.isRunning }, onTranscript: sendVoiceCommand)
+            pushToTalk.activate(canListen: { session.isRunning }, context: { session.commandContext() },
+                                onCommand: sendVoiceCommand)
         }
         .onDisappear { pushToTalk.deactivate() }
     }
@@ -72,6 +73,7 @@ struct GameView: View {
         switch pushToTalk.phase {
         case .listening: return "Listening… release to send"
         case .transcribing: return "Transcribing…"
+        case .interpreting: return "Interpreting…"
         case .idle: return pushToTalk.notice ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
         }
     }
@@ -117,7 +119,7 @@ private struct MicButton: View {
             switch pushToTalk.phase {
             case .listening:
                 Image(systemName: "mic.fill").foregroundStyle(Theme.accent)
-            case .transcribing:
+            case .transcribing, .interpreting:
                 ProgressView().controlSize(.small)
             case .idle:
                 Image(systemName: "mic").foregroundStyle(isEnabled ? Theme.text : Theme.dim.opacity(0.5))

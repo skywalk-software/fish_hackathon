@@ -3,12 +3,13 @@ import AVFoundation
 import PlanetfallEngine
 
 /// Hold-to-talk voice commands. While ⌥ (or the mic button) is held, the microphone records;
-/// on release the clip goes to Fish Audio speech-to-text and the transcript is handed back.
+/// on release the clip goes to Fish Audio speech-to-text, Claude turns the transcript into a
+/// parser command (when an Anthropic key is set), and the command is handed back.
 @MainActor
 @Observable
 final class PushToTalk {
     enum Phase: Equatable {
-        case idle, listening, transcribing
+        case idle, listening, transcribing, interpreting
     }
 
     private(set) var phase: Phase = .idle
@@ -18,9 +19,12 @@ final class PushToTalk {
     let unavailableReason: String?
 
     @ObservationIgnored private let speechToText: FishSpeechToText?
+    /// Nil without ANTHROPIC_API_KEY; transcripts then go to the game as heard.
+    @ObservationIgnored private let interpreter: CommandInterpreter?
     @ObservationIgnored private let recorder = MicrophoneRecorder()
     @ObservationIgnored private var canListen: () -> Bool = { false }
-    @ObservationIgnored private var onTranscript: (String) -> Void = { _ in }
+    @ObservationIgnored private var context: () -> CommandContext = { CommandContext(location: nil, recentOutput: "") }
+    @ObservationIgnored private var onCommand: (String) -> Void = { _ in }
     @ObservationIgnored private var keyMonitor: Any?
     @ObservationIgnored private var optionKeyHeld = false
 
@@ -37,12 +41,16 @@ final class PushToTalk {
             speechToText = nil
             unavailableReason = "Voice input is off. Add FISH_API_KEY to \(FishAPIKey.envFileURL.path)."
         }
+        interpreter = AnthropicAPIKey.load().map { CommandInterpreter(apiKey: $0) }
     }
 
-    /// Starts listening for ⌥ and routes transcripts to `onTranscript`.
-    func activate(canListen: @escaping () -> Bool, onTranscript: @escaping (String) -> Void) {
+    /// Starts listening for ⌥ and routes commands to `onCommand`. `context` describes the game
+    /// at the moment the player finishes speaking.
+    func activate(canListen: @escaping () -> Bool, context: @escaping () -> CommandContext,
+                  onCommand: @escaping (String) -> Void) {
         self.canListen = canListen
-        self.onTranscript = onTranscript
+        self.context = context
+        self.onCommand = onCommand
         guard keyMonitor == nil else { return }
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: [.flagsChanged, .keyDown]) { [weak self] event in
             MainActor.assumeIsolated { self?.handleKey(event) }
@@ -95,18 +103,40 @@ final class PushToTalk {
         }
         phase = .transcribing
         let wav = WAV.encode(samples: recording.samples, sampleRate: recording.sampleRate)
+        let context = self.context()
         Task {
             do {
-                let text = try await speechToText.transcribe(wav: wav)
-                if text.isEmpty {
+                let heard = try await speechToText.transcribe(wav: wav)
+                if heard.isEmpty {
                     notice = "Didn't catch that. Hold ⌥ and try again."
-                } else {
-                    onTranscript(text)
+                } else if let command = await interpret(heard, context: context) {
+                    onCommand(command)
                 }
             } catch {
                 notice = error.localizedDescription
             }
             phase = .idle
+        }
+    }
+
+    /// Asks Claude for the parser command the player meant. Returns nil when they weren't giving
+    /// the game a command. If Claude can't be reached, sends what was heard rather than nothing.
+    private func interpret(_ heard: String, context: CommandContext) async -> String? {
+        guard let interpreter else { return heard }
+        phase = .interpreting
+        do {
+            let command = try await interpreter.interpret(heard, context: context)
+            if command.isEmpty {
+                notice = "That didn't sound like a command: “\(heard)”"
+                return nil
+            }
+            if command.caseInsensitiveCompare(heard) != .orderedSame {
+                notice = "Heard “\(heard)”"
+            }
+            return command
+        } catch {
+            notice = "Sent as heard. Command cleanup failed: \(error.localizedDescription)"
+            return heard
         }
     }
 

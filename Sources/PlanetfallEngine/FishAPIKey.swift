@@ -12,20 +12,37 @@ public enum FishAPIKey {
     }
 
     static func load(environment: [String: String], envFile: URL) -> String? {
-        if let key = nonEmpty(environment["FISH_API_KEY"]) { return key }
-        guard let contents = try? String(contentsOf: envFile, encoding: .utf8) else { return nil }
-        return nonEmpty(DotEnv.parse(contents)["FISH_API_KEY"])
+        DotEnv.value(for: "FISH_API_KEY", environment: environment, envFile: envFile)
+    }
+}
+
+/// Finds the Anthropic API key used to clean up voice commands with Claude: `ANTHROPIC_API_KEY`
+/// in the environment, then the same `.env` file.
+public enum AnthropicAPIKey {
+    public static func load() -> String? {
+        load(environment: ProcessInfo.processInfo.environment, envFile: FishAPIKey.envFileURL)
     }
 
-    private static func nonEmpty(_ value: String?) -> String? {
-        guard let value = value?.trimmingCharacters(in: .whitespaces), !value.isEmpty else { return nil }
-        return value
+    static func load(environment: [String: String], envFile: URL) -> String? {
+        DotEnv.value(for: "ANTHROPIC_API_KEY", environment: environment, envFile: envFile)
     }
 }
 
 /// Minimal `.env` parser: `KEY=value` lines, `#` comments, an optional `export ` prefix, and
 /// optional single or double quotes around the value.
 enum DotEnv {
+    /// `name` from the environment if it's set and non-blank, otherwise from `envFile`.
+    static func value(for name: String, environment: [String: String], envFile: URL) -> String? {
+        if let value = nonEmpty(environment[name]) { return value }
+        guard let contents = try? String(contentsOf: envFile, encoding: .utf8) else { return nil }
+        return nonEmpty(parse(contents)[name])
+    }
+
+    private static func nonEmpty(_ value: String?) -> String? {
+        guard let value = value?.trimmingCharacters(in: .whitespaces), !value.isEmpty else { return nil }
+        return value
+    }
+
     static func parse(_ contents: String) -> [String: String] {
         var values: [String: String] = [:]
         for rawLine in contents.split(whereSeparator: \.isNewline) {
