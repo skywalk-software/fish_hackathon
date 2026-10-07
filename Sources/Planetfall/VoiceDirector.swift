@@ -4,6 +4,8 @@ import PlanetfallEngine
 /// Gives the game its voices, all through Fish Audio TTS and one shared speaker so nobody talks
 /// over anybody. After each action:
 /// 0. story sound effects play first (the explosion that starts the Feinstein blowing up),
+///    and from then on the red alert (siren and rumble) loops quietly underneath until the ship
+///    is gone, the player dies, or the game restarts,
 /// 1. the narrator reads Claude's retelling of the scene (character lines left out),
 /// 2. each character speaks their own lines (Blather as "arnold", Floyd, Veldina),
 /// 3. SNARK-9 delivers its commentary when its quip arrives.
@@ -17,7 +19,12 @@ final class VoiceDirector {
     var narratorEnabled: Bool { didSet { settingChanged(narratorEnabled, key: Self.narratorKey) } }
     var charactersEnabled: Bool { didSet { settingChanged(charactersEnabled, key: Self.charactersKey) } }
     var sidekickEnabled: Bool { didSet { settingChanged(sidekickEnabled, key: Self.sidekickKey) } }
-    var effectsEnabled: Bool { didSet { settingChanged(effectsEnabled, key: Self.effectsKey) } }
+    var effectsEnabled: Bool {
+        didSet {
+            settingChanged(effectsEnabled, key: Self.effectsKey)
+            updateAlert()
+        }
+    }
     /// The narrator needs an Anthropic key; SNARK-9's voice needs SNARK-9.
     let hasNarrator: Bool
     let hasSidekick: Bool
@@ -59,6 +66,11 @@ final class VoiceDirector {
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var generation = 0
     @ObservationIgnored private var lastCommand: String?
+    /// The red alert's loop, separate from the speech queue so commands don't silence it.
+    @ObservationIgnored private let alertPlayer = LoopPlayer(sampleRate: FishTextToSpeech.sampleRate)
+    @ObservationIgnored private var alertSounding = false
+    @ObservationIgnored private var isListening = false
+    @ObservationIgnored private var alertFade: Task<Void, Never>?
     @ObservationIgnored private var previousNarration: [String] = []
 
     private static let narratorKey = "narratorVoiceEnabled"
@@ -66,6 +78,8 @@ final class VoiceDirector {
     private static let sidekickKey = "sidekickVoiceEnabled"
     private static let effectsKey = "soundEffectsEnabled"
     private static let maxPreviousNarration = 3
+    /// Under the voices, so they stay clear.
+    private static let alertVolume: Float = 0.35
 
     /// Nil without a Fish API key. The narrator also needs an Anthropic key.
     static func makeDefault(session: GameSession, sidekick: Sidekick?) -> VoiceDirector? {
@@ -100,6 +114,8 @@ final class VoiceDirector {
                 self.stop()
             case .ended:
                 self.stop()
+                self.alertSounding = false
+                self.updateAlert()
             }
         }
         sidekick?.onLineFinished { [weak self] line in self?.sidekickSaid(line) }
@@ -122,6 +138,44 @@ final class VoiceDirector {
         stop()
         lastCommand = nil
         previousNarration = []
+        alertSounding = false
+        alertFade?.cancel()
+        alertPlayer.stop()
+    }
+
+    /// Push-to-talk is recording: duck the red alert so the microphone doesn't hear it.
+    func setListening(_ listening: Bool) {
+        isListening = listening
+        updateAlert()
+    }
+
+    /// Starts, fades, ducks, or stops the red alert to match the game and settings.
+    private func updateAlert(startDelay: Double = 0) {
+        let audible = alertSounding && effectsEnabled
+        let target: Float = audible && !isListening ? Self.alertVolume : 0
+        if audible, !alertPlayer.isPlaying {
+            alertPlayer.volume = 0
+            alertPlayer.play(RedAlert.loop(sampleRate: FishTextToSpeech.sampleRate))
+        }
+        guard alertPlayer.isPlaying else { return }
+        // Fade in slowly as it starts, duck quickly for the microphone, fade out when it's over.
+        let duration = !audible ? 1.5 : target == 0 ? 0.15 : startDelay > 0 ? 2.0 : 0.4
+        fadeAlert(to: target, over: duration, after: startDelay, thenStop: !audible)
+    }
+
+    private func fadeAlert(to target: Float, over duration: Double, after delay: Double, thenStop: Bool) {
+        alertFade?.cancel()
+        alertFade = Task { [alertPlayer] in
+            if delay > 0 { try? await Task.sleep(for: .seconds(delay)) }
+            let start = alertPlayer.volume
+            let steps = max(1, Int(duration / 0.05))
+            for step in 1...steps {
+                guard !Task.isCancelled else { return }
+                alertPlayer.volume = start + (target - start) * Float(step) / Float(steps)
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+            if thenStop, !Task.isCancelled { alertPlayer.stop() }
+        }
     }
 
     private func settingChanged(_ isOn: Bool, key: String) {
@@ -132,6 +186,12 @@ final class VoiceDirector {
     // MARK: - Casting each turn
 
     private func turnArrived(_ turn: GameTurn) {
+        let sounding = RedAlert.isSounding(after: turn.text, wasSounding: alertSounding)
+        if sounding != alertSounding {
+            alertSounding = sounding
+            // Let the explosion hit first, then bring the siren up under it.
+            updateAlert(startDelay: sounding ? 1.0 : 0)
+        }
         // Effects go to the front of the queue, so they play before anything else this turn.
         if effectsEnabled {
             for effect in SoundEffect.triggered(by: turn.text).reversed() { enqueue(.effect(effect), first: true) }

@@ -55,6 +55,7 @@ struct GameView: View {
         // Don't let the microphone hear the game talking.
         .onChange(of: pushToTalk.phase) { _, phase in
             if phase == .listening { voices?.stop() }
+            voices?.setListening(phase == .listening)
         }
     }
 

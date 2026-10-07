@@ -63,9 +63,13 @@ ANTHROPIC_API_KEY=your-anthropic-key   # optional: Claude command cleanup
 Everything you hear goes through Fish Audio text-to-speech (`POST /v1/tts`, model `s2.1-pro-free`, raw PCM streamed with latency `balanced`), except sound effects. All voices share one speaker queue, so nobody talks over anybody. After each action you hear these parts, in order:
 
 0. **Sound effects:** story moments play their sound before anything else.
-   - When the Feinstein starts blowing up on Deck Nine ("A massive explosion rocks the ship", the `explosion` story event), a 3.2 s explosion plays first, and the narrator starts once it has died away.
-   - The explosion is synthesized in code (`SoundEffect`): a crack, a blast that darkens as it fades, a sinking sub-bass rumble, and debris. So there's no audio file or license, and it sounds the same every time.
-   - To hear it, launch with `PLANETFALL_SEED=8` and `wait` nine times.
+   - When the Feinstein starts blowing up on Deck Nine ("A massive explosion rocks the ship", the `explosion` story event), a 6.5 s explosion plays first, and the narrator starts once it has died away.
+   - The explosion is synthesized in code (`SoundEffect`): a main blast and two aftershocks as the hull gives way, each a crack plus a roar that darkens as it fades. Under them, a deep rumble sinks to 25 Hz and holds for several seconds, with debris crackling down for the first four. So there's no audio file or license, and it sounds the same every time.
+   - **Red alert:** from that explosion on, an emergency siren whoops over a deep hull rumble and distant blasts.
+     - It loops quietly under the voices: it fades in a second into the explosion, and ducks while push-to-talk is listening.
+     - It stops when the danger is over: you escape in the pod and watch the Feinstein blow apart, you die, or the game restarts.
+     - It's synthesized too (`RedAlert`), as a seamless 6 s loop.
+   - To hear it, launch with `PLANETFALL_SEED=8` and `wait` nine times. Then `west` into the escape pod and `wait` three times to escape, or keep waiting to go down with the ship.
 
 1. **Narrator:** Claude (`claude-opus-5-5`, effort `low`, streamed) retells what the game printed as a sentence or two about the surroundings and what changed.
    - Each sentence goes to Fish as soon as it's written. The first one is heard about 2 s after the text appears.
@@ -107,6 +111,7 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `FishAPIKey`, `AnthropicAPIKey` | [Sources/PlanetfallEngine/FishAPIKey.swift](Sources/PlanetfallEngine/FishAPIKey.swift) | Load `FISH_API_KEY` / `ANTHROPIC_API_KEY` from the environment, then from `.env`. |
 | `FishSpeechToText` | [Sources/PlanetfallEngine/FishSpeechToText.swift](Sources/PlanetfallEngine/FishSpeechToText.swift) | Uploads a WAV to Fish `POST /v1/asr` and returns a clean command (speaker markers and cues removed). |
 | `SoundEffect` | [Sources/PlanetfallEngine/SoundEffect.swift](Sources/PlanetfallEngine/SoundEffect.swift) | Synthesizes story sound effects (the Deck Nine explosion) and picks the ones a turn's text triggers. |
+| `RedAlert`, `LoopPlayer` | [Sources/PlanetfallEngine/RedAlert.swift](Sources/PlanetfallEngine/RedAlert.swift) | The siren-and-rumble loop that plays while the Feinstein is blowing up, and when it starts and stops. |
 | `GameVocabulary` | [Sources/PlanetfallEngine/GameVocabulary.swift](Sources/PlanetfallEngine/GameVocabulary.swift) | Reads the parser's dictionary from the story file and checks that every word of a command is one the game knows. |
 | `CommandInterpreter` | [Sources/PlanetfallEngine/CommandInterpreter.swift](Sources/PlanetfallEngine/CommandInterpreter.swift) | Sends what was heard, plus the current room and recent output (`GameSession.commandContext()`), to Claude and returns one parser command. |
 | `VoiceCast`, `DialogueExtractor` | [Sources/PlanetfallEngine/CharacterVoice.swift](Sources/PlanetfallEngine/CharacterVoice.swift) | Which Fish voice each role uses, and splitting a turn into narration and character lines (with delivery tags). |
