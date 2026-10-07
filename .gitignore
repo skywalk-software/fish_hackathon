@@ -4,3 +4,6 @@
 build/
 *.xcodeproj/
 Story/*.z3
+
+# Secrets (Fish Audio API key)
+.env

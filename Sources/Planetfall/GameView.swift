@@ -7,6 +7,7 @@ struct GameView: View {
     @State private var input = ""
     @State private var history: [String] = []
     @State private var historyIndex: Int?
+    @State private var pushToTalk = PushToTalk()
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -19,7 +20,11 @@ struct GameView: View {
             inputBar
         }
         .background(Theme.background)
-        .onAppear { inputFocused = true }
+        .onAppear {
+            inputFocused = true
+            pushToTalk.activate(canListen: { session.isRunning }, onTranscript: sendVoiceCommand)
+        }
+        .onDisappear { pushToTalk.deactivate() }
     }
 
     private var inputBar: some View {
@@ -27,7 +32,7 @@ struct GameView: View {
             Text(">")
                 .foregroundStyle(Theme.accent)
             TextField(text: $input) {
-                Text(session.isRunning ? "What next?" : "The game has ended").foregroundStyle(Theme.dim)
+                Text(placeholder).foregroundStyle(Theme.dim)
             }
                 .textFieldStyle(.plain)
                 .focused($inputFocused)
@@ -35,11 +40,28 @@ struct GameView: View {
                 .onSubmit(submit)
                 .onKeyPress(.upArrow) { recallHistory(-1) }
                 .onKeyPress(.downArrow) { recallHistory(1) }
+            MicButton(pushToTalk: pushToTalk)
+                .disabled(!session.isRunning || pushToTalk.unavailableReason != nil)
         }
         .font(Theme.font)
         .foregroundStyle(Theme.text)
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+    }
+
+    private var placeholder: String {
+        guard session.isRunning else { return "The game has ended" }
+        switch pushToTalk.phase {
+        case .listening: return "Listening… release to send"
+        case .transcribing: return "Transcribing…"
+        case .idle: return pushToTalk.notice ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
+        }
+    }
+
+    private func sendVoiceCommand(_ command: String) {
+        session.send(command)
+        history.append(command)
+        historyIndex = nil
     }
 
     private func submit() {
@@ -63,6 +85,42 @@ struct GameView: View {
             input = history[historyIndex!]
         }
         return .handled
+    }
+}
+
+/// Hold to talk, same as holding ⌥.
+private struct MicButton: View {
+    let pushToTalk: PushToTalk
+    @State private var pressing = false
+    @Environment(\.isEnabled) private var isEnabled
+
+    var body: some View {
+        Group {
+            switch pushToTalk.phase {
+            case .listening:
+                Image(systemName: "mic.fill").foregroundStyle(Theme.accent)
+            case .transcribing:
+                ProgressView().controlSize(.small)
+            case .idle:
+                Image(systemName: "mic").foregroundStyle(isEnabled ? Theme.text : Theme.dim.opacity(0.5))
+            }
+        }
+        .frame(width: 22, height: 22)
+        .contentShape(Rectangle())
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    guard isEnabled, !pressing else { return }
+                    pressing = true
+                    pushToTalk.begin()
+                }
+                .onEnded { _ in
+                    pressing = false
+                    pushToTalk.end()
+                }
+        )
+        .help(pushToTalk.unavailableReason ?? "Hold to speak a command (or hold ⌥)")
+        .accessibilityLabel("Push to talk")
     }
 }
 

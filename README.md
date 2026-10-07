@@ -20,6 +20,30 @@ Run the tests with `swift test`. One test plays real turns through dfrotz.
 
 Save files go in `~/Library/Application Support/Planetfall/Saves`. Restart the game with ⇧⌘R.
 
+## Voice commands (push-to-talk)
+
+**Setup:** put your Fish Audio key in `.env` at the repo root. Get one at https://fish.audio/app/api-keys.
+
+```sh
+FISH_API_KEY=your-key-here
+```
+
+- `.env` is gitignored, so never commit it.
+- A `FISH_API_KEY` environment variable overrides the file.
+- Without a key, the game still runs, but the mic button stays disabled.
+
+**Using it:**
+- **Hold ⌥ (Option)**, or hold the mic button next to the command line, and speak a command. Release to send.
+- The clip goes to Fish speech-to-text (`POST /v1/asr`, model `transcribe-1-pro`), and the text is sent to the game as if you had typed it. It's also added to the ↑/↓ history.
+- A short "go north" took about 0.1–0.3 s round trip in testing.
+
+**Notes:**
+- **Microphone permission:** the first time you press ⌥, macOS asks for microphone access. With `swift run`, the prompt names Terminal (or whichever app launched it). The built app asks for itself.
+- **Accidental presses:** holds under 0.3 s are ignored, and so is silence, so it doesn't spend API calls. Pressing another key while holding ⌥ (to type a special character or use a shortcut) cancels the recording.
+- **Why push-to-talk:** Fish's speech-to-text has no streaming endpoint. It transcribes one finished clip per request, so you have to mark when you're done talking.
+- **Cost:** speech-to-text costs $0.36 per audio hour.
+- **Live test:** run the opt-in test against the real API with `FISH_LIVE_TESTS=1 swift test --filter transcribesRealSpeech`.
+
 ## How it works
 
 We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39), which runs on a Z-machine interpreter. The app runs **dfrotz** in the background and passes text in and out over pipes.
@@ -29,7 +53,11 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `FrotzOutputParser` | [Sources/PlanetfallEngine/FrotzOutputParser.swift](Sources/PlanetfallEngine/FrotzOutputParser.swift) | Splits dfrotz output into turns at the `>` prompt and pulls out the status line (room, score, moves). |
 | `GameSession` | [Sources/PlanetfallEngine/GameSession.swift](Sources/PlanetfallEngine/GameSession.swift) | Owns the dfrotz process. Exposes observable state (`transcript`, `status`, `isAwaitingInput`) and an event stream. |
 | `GameLocator` | [Sources/PlanetfallEngine/GameLocator.swift](Sources/PlanetfallEngine/GameLocator.swift) | Finds dfrotz and the story file. Override with `DFROTZ_PATH` / `PLANETFALL_STORY`. |
-| App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history. |
+| `FishAPIKey` | [Sources/PlanetfallEngine/FishAPIKey.swift](Sources/PlanetfallEngine/FishAPIKey.swift) | Loads `FISH_API_KEY` from the environment, then from `.env`. |
+| `FishSpeechToText` | [Sources/PlanetfallEngine/FishSpeechToText.swift](Sources/PlanetfallEngine/FishSpeechToText.swift) | Uploads a WAV to Fish `POST /v1/asr` and returns a clean command (speaker markers and cues removed). |
+| `WAV` | [Sources/PlanetfallEngine/WAV.swift](Sources/PlanetfallEngine/WAV.swift) | Encodes recorded samples as 16-bit mono WAV. |
+| `PushToTalk`, `MicrophoneRecorder` | [Sources/Planetfall/](Sources/Planetfall/) | Hold-⌥ / mic-button recording with AVAudioEngine, then speech-to-text, then `session.send`. |
+| App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history and a mic button. |
 | `RoomArt` | [Sources/Planetfall/RoomArt.swift](Sources/Planetfall/RoomArt.swift) | Finds the illustration for the current room. |
 
 `PlanetfallEngine` has no UI code, so voice features can build on it directly.
@@ -60,7 +88,7 @@ session.addObserver { event in
     }
 }
 
-// Voice input: once speech is transcribed, send it like typed input.
+// Voice input is already wired up: PushToTalk sends each transcript with
 session.send("open the pod")
 ```
 
@@ -68,7 +96,7 @@ Notes for voice:
 - **Text output**: dfrotz runs 255 columns wide, so paragraphs rarely contain hard line breaks. Lists (like inventory) do keep their newlines. The first turn also includes the title/copyright banner, which you may want to skip.
 - **Floyd** speaks in quotes after "Floyd says" and similar phrases, so a regex is probably enough to give him his own voice.
 - **Fish API**: see section 7.2 and section 11 of the deep dive. `s2.1-pro-free` costs $0 until 2026-11-30. Fish has no Swift SDK, so call `POST /v1/tts` directly with `URLSession`, and play the audio with `AVAudioPlayer` or `AVAudioEngine`.
-- **Speech input**: Fish's cloud ASR is batch-only. Apple's on-device speech recognition (`Speech` framework) streams, is free, and works offline.
+- **Speech input**: already done with Fish speech-to-text push-to-talk (see [Voice commands](#voice-commands-push-to-talk)). If you add TTS narration, stop playback when a `.command` event arrives, so the narrator doesn't talk over the player.
 
 ## Licensing
 

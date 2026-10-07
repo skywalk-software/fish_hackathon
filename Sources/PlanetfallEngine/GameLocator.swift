@@ -18,12 +18,14 @@ public enum GameLocator {
         if let resources = Bundle.main.resourceURL {
             candidates.append(resources.appendingPathComponent("planetfall.z3").path)
         }
-        // This file is Sources/PlanetfallEngine/GameLocator.swift, so the repo root is three levels up.
-        let repoRoot = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         candidates.append(repoRoot.appendingPathComponent("Story/planetfall.z3").path)
         return firstExisting(candidates, executable: false)
     }
+
+    /// The source checkout, for `swift run` and Xcode builds.
+    /// This file is Sources/PlanetfallEngine/GameLocator.swift, so the repo root is three levels up.
+    static let repoRoot = URL(fileURLWithPath: #filePath)
+        .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
 
     /// ~/Library/Application Support/Planetfall/Saves
     public static func savesDirectory() -> URL {

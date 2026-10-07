@@ -25,6 +25,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
   <key>CFBundleShortVersionString</key><string>0.1</string>
   <key>LSMinimumSystemVersion</key><string>14.0</string>
   <key>NSHighResolutionCapable</key><true/>
+  <key>NSMicrophoneUsageDescription</key><string>Planetfall listens while you hold Option (or the mic button) so you can speak commands.</string>
 </dict>
 </plist>
 PLIST
