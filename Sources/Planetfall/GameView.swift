@@ -12,6 +12,7 @@ struct GameView: View {
     var body: some View {
         VStack(spacing: 0) {
             StatusBar(status: session.status)
+            RoomArtView(location: session.status?.location)
             Divider()
             TranscriptView(entries: session.transcript)
             Divider()
@@ -87,6 +88,40 @@ private struct StatusBar: View {
     }
 }
 
+/// The current room's illustration, if we have one. Crossfades when you change rooms
+/// and collapses entirely in rooms without art.
+private struct RoomArtView: View {
+    let location: String?
+
+    var body: some View {
+        let image = location.flatMap(RoomArt.image(for:))
+        // A fixed-size box with the image as an overlay, so the fill-scaled image
+        // gets clipped to the box instead of growing the layout.
+        Color.clear
+            .frame(maxWidth: .infinity)
+            .containerRelativeFrame(.vertical) { height, _ in image == nil ? 0 : height * 0.45 }
+            .overlay {
+                if let image, let location {
+                    Image(nsImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .accessibilityLabel(location)
+                        .id(location)
+                        .transition(.opacity)
+                }
+            }
+            .overlay(alignment: .bottom) {
+                // Fade the bottom edge into the transcript background.
+                if image != nil {
+                    LinearGradient(colors: [.clear, Theme.background], startPoint: .top, endPoint: .bottom)
+                        .frame(height: 48)
+                }
+            }
+            .clipped()
+            .animation(.easeInOut(duration: 0.4), value: location)
+    }
+}
+
 private struct TranscriptView: View {
     let entries: [TranscriptEntry]
 
@@ -101,6 +136,8 @@ private struct TranscriptView: View {
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            // Stay pinned to the latest text when the art panel resizes the transcript.
+            .defaultScrollAnchor(.bottom)
             .onChange(of: entries.last?.id) { _, last in
                 guard let last else { return }
                 withAnimation(.easeOut(duration: 0.15)) { proxy.scrollTo(last, anchor: .bottom) }

@@ -29,9 +29,16 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `FrotzOutputParser` | [Sources/PlanetfallEngine/FrotzOutputParser.swift](Sources/PlanetfallEngine/FrotzOutputParser.swift) | Splits dfrotz output into turns at the `>` prompt and pulls out the status line (room, score, moves). |
 | `GameSession` | [Sources/PlanetfallEngine/GameSession.swift](Sources/PlanetfallEngine/GameSession.swift) | Owns the dfrotz process. Exposes observable state (`transcript`, `status`, `isAwaitingInput`) and an event stream. |
 | `GameLocator` | [Sources/PlanetfallEngine/GameLocator.swift](Sources/PlanetfallEngine/GameLocator.swift) | Finds dfrotz and the story file. Override with `DFROTZ_PATH` / `PLANETFALL_STORY`. |
-| App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, transcript, command line with ↑/↓ history. |
+| App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history. |
+| `RoomArt` | [Sources/Planetfall/RoomArt.swift](Sources/Planetfall/RoomArt.swift) | Finds the illustration for the current room. |
 
 `PlanetfallEngine` has no UI code, so voice features can build on it directly.
+
+## Room art
+
+When you're in a room that has art, the app shows it above the transcript and crossfades between rooms. Rooms without art just show text.
+
+To add art, drop an image into [Art/Rooms/](Art/Rooms/), named after the room as it appears in the status bar: lowercase, with hyphens between words. For example, **Deck Nine** → `deck-nine.jpg` and **Escape Pod** → `escape-pod.png`. JPG, PNG and WebP work, and about 16:9 crops best. No code changes are needed. `swift run` picks images up from the repo, and `build-app.sh` copies them into the app.
 
 ## Hooking up voice
 
