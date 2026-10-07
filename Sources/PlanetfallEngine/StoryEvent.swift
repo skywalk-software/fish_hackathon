@@ -15,7 +15,7 @@ public struct StoryEvent: Identifiable, Hashable, Sendable {
     static let gameStartMarker = "Infocom interactive fiction"
 
     /// The events whose trigger appears in `text`, in `all` order.
-    static func triggered(by text: String) -> [StoryEvent] {
+    public static func triggered(by text: String) -> [StoryEvent] {
         all.filter { text.contains($0.trigger) }
     }
 }

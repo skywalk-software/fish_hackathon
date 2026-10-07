@@ -60,7 +60,12 @@ ANTHROPIC_API_KEY=your-anthropic-key   # optional: Claude command cleanup
 
 ## Voices: narrator, characters, and SNARK-9
 
-Everything you hear goes through Fish Audio text-to-speech (`POST /v1/tts`, model `s2.1-pro-free`, raw PCM streamed with latency `balanced`). All voices share one speaker queue, so nobody talks over anybody. After each action you hear three parts, in order:
+Everything you hear goes through Fish Audio text-to-speech (`POST /v1/tts`, model `s2.1-pro-free`, raw PCM streamed with latency `balanced`), except sound effects. All voices share one speaker queue, so nobody talks over anybody. After each action you hear these parts, in order:
+
+0. **Sound effects:** story moments play their sound before anything else.
+   - When the Feinstein starts blowing up on Deck Nine ("A massive explosion rocks the ship", the `explosion` story event), a 3.2 s explosion plays first, and the narrator starts once it has died away.
+   - The explosion is synthesized in code (`SoundEffect`): a crack, a blast that darkens as it fades, a sinking sub-bass rumble, and debris. So there's no audio file or license, and it sounds the same every time.
+   - To hear it, launch with `PLANETFALL_SEED=8` and `wait` nine times.
 
 1. **Narrator:** Claude (`claude-opus-5-5`, effort `low`, streamed) retells what the game printed as a sentence or two about the surroundings and what changed.
    - Each sentence goes to Fish as soon as it's written. The first one is heard about 2 s after the text appears.
@@ -71,7 +76,7 @@ Everything you hear goes through Fish Audio text-to-speech (`POST /v1/tts`, mode
    - Finished character lines are cached in `~/Library/Caches/Planetfall/Voices`, so repeats play instantly and cost nothing.
 3. **SNARK-9 (commentator):** the sidekick's Claude quip about your move, read in its own voice once it's written.
 
-Sending a command, or starting push-to-talk, cuts everyone off, so the game never talks over you and the mic never hears it. Toggle each part from the Voices menu: Narrator (⇧⌘N), Character Voices (⇧⌘M), SNARK-9 Voice (⇧⌘J). Errors appear in the command line's placeholder.
+Sending a command, or starting push-to-talk, cuts everyone off, so the game never talks over you and the mic never hears it. Toggle each part from the Voices menu: Narrator (⇧⌘N), Character Voices (⇧⌘M), SNARK-9 Voice (⇧⌘J), Sound Effects (⇧⌘E). Errors appear in the command line's placeholder.
 
 | Role | Fish voice | `.env` override |
 |---|---|---|
@@ -101,6 +106,7 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `GameLocator` | [Sources/PlanetfallEngine/GameLocator.swift](Sources/PlanetfallEngine/GameLocator.swift) | Finds dfrotz and the story file. Override with `DFROTZ_PATH` / `PLANETFALL_STORY`. |
 | `FishAPIKey`, `AnthropicAPIKey` | [Sources/PlanetfallEngine/FishAPIKey.swift](Sources/PlanetfallEngine/FishAPIKey.swift) | Load `FISH_API_KEY` / `ANTHROPIC_API_KEY` from the environment, then from `.env`. |
 | `FishSpeechToText` | [Sources/PlanetfallEngine/FishSpeechToText.swift](Sources/PlanetfallEngine/FishSpeechToText.swift) | Uploads a WAV to Fish `POST /v1/asr` and returns a clean command (speaker markers and cues removed). |
+| `SoundEffect` | [Sources/PlanetfallEngine/SoundEffect.swift](Sources/PlanetfallEngine/SoundEffect.swift) | Synthesizes story sound effects (the Deck Nine explosion) and picks the ones a turn's text triggers. |
 | `GameVocabulary` | [Sources/PlanetfallEngine/GameVocabulary.swift](Sources/PlanetfallEngine/GameVocabulary.swift) | Reads the parser's dictionary from the story file and checks that every word of a command is one the game knows. |
 | `CommandInterpreter` | [Sources/PlanetfallEngine/CommandInterpreter.swift](Sources/PlanetfallEngine/CommandInterpreter.swift) | Sends what was heard, plus the current room and recent output (`GameSession.commandContext()`), to Claude and returns one parser command. |
 | `VoiceCast`, `DialogueExtractor` | [Sources/PlanetfallEngine/CharacterVoice.swift](Sources/PlanetfallEngine/CharacterVoice.swift) | Which Fish voice each role uses, and splitting a turn into narration and character lines (with delivery tags). |

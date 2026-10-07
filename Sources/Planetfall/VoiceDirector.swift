@@ -3,6 +3,7 @@ import PlanetfallEngine
 
 /// Gives the game its voices, all through Fish Audio TTS and one shared speaker so nobody talks
 /// over anybody. After each action:
+/// 0. story sound effects play first (the explosion that starts the Feinstein blowing up),
 /// 1. the narrator reads Claude's retelling of the scene (character lines left out),
 /// 2. each character speaks their own lines (Blather as "arnold", Floyd, Veldina),
 /// 3. SNARK-9 delivers its commentary when its quip arrives.
@@ -16,12 +17,13 @@ final class VoiceDirector {
     var narratorEnabled: Bool { didSet { settingChanged(narratorEnabled, key: Self.narratorKey) } }
     var charactersEnabled: Bool { didSet { settingChanged(charactersEnabled, key: Self.charactersKey) } }
     var sidekickEnabled: Bool { didSet { settingChanged(sidekickEnabled, key: Self.sidekickKey) } }
+    var effectsEnabled: Bool { didSet { settingChanged(effectsEnabled, key: Self.effectsKey) } }
     /// The narrator needs an Anthropic key; SNARK-9's voice needs SNARK-9.
     let hasNarrator: Bool
     let hasSidekick: Bool
 
     private struct Utterance {
-        enum Role { case narrator, character, sidekick }
+        enum Role { case effect, narrator, character, sidekick }
         let role: Role
         let speaker: String
         let voiceID: String
@@ -29,6 +31,14 @@ final class VoiceDirector {
         let texts: AsyncThrowingStream<String, Error>
         /// Stops producing `texts`, e.g. cancels the narrator's Claude request.
         var cancel: () -> Void = {}
+        /// Audio to play as is (sound effects), instead of speaking `texts`.
+        var sound: Data?
+
+        static func effect(_ effect: SoundEffect) -> Utterance {
+            Utterance(role: .effect, speaker: effect.rawValue, voiceID: "",
+                      texts: AsyncThrowingStream { $0.finish() },
+                      sound: effect.pcm(sampleRate: FishTextToSpeech.sampleRate))
+        }
 
         static func single(_ role: Role, speaker: String, voiceID: String, text: String) -> Utterance {
             Utterance(role: role, speaker: speaker, voiceID: voiceID, texts: AsyncThrowingStream { continuation in
@@ -54,6 +64,7 @@ final class VoiceDirector {
     private static let narratorKey = "narratorVoiceEnabled"
     private static let charactersKey = "characterVoicesEnabled"
     private static let sidekickKey = "sidekickVoiceEnabled"
+    private static let effectsKey = "soundEffectsEnabled"
     private static let maxPreviousNarration = 3
 
     /// Nil without a Fish API key. The narrator also needs an Anthropic key.
@@ -77,6 +88,7 @@ final class VoiceDirector {
         narratorEnabled = defaults.object(forKey: Self.narratorKey) as? Bool ?? true
         charactersEnabled = defaults.object(forKey: Self.charactersKey) as? Bool ?? true
         sidekickEnabled = defaults.object(forKey: Self.sidekickKey) as? Bool ?? true
+        effectsEnabled = defaults.object(forKey: Self.effectsKey) as? Bool ?? true
 
         session.addObserver { [weak self] event in
             guard let self else { return }
@@ -120,6 +132,10 @@ final class VoiceDirector {
     // MARK: - Casting each turn
 
     private func turnArrived(_ turn: GameTurn) {
+        // Effects go to the front of the queue, so they play before anything else this turn.
+        if effectsEnabled {
+            for effect in SoundEffect.triggered(by: turn.text).reversed() { enqueue(.effect(effect), first: true) }
+        }
         let script = DialogueExtractor.script(for: turn.text, voices: cast.characters)
         if narratorEnabled, let narrator,
            !script.narration.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -153,8 +169,8 @@ final class VoiceDirector {
 
     // MARK: - Playback
 
-    private func enqueue(_ utterance: Utterance) {
-        queue.append(utterance)
+    private func enqueue(_ utterance: Utterance, first: Bool = false) {
+        if first { queue.insert(utterance, at: 0) } else { queue.append(utterance) }
         guard task == nil else { return }
         let generation = self.generation
         task = Task { await playQueue(generation: generation) }
@@ -166,6 +182,10 @@ final class VoiceDirector {
         while !queue.isEmpty, !Task.isCancelled {
             let utterance = queue.removeFirst()
             current = utterance
+            if let sound = utterance.sound {
+                player.enqueue(sound)
+                continue
+            }
             var spoken: [String] = []
             do {
                 for try await text in utterance.texts {

@@ -35,6 +35,8 @@ struct PlanetfallApp: App {
                     Toggle("SNARK-9 Voice", isOn: Bindable(voices).sidekickEnabled)
                         .keyboardShortcut("j", modifiers: [.command, .shift])
                         .disabled(!voices.hasSidekick)
+                    Toggle("Sound Effects", isOn: Bindable(voices).effectsEnabled)
+                        .keyboardShortcut("e", modifiers: [.command, .shift])
                     if !voices.hasNarrator {
                         Text("Add ANTHROPIC_API_KEY to .env for the narrator")
                     }
