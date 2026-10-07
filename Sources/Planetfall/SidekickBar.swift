@@ -5,9 +5,15 @@ import SwiftUI
 /// covers game text. Their line types in as Claude streams it.
 struct SidekickBar: View {
     let sidekick: Sidekick
+    /// Called when the avatar is clicked, to show it close up.
+    var onShowAvatar: () -> Void = {}
+
+    /// Big enough to make out SNARK-9's face, like a streamer's facecam.
+    static let avatarSize: CGFloat = 80
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        // Centered so the caption sits beside the avatar's face rather than its top edge.
+        HStack(alignment: .center, spacing: 16) {
             avatar
             VStack(alignment: .leading, spacing: 3) {
                 Text(verbatim: sidekick.persona.name)
@@ -24,7 +30,7 @@ struct SidekickBar: View {
             Spacer(minLength: 0)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .padding(.vertical, 12)
         .background(Color.white.opacity(0.04))
         .animation(.easeOut(duration: 0.15), value: sidekick.line)
     }
@@ -46,6 +52,16 @@ struct SidekickBar: View {
 
     @ViewBuilder
     private var avatar: some View {
+        if Artwork.character(sidekick.persona.artID) != nil {
+            Button(action: onShowAvatar) { avatarImage }
+                .buttonStyle(.plain)
+                .help("Show \(sidekick.persona.name) close up")
+        } else {
+            avatarImage
+        }
+    }
+
+    private var avatarImage: some View {
         Group {
             if let image = Artwork.character(sidekick.persona.artID) {
                 Image(nsImage: image)
@@ -53,15 +69,16 @@ struct SidekickBar: View {
                     .aspectRatio(contentMode: .fill)
             } else {
                 Image(systemName: "eye.trianglebadge.exclamationmark")
-                    .font(.system(size: 18))
+                    .font(.system(size: 36))
                     .foregroundStyle(Theme.background)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Theme.accent)
             }
         }
-        .frame(width: 40, height: 40)
+        .frame(width: Self.avatarSize, height: Self.avatarSize)
         .clipShape(Circle())
-        .overlay(Circle().strokeBorder(Theme.accent, lineWidth: 1.5))
+        .overlay(Circle().strokeBorder(Theme.accent, lineWidth: 2))
+        .contentShape(Circle())
         // A pulse while thinking, like a streamer's mic light.
         .opacity(sidekick.isThinking ? 0.7 : 1)
         .animation(sidekick.isThinking ? .easeInOut(duration: 0.6).repeatForever() : .default,

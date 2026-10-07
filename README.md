@@ -110,7 +110,7 @@ The opening is random: on Deck Nine, the game sends Blather, the alien ambassado
 - **Setup:** it needs `ANTHROPIC_API_KEY` in `.env`. Without a key, the bar is hidden.
 - **Turning it off:** use **Sidekick → SNARK-9 Commentary** (⇧⌘K). The setting is remembered between launches.
 - **Recasting the sidekick:** edit `SidekickPersona.default` in [Sources/PlanetfallEngine/Commentator.swift](Sources/PlanetfallEngine/Commentator.swift) to change the name, description and personality. The rules (short, no spoilers, PG-13, no invented events) are in the system prompt in the same file.
-- **Avatar:** drop a square image at `Art/NPCs/sidekick.jpg`. Until then, the bar shows an icon.
+- **Avatar:** a square image at `Art/NPCs/sidekick.jpg`, shown at 80 points beside the quip. Click it to see it close up, like character portraits. Without the image, the bar shows an icon.
 - **Pacing:** if you type while a quip is still streaming, the sidekick finishes it, then comments once on the latest state, so quips never pile up.
 - **Cost:** each commented turn sends about 1–3K input tokens, roughly a cent or two per turn.
 - **Live test:** run it against the real API with `ANTHROPIC_LIVE_TESTS=1 swift test --filter commentsOnARealTurn`.

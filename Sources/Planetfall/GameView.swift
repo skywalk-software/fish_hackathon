@@ -9,8 +9,8 @@ struct GameView: View {
     @State private var history: [String] = []
     @State private var historyIndex: Int?
     @State private var pushToTalk = PushToTalk()
-    /// The character whose portrait is shown full-window, if any.
-    @State private var closeup: GameCharacter?
+    /// The portrait shown full-window, if any: a character in the room or the sidekick.
+    @State private var closeup: Portrait?
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -25,19 +25,21 @@ struct GameView: View {
             // art never has to be drawn with and without each character.
             .overlay(alignment: .topTrailing) {
                 CharacterInsets(characters: session.presentCharacters) { character in
-                    closeup = character
+                    closeup = Portrait(artID: character.id, name: character.name)
                 }
             }
             if let sidekick, sidekick.isEnabled {
                 Divider()
-                SidekickBar(sidekick: sidekick)
+                SidekickBar(sidekick: sidekick) {
+                    closeup = Portrait(artID: sidekick.persona.artID, name: sidekick.persona.name)
+                }
             }
             Divider()
             inputBar
         }
         .background(Theme.background)
         .overlay {
-            if let closeup, let image = Artwork.character(closeup.id) {
+            if let closeup, let image = Artwork.character(closeup.artID) {
                 CharacterCloseup(name: closeup.name, image: image) { self.closeup = nil }
                     .transition(.opacity)
             }
@@ -259,6 +261,12 @@ private struct CharacterPortrait: View {
 }
 
 /// A character's portrait filling the window, with a small X (or Escape) to close.
+/// Whose portrait to show close up. Art comes from Art/NPCs/<artID>.
+struct Portrait: Equatable {
+    var artID: String
+    var name: String
+}
+
 private struct CharacterCloseup: View {
     let name: String
     let image: NSImage
