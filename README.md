@@ -69,6 +69,7 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `WAV` | [Sources/PlanetfallEngine/WAV.swift](Sources/PlanetfallEngine/WAV.swift) | Encodes recorded samples as 16-bit mono WAV. |
 | `PushToTalk`, `MicrophoneRecorder` | [Sources/Planetfall/](Sources/Planetfall/) | Hold-⌥ / mic-button recording with AVAudioEngine, then speech-to-text, then command cleanup, then `session.send`. |
 | App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history and a mic button. |
+| `Commentator`, `Sidekick` | [Sources/PlanetfallEngine/](Sources/PlanetfallEngine/) | Let's-play commentary: streams a quip from Claude after each turn. `Sidekick` decides when to comment. |
 | `GameCharacter` | [Sources/PlanetfallEngine/GameCharacter.swift](Sources/PlanetfallEngine/GameCharacter.swift) | The game's characters (Blather, Floyd, the ambassador…) and the in-game object names used to track them. |
 | `Artwork` | [Sources/Planetfall/Artwork.swift](Sources/Planetfall/Artwork.swift) | Finds the illustration for a room or character. |
 
@@ -101,6 +102,20 @@ To add a portrait, drop a square image into [Art/NPCs/](Art/NPCs/), named by the
 A head-and-shoulders shot on a plain dark background works best at inset size.
 
 The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession` to get the same game every time. For example, with seed 8, Blather arrives on turn 4.
+
+## Sidekick commentary
+
+**SNARK-9**, a sarcastic decommissioned training drone, co-hosts your playthrough like a let's-play sidekick. After each turn, the app sends the recent game output to Claude (`claude-opus-5-5`, low effort, streamed). SNARK-9's reaction types out live in a bar above the command line. It passes on routine turns, so it doesn't comment on everything.
+
+- **Setup:** it needs `ANTHROPIC_API_KEY` in `.env`. Without a key, the bar is hidden.
+- **Turning it off:** use **Sidekick → SNARK-9 Commentary** (⇧⌘K). The setting is remembered between launches.
+- **Recasting the sidekick:** edit `SidekickPersona.default` in [Sources/PlanetfallEngine/Commentator.swift](Sources/PlanetfallEngine/Commentator.swift) to change the name, description and personality. The rules (short, no spoilers, PG-13, no invented events) are in the system prompt in the same file.
+- **Avatar:** drop a square image at `Art/NPCs/sidekick.jpg`. Until then, the bar shows an icon.
+- **Pacing:** if you type while a quip is still streaming, the sidekick finishes it, then comments once on the latest state, so quips never pile up.
+- **Cost:** each commented turn sends about 1–3K input tokens, roughly a cent or two per turn.
+- **Live test:** run it against the real API with `ANTHROPIC_LIVE_TESTS=1 swift test --filter commentsOnARealTurn`.
+
+**For voice:** `sidekick.onLineFinished { line in … }` delivers each finished quip, ready to speak in SNARK-9's own Fish voice. `sidekick.line` updates as the text streams, if you'd rather start speaking sooner.
 
 ## Hooking up voice
 

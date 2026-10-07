@@ -3,6 +3,7 @@ import SwiftUI
 
 struct GameView: View {
     let session: GameSession
+    var sidekick: Sidekick?
 
     @State private var input = ""
     @State private var history: [String] = []
@@ -26,6 +27,10 @@ struct GameView: View {
                 CharacterInsets(characters: session.presentCharacters) { character in
                     closeup = character
                 }
+            }
+            if let sidekick, sidekick.isEnabled {
+                Divider()
+                SidekickBar(sidekick: sidekick)
             }
             Divider()
             inputBar

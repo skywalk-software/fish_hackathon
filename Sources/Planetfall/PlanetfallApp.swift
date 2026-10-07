@@ -12,7 +12,7 @@ struct PlanetfallApp: App {
             Group {
                 switch launch.state {
                 case .running(let session):
-                    GameView(session: session)
+                    GameView(session: session, sidekick: launch.sidekick)
                 case .failed(let message):
                     SetupErrorView(message: message)
                 }
@@ -24,6 +24,14 @@ struct PlanetfallApp: App {
             CommandGroup(replacing: .newItem) {
                 Button("Restart Game") { launch.restart() }
                     .keyboardShortcut("r", modifiers: [.command, .shift])
+            }
+            CommandMenu("Sidekick") {
+                if let sidekick = launch.sidekick {
+                    Toggle("\(sidekick.persona.name) Commentary", isOn: Bindable(sidekick).isEnabled)
+                        .keyboardShortcut("k", modifiers: [.command, .shift])
+                } else {
+                    Text("Add ANTHROPIC_API_KEY to .env to enable commentary")
+                }
             }
         }
     }
@@ -39,10 +47,14 @@ final class GameLaunch {
     }
 
     private(set) var state: State
+    /// The let's-play commentator; nil without an Anthropic API key.
+    private(set) var sidekick: Sidekick?
 
     init() {
         do {
             let session = try GameSession.makeDefault()
+            // Created before start() so it sees the opening turn.
+            sidekick = Sidekick.makeDefault(session: session)
             try session.start()
             state = .running(session)
         } catch {
@@ -52,6 +64,7 @@ final class GameLaunch {
 
     func restart() {
         guard case .running(let session) = state else { return }
+        sidekick?.reset()
         do {
             try session.restart()
         } catch {
