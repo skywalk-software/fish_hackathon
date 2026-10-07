@@ -21,6 +21,11 @@ enum Artwork {
         image(.character, slug: id)
     }
 
+    /// Art/AppIcon.png, used for the Dock icon when running without a bundle icon (`swift run`, Xcode).
+    static func appIcon() -> NSImage? {
+        roots.lazy.compactMap { NSImage(contentsOf: $0.appendingPathComponent("AppIcon.png")) }.first
+    }
+
     /// "Deck Nine" -> "deck-nine", "Escape Pod" -> "escape-pod".
     static func slug(for name: String) -> String {
         name.lowercased()

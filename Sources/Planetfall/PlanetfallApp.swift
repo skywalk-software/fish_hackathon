@@ -77,6 +77,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Needed when launched with `swift run`, which starts us as a background process.
         NSApp.setActivationPolicy(.regular)
+        // Without a bundle, the Dock would show the generic executable icon.
+        if let icon = Artwork.appIcon() { NSApp.applicationIconImage = icon }
         NSApp.activate()
     }
 
