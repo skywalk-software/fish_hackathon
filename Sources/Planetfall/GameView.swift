@@ -4,6 +4,7 @@ import SwiftUI
 struct GameView: View {
     let session: GameSession
     var sidekick: Sidekick?
+    var voices: VoiceDirector?
 
     @State private var input = ""
     @State private var history: [String] = []
@@ -51,6 +52,10 @@ struct GameView: View {
                                 onCommand: sendVoiceCommand)
         }
         .onDisappear { pushToTalk.deactivate() }
+        // Don't let the microphone hear the game talking.
+        .onChange(of: pushToTalk.phase) { _, phase in
+            if phase == .listening { voices?.stop() }
+        }
     }
 
     private var inputBar: some View {
@@ -82,7 +87,9 @@ struct GameView: View {
         case .listening: return "Listening… release to send"
         case .transcribing: return "Transcribing…"
         case .interpreting: return "Interpreting…"
-        case .idle: return pushToTalk.notice ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
+        case .idle:
+            return pushToTalk.notice ?? voices?.errorMessage
+                ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
         }
     }
 

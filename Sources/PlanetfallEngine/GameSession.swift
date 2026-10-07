@@ -86,7 +86,10 @@ public final class GameSession {
     public static func makeDefault() throws -> GameSession {
         guard let dfrotz = GameLocator.dfrotzURL() else { throw GameSessionError.dfrotzNotFound }
         guard let story = GameLocator.storyURL() else { throw GameSessionError.storyNotFound }
-        return GameSession(dfrotzURL: dfrotz, storyURL: story, savesDirectory: GameLocator.savesDirectory())
+        // PLANETFALL_SEED replays the same game, e.g. 8 to have Blather show up on turn 4.
+        let seed = ProcessInfo.processInfo.environment["PLANETFALL_SEED"].flatMap { Int($0) }
+        return GameSession(dfrotzURL: dfrotz, storyURL: story, savesDirectory: GameLocator.savesDirectory(),
+                           randomSeed: seed)
     }
 
     /// Calls `handler` on the main actor for every event. Keep handlers quick;

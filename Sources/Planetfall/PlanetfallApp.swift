@@ -12,7 +12,7 @@ struct PlanetfallApp: App {
             Group {
                 switch launch.state {
                 case .running(let session):
-                    GameView(session: session, sidekick: launch.sidekick)
+                    GameView(session: session, sidekick: launch.sidekick, voices: launch.voices)
                 case .failed(let message):
                     SetupErrorView(message: message)
                 }
@@ -24,6 +24,23 @@ struct PlanetfallApp: App {
             CommandGroup(replacing: .newItem) {
                 Button("Restart Game") { launch.restart() }
                     .keyboardShortcut("r", modifiers: [.command, .shift])
+            }
+            CommandMenu("Voices") {
+                if let voices = launch.voices {
+                    Toggle("Narrator", isOn: Bindable(voices).narratorEnabled)
+                        .keyboardShortcut("n", modifiers: [.command, .shift])
+                        .disabled(!voices.hasNarrator)
+                    Toggle("Character Voices", isOn: Bindable(voices).charactersEnabled)
+                        .keyboardShortcut("m", modifiers: [.command, .shift])
+                    Toggle("SNARK-9 Voice", isOn: Bindable(voices).sidekickEnabled)
+                        .keyboardShortcut("j", modifiers: [.command, .shift])
+                        .disabled(!voices.hasSidekick)
+                    if !voices.hasNarrator {
+                        Text("Add ANTHROPIC_API_KEY to .env for the narrator")
+                    }
+                } else {
+                    Text("Add FISH_API_KEY to .env to hear the game")
+                }
             }
             CommandMenu("Sidekick") {
                 if let sidekick = launch.sidekick {
@@ -49,12 +66,16 @@ final class GameLaunch {
     private(set) var state: State
     /// The let's-play commentator; nil without an Anthropic API key.
     private(set) var sidekick: Sidekick?
+    /// The narrator, characters, and SNARK-9's voices; nil without a Fish API key.
+    private(set) var voices: VoiceDirector?
 
     init() {
         do {
             let session = try GameSession.makeDefault()
             // Created before start() so it sees the opening turn.
-            sidekick = Sidekick.makeDefault(session: session)
+            let sidekick = Sidekick.makeDefault(session: session)
+            self.sidekick = sidekick
+            voices = VoiceDirector.makeDefault(session: session, sidekick: sidekick)
             try session.start()
             state = .running(session)
         } catch {
@@ -65,6 +86,7 @@ final class GameLaunch {
     func restart() {
         guard case .running(let session) = state else { return }
         sidekick?.reset()
+        voices?.reset()
         do {
             try session.restart()
         } catch {

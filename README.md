@@ -54,6 +54,36 @@ ANTHROPIC_API_KEY=your-anthropic-key   # optional: Claude command cleanup
 - **Cleanup model:** `claude-opus-5-5` at `effort: "low"`, with a cached system prompt and JSON-schema output. It adds a round trip on top of speech-to-text. For lower latency, construct `CommandInterpreter(apiKey:model:effort:serverSideFallbacks:)` with `model: "claude-haiku-4-5", effort: nil, serverSideFallbacks: false` in `PushToTalk`.
 - **Live tests:** run the opt-in tests against the real APIs with `FISH_LIVE_TESTS=1 swift test --filter transcribesRealSpeech` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter interpretsRealSpeech`.
 
+## Voices: narrator, characters, and SNARK-9
+
+Everything you hear goes through Fish Audio text-to-speech (`POST /v1/tts`, model `s2.1-pro-free`, raw PCM streamed with latency `balanced`). All voices share one speaker queue, so nobody talks over anybody. After each action you hear three parts, in order:
+
+1. **Narrator:** Claude (`claude-opus-5-5`, effort `low`, streamed) retells what the game printed as a sentence or two about the surroundings and what changed.
+   - Each sentence goes to Fish as soon as it's written. The first one is heard about 2 s after the text appears.
+   - Character dialogue is removed first and replaced with markers like `[Blather speaks]`, so the narrator describes the scene ("Blather swaggers in, glaring at you") but never speaks anyone's lines.
+   - Needs `ANTHROPIC_API_KEY`.
+2. **Characters:** each named character speaks their own quoted lines in their voice.
+   - The verb next to a quote becomes a Fish S2 delivery tag: "he sneers" adds `[sneering]`, "bellows" adds `[shouting]`, "Floyd giggles" adds `[laughing]`.
+   - Finished character lines are cached in `~/Library/Caches/Planetfall/Voices`, so repeats play instantly and cost nothing.
+3. **SNARK-9 (commentator):** the sidekick's Claude quip about your move, read in its own voice once it's written.
+
+Sending a command, or starting push-to-talk, cuts everyone off, so the game never talks over you and the mic never hears it. Toggle each part from the Voices menu: Narrator (⇧⌘N), Character Voices (⇧⌘M), SNARK-9 Voice (⇧⌘J). Errors appear in the command line's placeholder.
+
+| Role | Fish voice | `.env` override |
+|---|---|---|
+| Narrator | "calm storyteller male" `e686ae649ee44f219a108aacba206c1a` | `FISH_VOICE_NARRATOR` |
+| Ensign Blather | **arnold** `546972d2053c481d86fe4449a1b54e27` (cloned from `audio/arnold-soundboard-combined.mp3`) | `FISH_VOICE_BLATHER` |
+| Floyd | "Energetic Child" `4fcb3a423c61415fb35604eba567d95f` | `FISH_VOICE_FLOYD` |
+| Veldina | "Measured Storyteller" `8906b5268cae414fb9b8d3da6e84413d` | `FISH_VOICE_VELDINA` |
+| SNARK-9 | "Robot" `fe5b8eaa8b754a5b8d895265def9e5b2` | `FISH_VOICE_SIDEKICK` |
+
+- **Arnold is private to Gaurav's Fish account.** Anyone else needs their own clone in `FISH_VOICE_BLATHER`. The other voices are public, from Fish's voice library.
+- **Finding character lines:** `DialogueExtractor` gives a quote to the nearest voiced name in its paragraph (`Blather shouts "…"`, `"…" bellows Blather`). Quotes near "labelled", "reads" or "embossed" are signs, so they stay with the narrator.
+- **Adding a character:** add a `CharacterVoice` (id, the names the game uses for them, Fish voice id) to `VoiceCast.defaults`.
+- **Why SNARK-9 isn't a Fish Agent:** Fish's hosted Agents can take text (`user.message` with `audio: true`). But they need the LiveKit WebRTC SDK, an agent configured in Fish's agent platform, and a session open for the whole game (Fish bills agents at $0.06/min). Their audio would also bypass the shared speaker queue. SNARK-9 already writes the commentary with Claude, so it gets a Fish voice instead.
+- **Microphone:** push-to-talk records from the macOS default input (System Settings → Sound → Input), re-read on every press. Headphones that expose no microphone to macOS, like Bluetooth buds in headphone-only mode, can't be recorded from; the Mac's mic is used instead.
+- **Live tests:** `FISH_LIVE_TESTS=1 swift test --filter streamsEveryCastVoice` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter narratesARealTurn`.
+
 ## How it works
 
 We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39), which runs on a Z-machine interpreter. The app runs **dfrotz** in the background and passes text in and out over pipes.
@@ -66,6 +96,10 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `FishAPIKey`, `AnthropicAPIKey` | [Sources/PlanetfallEngine/FishAPIKey.swift](Sources/PlanetfallEngine/FishAPIKey.swift) | Load `FISH_API_KEY` / `ANTHROPIC_API_KEY` from the environment, then from `.env`. |
 | `FishSpeechToText` | [Sources/PlanetfallEngine/FishSpeechToText.swift](Sources/PlanetfallEngine/FishSpeechToText.swift) | Uploads a WAV to Fish `POST /v1/asr` and returns a clean command (speaker markers and cues removed). |
 | `CommandInterpreter` | [Sources/PlanetfallEngine/CommandInterpreter.swift](Sources/PlanetfallEngine/CommandInterpreter.swift) | Sends what was heard, plus the current room and recent output (`GameSession.commandContext()`), to Claude and returns one parser command. |
+| `VoiceCast`, `DialogueExtractor` | [Sources/PlanetfallEngine/CharacterVoice.swift](Sources/PlanetfallEngine/CharacterVoice.swift) | Which Fish voice each role uses, and splitting a turn into narration and character lines (with delivery tags). |
+| `Narrator` | [Sources/PlanetfallEngine/Narrator.swift](Sources/PlanetfallEngine/Narrator.swift) | Streams Claude's spoken retelling of a turn, a sentence at a time. |
+| `FishTextToSpeech`, `VoiceLineCache` | [Sources/PlanetfallEngine/FishTextToSpeech.swift](Sources/PlanetfallEngine/FishTextToSpeech.swift) | Streams a line from Fish `POST /v1/tts` as PCM, and caches finished lines on disk. |
+| `VoiceDirector`, `PCMStreamPlayer` | [Sources/Planetfall/](Sources/Planetfall/) | Queues narrator, character, and SNARK-9 audio on one speaker, plays it as it streams, and stops on the next command or push-to-talk. |
 | `WAV` | [Sources/PlanetfallEngine/WAV.swift](Sources/PlanetfallEngine/WAV.swift) | Encodes recorded samples as 16-bit mono WAV. |
 | `PushToTalk`, `MicrophoneRecorder` | [Sources/Planetfall/](Sources/Planetfall/) | Hold-⌥ / mic-button recording with AVAudioEngine, then speech-to-text, then command cleanup, then `session.send`. |
 | App UI | [Sources/Planetfall/](Sources/Planetfall/) | SwiftUI window: status bar, room art, transcript, command line with ↑/↓ history and a mic button. |
@@ -101,7 +135,7 @@ To add a portrait, drop a square image into [Art/NPCs/](Art/NPCs/), named by the
 
 A head-and-shoulders shot on a plain dark background works best at inset size.
 
-The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession` to get the same game every time. For example, with seed 8, Blather arrives on turn 4.
+The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession`, or set `PLANETFALL_SEED` when launching the app, to get the same game every time. For example, with seed 8, Blather arrives on turn 4: `PLANETFALL_SEED=8 swift run Planetfall`, or `open --env PLANETFALL_SEED=8 build/Planetfall.app`.
 
 ## Sidekick commentary
 
