@@ -69,4 +69,11 @@ struct FrotzOutputParserTests {
         GameCharacter.apply(.removed("Ensign First Class"), to: &locations)
         #expect(locations == ["floyd": "Robot Shop"])
     }
+
+    @Test func triesTheMostSpecificArtFirst() {
+        #expect(StoryEvent.tagCombinations([]).isEmpty)
+        #expect(StoryEvent.tagCombinations(["explosion", "webbing"]) == [["explosion", "webbing"], ["webbing"], ["explosion"]])
+        #expect(StoryEvent.tagCombinations(["a", "b", "c"]).first == ["a", "b", "c"])
+        #expect(StoryEvent.tagCombinations(["a", "b", "c"]).count == 7)
+    }
 }

@@ -53,8 +53,18 @@ public final class GameSession {
     /// Where each character is (character id -> room name), tracked from dfrotz's
     /// object-movement trace. Characters not yet seen or removed from play are absent.
     public private(set) var characterLocations: [String: String] = [:]
-    /// Ids of the `StoryEvent`s that have happened this game, oldest first.
+    /// Ids of the active `StoryEvent`s, oldest first.
     public private(set) var storyEvents: [String] = []
+    /// The object the player is inside, from the object trace (e.g. "safety web"), or the
+    /// room name when they're just standing in a room. Nil until the game reports a move.
+    public private(set) var playerHolder: String?
+
+    /// Tags that pick story-specific art, oldest first: active story events, then where the
+    /// player is (in the safety web: "webbing"). Rooms look for
+    /// Art/Rooms/<room>-<tags>.jpg, most specific first.
+    public var artTags: [String] {
+        storyEvents + (playerHolder.flatMap { StoryEvent.holderTags[$0] }.map { [$0] } ?? [])
+    }
 
     /// Characters in the same room as the player, in `GameCharacter.all` order.
     public var presentCharacters: [GameCharacter] {
@@ -173,6 +183,7 @@ public final class GameSession {
         status = nil
         characterLocations = [:]
         storyEvents = []
+        playerHolder = nil
         isAwaitingInput = false
         prompt = .command
         isRunning = false
@@ -204,11 +215,15 @@ public final class GameSession {
         if turn.text.contains(StoryEvent.gameStartMarker) {
             characterLocations = [:]
             storyEvents = []
+            playerHolder = nil
         }
-        for event in turn.objectEvents { GameCharacter.apply(event, to: &characterLocations) }
-        for event in StoryEvent.triggered(by: turn.text) where !storyEvents.contains(event.id) {
-            storyEvents.append(event.id)
+        for event in turn.objectEvents {
+            GameCharacter.apply(event, to: &characterLocations)
+            if case .moved(let args) = event, args.hasPrefix("player ") {
+                playerHolder = String(args.dropFirst("player ".count))
+            }
         }
+        StoryEvent.update(&storyEvents, with: turn.text)
         if let newStatus = turn.status { status = newStatus }
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true

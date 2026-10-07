@@ -134,4 +134,53 @@ struct GameSessionTests {
         #expect(session.storyEvents.isEmpty)
         #expect(session.characterLocations.isEmpty)
     }
+
+    @Test(.enabled(if: GameLocator.dfrotzURL() != nil && GameLocator.storyURL() != nil))
+    func tracksTheSafetyWebAndTheLaunch() async throws {
+        let saves = FileManager.default.temporaryDirectory
+            .appendingPathComponent("planetfall-tests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: saves) }
+
+        let session = GameSession(dfrotzURL: GameLocator.dfrotzURL()!,
+                                  storyURL: GameLocator.storyURL()!,
+                                  savesDirectory: saves,
+                                  randomSeed: 8)
+        var turns: [GameTurn] = []
+        session.addObserver { event in
+            if case .turn(let turn) = event { turns.append(turn) }
+        }
+        try session.start()
+        defer { session.stop() }
+
+        func play(_ command: String) async throws {
+            let target = turns.count + 1
+            session.send(command)
+            for _ in 0..<100 where turns.count < target {
+                try await Task.sleep(for: .milliseconds(20))
+            }
+            try #require(turns.count >= target)
+        }
+        for _ in 0..<100 where turns.isEmpty { try await Task.sleep(for: .milliseconds(20)) }
+
+        for _ in 0..<9 { try await play("wait") }
+        try await play("west")
+        #expect(session.status?.location == "Escape Pod")
+        #expect(session.artTags == ["explosion"])
+
+        // Strapped in while the ship is still exploding around the pod.
+        try await play("get in webbing")
+        #expect(session.playerHolder == "safety web")
+        #expect(session.artTags == ["explosion", "webbing"])
+
+        // Once the pod is away from the Feinstein, the explosion phase is over.
+        for _ in 0..<4 where !turns.contains(where: { $0.text.contains("Feinstein dwindle") }) {
+            try await play("wait")
+        }
+        #expect(session.artTags == ["webbing"])
+
+        // Standing up (any way out of the web) drops the webbing art.
+        try await play("stand")
+        #expect(session.playerHolder == "Escape Pod")
+        #expect(session.artTags.isEmpty)
+    }
 }

@@ -1,4 +1,5 @@
 import AppKit
+import PlanetfallEngine
 
 /// Loads illustrations from the Art folders by name.
 /// Rooms: "Deck Nine" -> Art/Rooms/deck-nine.jpg. Characters: Art/NPCs/<character id>.jpg.
@@ -17,17 +18,20 @@ enum Artwork {
         image(.room, slug: slug(for: location))
     }
 
-    /// The art for a room at this point in the story: the newest event's variant if there
-    /// is one ("deck-nine-explosion"), otherwise the room's normal art. Returns the slug
-    /// used too, so callers can tell when the picture changes within a room.
-    static func room(_ location: String, events: [String]) -> (slug: String, image: NSImage)? {
+    /// The art for a room at this point in the story. Tries the room with every combination
+    /// of the active tags, most specific first and newest tags first, then the plain room:
+    /// with tags [explosion, webbing], the Escape Pod tries "escape-pod-explosion-webbing",
+    /// "escape-pod-webbing", "escape-pod-explosion", then "escape-pod". Returns the slug used
+    /// too, so callers can tell when the picture changes within a room.
+    static func room(_ location: String, tags: [String]) -> (slug: String, image: NSImage)? {
         let base = slug(for: location)
-        for event in events.reversed() {
-            let variant = "\(base)-\(event)"
+        for combination in StoryEvent.tagCombinations(tags) {
+            let variant = ([base] + combination).joined(separator: "-")
             if let image = image(.room, slug: variant) { return (variant, image) }
         }
         return image(.room, slug: base).map { (base, $0) }
     }
+
 
     static func character(_ id: String) -> NSImage? {
         image(.character, slug: id)

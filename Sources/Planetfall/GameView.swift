@@ -18,7 +18,7 @@ struct GameView: View {
         VStack(spacing: 0) {
             StatusBar(status: session.status)
             VStack(spacing: 0) {
-                RoomArtView(location: session.status?.location, storyEvents: session.storyEvents)
+                RoomArtView(location: session.status?.location, artTags: session.artTags)
                 Divider()
                 TranscriptTextView(entries: session.transcript)
             }
@@ -185,10 +185,10 @@ private struct StatusBar: View {
 /// and collapses entirely in rooms without art.
 private struct RoomArtView: View {
     let location: String?
-    let storyEvents: [String]
+    let artTags: [String]
 
     var body: some View {
-        let art = location.flatMap { Artwork.room($0, events: storyEvents) }
+        let art = location.flatMap { Artwork.room($0, tags: artTags) }
         let image = art?.image
         // A fixed-size box with the image as an overlay, so the fill-scaled image
         // gets clipped to the box instead of growing the layout.

@@ -130,15 +130,26 @@ To add art, drop an image into [Art/Rooms/](Art/Rooms/), named after the room as
 
 ### Art that changes with the story
 
-Some moments change how rooms look. When the game prints a story event's trigger text, that event stays active for the rest of the game, and any room with an `Art/Rooms/<room>-<event>` image switches to it (crossfading if you're in that room). For example, after "A massive explosion rocks the ship", Deck Nine shows `deck-nine-explosion.jpg`. Rooms without an event version keep their normal art.
+Rooms can have alternate art for story moments, picked from **tags**:
 
-Events are listed in [Sources/PlanetfallEngine/StoryEvent.swift](Sources/PlanetfallEngine/StoryEvent.swift):
+- **Story events** come from the game's text. Each one starts at a trigger sentence and lasts until its end sentence (or a restart). The events are listed in [Sources/PlanetfallEngine/StoryEvent.swift](Sources/PlanetfallEngine/StoryEvent.swift).
+- **Where you are** comes from dfrotz's object trace. While you're in the safety web, the `webbing` tag is on, however you got in or out.
 
-| Event id | Triggered by | Art |
+| Tag | On when | Off when |
 |---|---|---|
-| `explosion` | "A massive explosion rocks the ship" | `deck-nine-explosion.jpg` |
+| `explosion` | "A massive explosion rocks the ship" | The pod clears the ship ("…you see the Feinstein dwindle…") |
+| `webbing` | You're in the safety web | You leave the web |
 
-To add a moment, add a `StoryEvent` with a sentence the game prints exactly once at that point, then drop in `<room>-<id>` images. Events reset when the game restarts, including RESTART typed in the game. One limitation: RESTORE doesn't reset them, so restoring a save from before the explosion keeps the explosion art.
+For each room, the app tries `Art/Rooms/<room>-<tags>` with the active tags in the order they began, most specific first, then the plain room art:
+
+| Moment | Tags | Art used |
+|---|---|---|
+| Deck Nine after the first explosion | explosion | `deck-nine-explosion.jpg` |
+| In the webbing while the ship is exploding | explosion, webbing | `escape-pod-explosion-webbing.jpg` if present, else `escape-pod-webbing.jpg` |
+| In the webbing after launch | webbing | `escape-pod-webbing.jpg` |
+| Out of the webbing | none | `escape-pod.jpg` |
+
+Changing art takes no code: name the image for the room plus its tags. Tags reset when the game restarts, including RESTART typed in the game. One limitation: RESTORE doesn't reset them.
 
 ## Character portraits
 
