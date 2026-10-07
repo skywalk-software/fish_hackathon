@@ -32,7 +32,7 @@ final class StubURLProtocol: URLProtocol, @unchecked Sendable {
 @Suite(.serialized)
 struct CommentatorTests {
     private let context = CommentaryContext(
-        location: "Deck Nine", score: 0, moves: 4454,
+        location: "Deck Nine", score: 0, moves: 4454, turnsPlayed: 3,
         recentOutput: "Deck Nine\nA corridor.\n> scrub floor\nYou scrub the floor. It is now slightly less filthy.",
         previousLines: ["Riveting stuff, Ensign."])
 
@@ -85,11 +85,16 @@ struct CommentatorTests {
 
         let system = try #require((body["system"] as? [[String: Any]])?.first)
         #expect((system["cache_control"] as? [String: String])?["type"] == "ephemeral")
-        #expect((system["text"] as? String)?.contains("SNARK-9") == true)
+        let systemText = try #require(system["text"] as? String)
+        #expect(systemText.contains("SNARK-9"))
+        // The sidekick watches from outside the game rather than appearing in it.
+        #expect(systemText.contains("You are outside the game"))
+        #expect(!systemText.contains("Stellar Patrol training drone"))
 
         let message = try #require((body["messages"] as? [[String: Any]])?.first)
         let content = try #require(message["content"] as? String)
-        #expect(content.contains("Room: Deck Nine | Score: 0 | Moves: 4454"))
+        #expect(content.contains("Room: Deck Nine | Score: 0 | Commands entered so far: 3"))
+        #expect(content.contains("Ship's clock (in-game time, not a turn count): 4454"))
         #expect(content.contains("> scrub floor"))
         #expect(content.contains("- Riveting stuff, Ensign."))
     }

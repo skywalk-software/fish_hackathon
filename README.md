@@ -105,7 +105,7 @@ The opening is random: on Deck Nine, the game sends Blather, the alien ambassado
 
 ## Sidekick commentary
 
-**SNARK-9**, a sarcastic decommissioned training drone, co-hosts your playthrough like a let's-play sidekick. After each turn, the app sends the recent game output to Claude (`claude-opus-5-5`, low effort, streamed). SNARK-9's reaction types out live in a bar above the command line. It passes on routine turns, so it doesn't comment on everything.
+**SNARK-9**, a jaded retro-gaming commentary robot, co-hosts your playthrough like a let's-play sidekick. It isn't part of the game: it watches you play from outside, the way a viewer would, and can't be seen or talked to in Planetfall. After each turn, the app sends the recent game output to Claude (`claude-opus-5-5`, low effort, streamed). SNARK-9's reaction types out live in a bar above the command line. It passes on routine turns, so it doesn't comment on everything.
 
 - **Setup:** it needs `ANTHROPIC_API_KEY` in `.env`. Without a key, the bar is hidden.
 - **Turning it off:** use **Sidekick → SNARK-9 Commentary** (⇧⌘K). The setting is remembered between launches.

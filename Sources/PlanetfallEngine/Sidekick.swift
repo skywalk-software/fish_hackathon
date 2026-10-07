@@ -71,6 +71,7 @@ public final class Sidekick {
             location: session.status?.location,
             score: session.status?.score,
             moves: session.status?.moves,
+            turnsPlayed: session.transcript.filter { if case .command = $0 { true } else { false } }.count,
             recentOutput: CommandContext.recent(session.transcript, location: nil).recentOutput,
             previousLines: previousLines)
         hasPendingTurn = false

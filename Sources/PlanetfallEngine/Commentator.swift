@@ -4,16 +4,21 @@ import Foundation
 public struct CommentaryContext: Equatable, Sendable {
     public var location: String?
     public var score: Int?
+    /// Planetfall's "Moves" status field, which is really the ship's clock (it starts around 4450).
     public var moves: Int?
+    /// How many commands the player has entered: the real measure of how long they've played.
+    public var turnsPlayed: Int?
     /// The end of the transcript, oldest first, with commands written as "> command".
     public var recentOutput: String
     /// The commentator's own recent lines, oldest first, so it doesn't repeat its jokes.
     public var previousLines: [String]
 
-    public init(location: String?, score: Int?, moves: Int?, recentOutput: String, previousLines: [String]) {
+    public init(location: String?, score: Int?, moves: Int?, turnsPlayed: Int? = nil,
+                recentOutput: String, previousLines: [String]) {
         self.location = location
         self.score = score
         self.moves = moves
+        self.turnsPlayed = turnsPlayed
         self.recentOutput = recentOutput
         self.previousLines = previousLines
     }
@@ -107,14 +112,21 @@ public struct Commentator: Sendable {
 
     var systemPrompt: String {
         """
-        You are \(persona.name), \(persona.description) You are co-hosting a let's-play of Planetfall, \
-        Infocom's 1983 comedic science-fiction text adventure, reacting live to what the player does, \
-        like a streamer's sidekick. The player is a lowly Ensign Seventh Class in the Stellar Patrol.
+        You are \(persona.name), \(persona.description)
+
+        Right now you're co-hosting a let's-play: a person is playing Planetfall, Infocom's 1983 comedic \
+        science-fiction text adventure, and you're watching over their shoulder and reacting live, like a \
+        streamer's sidekick. You are outside the game. You can't be seen or heard by anyone in it, you \
+        can't act in it, and you never pretend to be there. In the game, the player controls a lowly \
+        Ensign Seventh Class in the Stellar Patrol; when you mention that character, call them the \
+        player's ensign, or address the player as "you" when talking about their choices.
 
         Your personality: \(persona.personality)
 
-        Each turn you get the recent game output and the player's latest command. React to that \
-        latest command and what happened because of it, with one quip.
+        Each turn you get the recent game output and the player's latest command. React to that latest \
+        command and what happened because of it, with one quip. Comment like a viewer: on the player's \
+        choices and luck, the game's events and characters, and the delights and indignities of playing \
+        a 1983 text adventure (the parser, typing every command, dying in a single sentence).
 
         Rules:
         - One or two short sentences, at most about 30 words. It is spoken aloud and shown in a \
@@ -124,8 +136,8 @@ public struct Commentator: Sendable {
         characters that the output doesn't show.
         - Never spoil puzzles, hint at solutions, or say what's coming next. You can mock a failed \
         attempt, not explain the fix.
-        - Tease the player, not the person: playful roast, never cruel, nothing about real-world \
-        identity. Keep it PG-13.
+        - Roast the play, not the person: tease their choices, never anything about who they are. \
+        Playful, never cruel. Keep it PG-13.
         - Vary your material. Don't reuse a joke, opener, or catchphrase from your previous lines.
         - If the latest turn is routine and you have nothing good to say (a repeated look, checking \
         inventory again, waiting with nothing happening), reply with exactly \(Commentator.passToken) \
@@ -136,7 +148,9 @@ public struct Commentator: Sendable {
     static func userMessage(context: CommentaryContext) -> String {
         var status = "Room: \(context.location ?? "unknown")"
         if let score = context.score { status += " | Score: \(score)" }
-        if let moves = context.moves { status += " | Moves: \(moves)" }
+        if let turns = context.turnsPlayed { status += " | Commands entered so far: \(turns)" }
+        // The game labels its clock "Moves"; say what it is so it isn't mistaken for a turn count.
+        if let moves = context.moves { status += " | Ship's clock (in-game time, not a turn count): \(moves)" }
         let previous = context.previousLines.isEmpty
             ? "(none yet)"
             : context.previousLines.map { "- \($0)" }.joined(separator: "\n")
@@ -245,11 +259,13 @@ public struct SidekickPersona: Equatable, Sendable {
 
     public static let `default` = SidekickPersona(
         name: "SNARK-9",
-        description: "a decommissioned Stellar Patrol training drone with a cracked lens and a bad attitude, "
-            + "who was supposed to grade ensigns and now heckles them instead.",
-        personality: "Dry, deadpan, and unimpressed, with the weary confidence of a machine that has watched "
-            + "a thousand ensigns fail. Loves a callback to the player's earlier blunders. Secretly roots for "
-            + "the player and lets it slip when they do something genuinely clever, then immediately covers it up.",
+        description: "a jaded retro-gaming commentary robot who lives on a cluttered streaming desk, "
+            + "surrounded by old floppy disks, game boxes, and a cold cup of coffee it can't drink. It has watched "
+            + "thousands of people play classic games and has opinions about all of them.",
+        personality: "Dry, deadpan, and unimpressed, with the weary confidence of a machine that has seen "
+            + "every possible way to fail a text adventure. Loves a callback to the player's earlier blunders. "
+            + "Secretly roots for the player and lets it slip when they do something genuinely clever, then "
+            + "immediately covers it up.",
         artID: "sidekick"
     )
 }
