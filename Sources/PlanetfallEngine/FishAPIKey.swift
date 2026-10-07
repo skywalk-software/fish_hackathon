@@ -1,10 +1,19 @@
 import Foundation
 
-/// Finds the Fish Audio API key: `FISH_API_KEY` in the environment, then the repo's `.env` file.
+/// Finds the Fish Audio API key: `FISH_API_KEY` in the environment, then the `.env` file at `envFileURL`.
 public enum FishAPIKey {
-    /// The repo-root `.env` (gitignored), with a line like `FISH_API_KEY=...`.
+    /// Where the keys live, as lines like `FISH_API_KEY=...`: the repo's gitignored `.env` when
+    /// running from a source checkout, otherwise ~/Library/Application Support/Planetfall/.env
+    /// (an install, e.g. from Homebrew, has no source folder).
     public static var envFileURL: URL {
-        GameLocator.repoRoot.appendingPathComponent(".env")
+        envFileURL(repoRoot: GameLocator.repoRoot)
+    }
+
+    static func envFileURL(repoRoot: URL) -> URL {
+        if FileManager.default.fileExists(atPath: repoRoot.appendingPathComponent("Package.swift").path) {
+            return repoRoot.appendingPathComponent(".env")
+        }
+        return URL.applicationSupportDirectory.appendingPathComponent("Planetfall/.env")
     }
 
     public static func load() -> String? {

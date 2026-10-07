@@ -1,16 +1,17 @@
 #!/bin/sh
 # Builds build/Planetfall.app (release, ad-hoc signed) with the story file inside.
 # dfrotz still comes from Homebrew: brew install frotz
+# SWIFT_BUILD_FLAGS adds flags to `swift build` (the Homebrew formula passes --disable-sandbox).
 set -e
 cd "$(dirname "$0")/.."
 
 [ -f Story/planetfall.z3 ] || ./scripts/fetch-story.sh
-swift build -c release --product Planetfall
+swift build -c release --product Planetfall $SWIFT_BUILD_FLAGS
 
 APP=build/Planetfall.app
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-cp "$(swift build -c release --show-bin-path)/Planetfall" "$APP/Contents/MacOS/Planetfall"
+cp "$(swift build -c release $SWIFT_BUILD_FLAGS --show-bin-path)/Planetfall" "$APP/Contents/MacOS/Planetfall"
 cp Story/planetfall.z3 "$APP/Contents/Resources/"
 cp -R Art "$APP/Contents/Resources/Art"
 

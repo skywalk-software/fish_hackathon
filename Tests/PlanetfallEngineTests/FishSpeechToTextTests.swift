@@ -41,6 +41,13 @@ struct FishAPIKeyTests {
         #expect(FishAPIKey.load(environment: ["FISH_API_KEY": "  "], envFile: file) == "from-file")
     }
 
+    @Test func keysLiveInTheRepoFromSourceAndInApplicationSupportWhenInstalled() throws {
+        #expect(FishAPIKey.envFileURL == GameLocator.repoRoot.appendingPathComponent(".env"))
+        // A Homebrew build's source folder is deleted after install.
+        let installed = FishAPIKey.envFileURL(repoRoot: URL(fileURLWithPath: "/nonexistent/build-dir"))
+        #expect(installed.path.hasSuffix("Library/Application Support/Planetfall/.env"))
+    }
+
     @Test func blankOrMissingKeyIsNil() throws {
         let file = try envFile("FISH_API_KEY=\n")
         defer { try? FileManager.default.removeItem(at: file) }

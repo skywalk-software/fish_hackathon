@@ -7,3 +7,7 @@ Story/*.z3
 
 # Secrets (Fish Audio API key)
 .env
+
+# Local only: voice-clone source clips and rendered previews, and Claude Code settings
+audio/
+.claude/

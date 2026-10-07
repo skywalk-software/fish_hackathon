@@ -4,7 +4,22 @@ Hackathon workspace for building with Fish Audio speech models. We're building a
 
 - [fish_speech_deep_dive.md](fish_speech_deep_dive.md): research notes on Fish Speech / Fish Audio. Covers S2-Pro and S2.1-Pro TTS, the status of ASR and speech-to-speech, voice cloning, multilingual support, local setup, the local and cloud APIs, limitations, and a comparison with Tencent AuK and other alternatives.
 
-## Running the game
+## Install with Homebrew
+
+```sh
+brew install skywalk-software/tap/planetfall
+planetfall
+```
+
+- **What it installs:** Homebrew installs `frotz` (the interpreter), builds `Planetfall.app` from this repo, and downloads the game file (Release 39) from [historicalsource/planetfall](https://github.com/historicalsource/planetfall).
+  - Homebrew doesn't carry Infocom's games, and this repo doesn't include the game file.
+  - The formula lives in [skywalk-software/homebrew-tap](https://github.com/skywalk-software/homebrew-tap).
+- **Requirements:** macOS 14+ and Swift 6 (Xcode 16+ or its Command Line Tools), since the app is built on your Mac.
+- **Launching:** `planetfall` opens the app. To add it to Applications, run `ln -sf "$(brew --prefix)/opt/planetfall/Planetfall.app" /Applications/`.
+- **Voices:** put your keys in `~/Library/Application Support/Planetfall/.env`, in the same format as [Voice commands](#voice-commands-push-to-talk).
+- **Updating:** `brew upgrade planetfall`. To install the latest `main` instead of the release, use `brew install --HEAD skywalk-software/tap/planetfall`.
+
+## Running the game from source
 
 You need macOS 14+, Xcode (Swift 6), and Homebrew.
 
@@ -22,7 +37,7 @@ Save files go in `~/Library/Application Support/Planetfall/Saves`. Restart the g
 
 ## Voice commands (push-to-talk)
 
-**Setup:** put your keys in `.env` at the repo root. Get a Fish Audio key at https://fish.audio/app/api-keys and an Anthropic key at https://console.anthropic.com.
+**Setup:** put your keys in `.env` at the repo root, or in `~/Library/Application Support/Planetfall/.env` for a Homebrew install. Get a Fish Audio key at https://fish.audio/app/api-keys and an Anthropic key at https://console.anthropic.com.
 
 ```sh
 FISH_API_KEY=your-fish-key
