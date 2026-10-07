@@ -18,6 +18,9 @@ struct PlanetfallApp: App {
                 }
             }
             .frame(minWidth: 560, minHeight: 420)
+            // The app is always dark; this keeps system-drawn parts (text cursor, scrollbars,
+            // selection) readable when macOS itself is in Light Mode.
+            .preferredColorScheme(.dark)
         }
         .defaultSize(width: 820, height: 640)
         .commands {

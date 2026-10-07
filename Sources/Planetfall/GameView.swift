@@ -65,10 +65,19 @@ struct GameView: View {
         HStack(spacing: 8) {
             Text(">")
                 .foregroundStyle(Theme.accent)
-            TextField(text: $input) {
-                Text(placeholder).foregroundStyle(Theme.dim)
-            }
+            // The placeholder is drawn by us rather than the text field: while the field has
+            // focus, macOS draws its own placeholder in the system color, which in Light Mode
+            // is nearly black and invisible on this background.
+            TextField("", text: $input)
                 .textFieldStyle(.plain)
+                .background(alignment: .leading) {
+                    if input.isEmpty {
+                        Text(verbatim: placeholder)
+                            .foregroundStyle(Theme.dim)
+                            .lineLimit(1)
+                            .allowsHitTesting(false)
+                    }
+                }
                 .focused($inputFocused)
                 .disabled(!session.isRunning)
                 .onSubmit(submit)
