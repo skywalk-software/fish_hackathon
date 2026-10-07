@@ -8,6 +8,8 @@ struct GameView: View {
     @State private var history: [String] = []
     @State private var historyIndex: Int?
     @State private var pushToTalk = PushToTalk()
+    /// The character whose portrait is shown full-window, if any.
+    @State private var closeup: GameCharacter?
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -21,12 +23,21 @@ struct GameView: View {
             // Characters in the room appear as portraits over the top corner, so room
             // art never has to be drawn with and without each character.
             .overlay(alignment: .topTrailing) {
-                CharacterInsets(characters: session.presentCharacters)
+                CharacterInsets(characters: session.presentCharacters) { character in
+                    closeup = character
+                }
             }
             Divider()
             inputBar
         }
         .background(Theme.background)
+        .overlay {
+            if let closeup, let image = Artwork.character(closeup.id) {
+                CharacterCloseup(name: closeup.name, image: image) { self.closeup = nil }
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: closeup)
         .onAppear {
             inputFocused = true
             pushToTalk.activate(canListen: { session.isRunning }, onTranscript: sendVoiceCommand)
@@ -190,13 +201,18 @@ private struct RoomArtView: View {
 /// Portraits of the characters in the room, top-right. Characters without art are skipped.
 private struct CharacterInsets: View {
     let characters: [GameCharacter]
+    let onSelect: (GameCharacter) -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             ForEach(characters) { character in
                 if let image = Artwork.character(character.id) {
-                    CharacterPortrait(name: character.name, image: image)
-                        .transition(.scale(scale: 0.85, anchor: .topTrailing).combined(with: .opacity))
+                    Button { onSelect(character) } label: {
+                        CharacterPortrait(name: character.name, image: image)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Show \(character.name) close up")
+                    .transition(.scale(scale: 0.85, anchor: .topTrailing).combined(with: .opacity))
                 }
             }
         }
@@ -228,8 +244,52 @@ private struct CharacterPortrait: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.accent, lineWidth: 2))
         .shadow(color: .black.opacity(0.6), radius: 10, y: 4)
+        .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(name)
+    }
+}
+
+/// A character's portrait filling the window, with a small X (or Escape) to close.
+private struct CharacterCloseup: View {
+    let name: String
+    let image: NSImage
+    let onClose: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.92)
+                .ignoresSafeArea()
+
+            VStack(spacing: 12) {
+                Image(nsImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.accent, lineWidth: 2))
+                    .shadow(color: .black.opacity(0.8), radius: 24)
+                Text(name)
+                    .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                    .foregroundStyle(Theme.accent)
+            }
+            .padding(.horizontal, 32)
+            .padding(.vertical, 24)
+        }
+        .overlay(alignment: .topTrailing) {
+            Button(action: onClose) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 12, weight: .bold))
+                    .foregroundStyle(Theme.text)
+                    .frame(width: 26, height: 26)
+                    .background(Circle().fill(.white.opacity(0.15)))
+                    .contentShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .keyboardShortcut(.cancelAction)
+            .help("Close")
+            .accessibilityLabel("Close")
+            .padding(14)
+        }
     }
 }
 

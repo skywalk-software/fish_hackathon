@@ -71,7 +71,7 @@ To add art, drop an image into [Art/Rooms/](Art/Rooms/), named after the room as
 
 ## Character portraits
 
-When a character is in the same room as you, their portrait appears in the top-right corner. Several characters can appear at once, side by side. This way room art never has to be drawn both with and without each character.
+When a character is in the same room as you, their portrait appears in the top-right corner. Several characters can appear at once, side by side. Click a portrait to see it close up, filling the window; close it with the ✕ or Escape. This way room art never has to be drawn both with and without each character.
 
 The app knows where characters are because dfrotz runs with `-o`, which reports every object the game moves (`@move_obj Ensign First Class Deck Nine`). The engine strips those lines from the narration and keeps `session.characterLocations` up to date. A portrait stays up while the character is present, even on turns that don't mention them.
 
