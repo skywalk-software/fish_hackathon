@@ -10,6 +10,8 @@ struct GameView: View {
     @State private var history: [String] = []
     @State private var historyIndex: Int?
     @State private var pushToTalk = PushToTalk()
+    /// A spoken command waiting in the command box to be sent; cleared if the player edits it.
+    @State private var pendingVoiceCommand: String?
     /// The portrait shown full-window, if any: a character in the room or the sidekick.
     @State private var closeup: Portrait?
     @FocusState private var inputFocused: Bool
@@ -70,6 +72,12 @@ struct GameView: View {
                 .focused($inputFocused)
                 .disabled(!session.isRunning)
                 .onSubmit(submit)
+                .onKeyPress(.escape) {
+                    // Stop a spoken command from sending itself, leaving it to edit.
+                    guard pendingVoiceCommand != nil else { return .ignored }
+                    pendingVoiceCommand = nil
+                    return .handled
+                }
                 .onKeyPress(.upArrow) { recallHistory(-1) }
                 .onKeyPress(.downArrow) { recallHistory(1) }
             MicButton(pushToTalk: pushToTalk)
@@ -87,20 +95,32 @@ struct GameView: View {
         switch pushToTalk.phase {
         case .listening: return "Listening… release to send"
         case .transcribing: return "Transcribing…"
-        case .interpreting: return "Interpreting…"
+        case .interpreting: return pushToTalk.heard.map { "Interpreting “\($0)”…" } ?? "Interpreting…"
         case .idle:
             return pushToTalk.notice ?? voices?.errorMessage
                 ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
         }
     }
 
+    /// How long a spoken command sits in the command box before it's sent.
+    private static let voiceCommandPreview: Duration = .milliseconds(800)
+
+    /// Shows a spoken command in the command box, then sends it. Typing (or pressing Escape)
+    /// during the pause cancels the automatic send so the player can fix it first.
     private func sendVoiceCommand(_ command: String) {
-        session.send(command)
-        history.append(command)
+        input = command
         historyIndex = nil
+        pendingVoiceCommand = command
+        Task {
+            try? await Task.sleep(for: Self.voiceCommandPreview)
+            guard pendingVoiceCommand == command, input == command else { return }
+            pendingVoiceCommand = nil
+            submit()
+        }
     }
 
     private func submit() {
+        pendingVoiceCommand = nil
         let command = input.trimmingCharacters(in: .whitespaces)
         // Empty input is allowed: some prompts (e.g. the save filename) accept the default.
         session.send(command)

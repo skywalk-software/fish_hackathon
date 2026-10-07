@@ -14,6 +14,8 @@ final class PushToTalk {
     }
 
     private(set) var phase: Phase = .idle
+    /// What speech-to-text heard, while Claude turns it into a command. Nil otherwise.
+    private(set) var heard: String?
     /// A hint or error to show the player. Cleared when the next recording starts.
     private(set) var notice: String?
     /// Why voice input is off (no API key), or nil when it's ready.
@@ -112,6 +114,8 @@ final class PushToTalk {
         Task {
             do {
                 let heard = try await speechToText.transcribe(wav: wav)
+                self.heard = heard.isEmpty ? nil : heard
+                defer { self.heard = nil }
                 if heard.isEmpty {
                     notice = "Didn't catch that. Hold ⌥ and try again."
                 } else if let command = await acceptedCommand(from: heard, context: context) {
