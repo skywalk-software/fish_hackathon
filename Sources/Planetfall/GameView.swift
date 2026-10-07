@@ -18,7 +18,7 @@ struct GameView: View {
             VStack(spacing: 0) {
                 RoomArtView(location: session.status?.location)
                 Divider()
-                TranscriptView(entries: session.transcript)
+                TranscriptTextView(entries: session.transcript)
             }
             // Characters in the room appear as portraits over the top corner, so room
             // art never has to be drawn with and without each character.
@@ -66,6 +66,7 @@ struct GameView: View {
         .foregroundStyle(Theme.text)
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+        .background(InvertedFieldSelection())
     }
 
     private var placeholder: String {
@@ -291,44 +292,6 @@ private struct CharacterCloseup: View {
             .help("Close")
             .accessibilityLabel("Close")
             .padding(14)
-        }
-    }
-}
-
-private struct TranscriptView: View {
-    let entries: [TranscriptEntry]
-
-    var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 14) {
-                    ForEach(entries) { entry in
-                        row(for: entry).id(entry.id)
-                    }
-                }
-                .padding(16)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            // Stay pinned to the latest text when the art panel resizes the transcript.
-            .defaultScrollAnchor(.bottom)
-            .onChange(of: entries.last?.id) { _, last in
-                guard let last else { return }
-                withAnimation(.easeOut(duration: 0.15)) { proxy.scrollTo(last, anchor: .bottom) }
-            }
-        }
-        .font(Theme.font)
-        .textSelection(.enabled)
-    }
-
-    @ViewBuilder
-    private func row(for entry: TranscriptEntry) -> some View {
-        switch entry {
-        case .narration(_, let text):
-            Text(text).foregroundStyle(Theme.text)
-        case .command(_, let text):
-            Text(verbatim: "> \(text)").foregroundStyle(Theme.accent)
-        case .system(_, let text):
-            Text(text).foregroundStyle(Theme.dim).italic()
         }
     }
 }
