@@ -242,24 +242,26 @@ private struct CharacterPortrait: View {
     let name: String
     let image: NSImage
 
+    static let size: CGFloat = 225
+
     var body: some View {
         VStack(spacing: 0) {
             Image(nsImage: image)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 150, height: 150)
+                .frame(width: Self.size, height: Self.size)
                 .clipped()
             Text(name)
-                .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                .font(.system(size: 14, weight: .semibold, design: .monospaced))
                 .foregroundStyle(Theme.background)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
                 .background(Theme.accent)
         }
-        .frame(width: 150)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Theme.accent, lineWidth: 2))
+        .frame(width: Self.size)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.accent, lineWidth: 2))
         .shadow(color: .black.opacity(0.6), radius: 10, y: 4)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
