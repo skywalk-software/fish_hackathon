@@ -46,6 +46,9 @@ public final class GameSession {
     public private(set) var transcript: [TranscriptEntry] = []
     public private(set) var status: StatusLine?
     public private(set) var isAwaitingInput = false
+    /// What the game is waiting for: a command at `>`, or an answer to a question such as a
+    /// save file name.
+    public private(set) var prompt: GameTurn.Prompt = .command
     public private(set) var isRunning = false
     /// Where each character is (character id -> room name), tracked from dfrotz's
     /// object-movement trace. Characters not yet seen or removed from play are absent.
@@ -171,6 +174,7 @@ public final class GameSession {
         characterLocations = [:]
         storyEvents = []
         isAwaitingInput = false
+        prompt = .command
         isRunning = false
         try start()
     }
@@ -208,6 +212,7 @@ public final class GameSession {
         if let newStatus = turn.status { status = newStatus }
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true
+        prompt = turn.prompt
         emit(.turn(turn))
     }
 

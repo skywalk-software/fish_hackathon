@@ -4,7 +4,8 @@ import PlanetfallEngine
 
 /// Hold-to-talk voice commands. While ⌥ (or the mic button) is held, the microphone records;
 /// on release the clip goes to Fish Audio speech-to-text, Claude turns the transcript into a
-/// parser command (when an Anthropic key is set), and the command is handed back.
+/// parser command (when an Anthropic key is set), and the command is handed back only if every
+/// word is in the game's vocabulary. Nothing the game can't accept is ever sent.
 @MainActor
 @Observable
 final class PushToTalk {
@@ -19,8 +20,10 @@ final class PushToTalk {
     let unavailableReason: String?
 
     @ObservationIgnored private let speechToText: FishSpeechToText?
-    /// Nil without ANTHROPIC_API_KEY; transcripts then go to the game as heard.
+    /// Nil without ANTHROPIC_API_KEY; transcripts must then pass the vocabulary check as heard.
     @ObservationIgnored private let interpreter: CommandInterpreter?
+    /// The parser's dictionary, read from the story file.
+    @ObservationIgnored private let vocabulary = GameVocabulary.planetfall
     @ObservationIgnored private let recorder = MicrophoneRecorder()
     @ObservationIgnored private var canListen: () -> Bool = { false }
     @ObservationIgnored private var context: () -> CommandContext = { CommandContext(location: nil, recentOutput: "") }
@@ -41,7 +44,9 @@ final class PushToTalk {
             speechToText = nil
             unavailableReason = "Voice input is off. Add FISH_API_KEY to \(FishAPIKey.envFileURL.path)."
         }
-        interpreter = AnthropicAPIKey.load().map { CommandInterpreter(apiKey: $0) }
+        interpreter = AnthropicAPIKey.load().map {
+            CommandInterpreter(apiKey: $0, vocabulary: GameVocabulary.planetfall?.words)
+        }
     }
 
     /// Starts listening for ⌥ and routes commands to `onCommand`. `context` describes the game
@@ -109,7 +114,7 @@ final class PushToTalk {
                 let heard = try await speechToText.transcribe(wav: wav)
                 if heard.isEmpty {
                     notice = "Didn't catch that. Hold ⌥ and try again."
-                } else if let command = await interpret(heard, context: context) {
+                } else if let command = await acceptedCommand(from: heard, context: context) {
                     onCommand(command)
                 }
             } catch {
@@ -119,25 +124,41 @@ final class PushToTalk {
         }
     }
 
-    /// Asks Claude for the parser command the player meant. Returns nil when they weren't giving
-    /// the game a command. If Claude can't be reached, sends what was heard rather than nothing.
-    private func interpret(_ heard: String, context: CommandContext) async -> String? {
-        guard let interpreter else { return heard }
-        phase = .interpreting
-        do {
-            let command = try await interpreter.interpret(heard, context: context)
-            if command.isEmpty {
-                notice = "That didn't sound like a command: “\(heard)”"
+    /// The command to send for what was heard, or nil to send nothing. Claude rewrites the words
+    /// into the parser's terms; then every word must be in the game's vocabulary (answers to the
+    /// game's questions, like a save file name, are exempt). If Claude can't be reached, what was
+    /// heard still goes through only if the parser would accept it as is.
+    private func acceptedCommand(from heard: String, context: CommandContext) async -> String? {
+        var candidate = heard
+        var cleanupFailure: String?
+        if let interpreter {
+            phase = .interpreting
+            do {
+                candidate = try await interpreter.interpret(heard, context: context)
+                if candidate.isEmpty {
+                    notice = "That didn't sound like a command: “\(heard)”"
+                    return nil
+                }
+            } catch {
+                cleanupFailure = "Command cleanup failed (\(error.localizedDescription))"
+            }
+        }
+        let command = GameVocabulary.normalize(candidate)
+        if !context.isAnsweringQuestion, let vocabulary {
+            let unknown = vocabulary.unknownWords(in: command)
+            guard unknown.isEmpty else {
+                let words = unknown.map { "“\($0)”" }.joined(separator: ", ")
+                notice = (cleanupFailure.map { $0 + ". " } ?? "")
+                    + "Not sent: the game doesn't know \(words). Heard “\(heard)”"
                 return nil
             }
-            if command.caseInsensitiveCompare(heard) != .orderedSame {
-                notice = "Heard “\(heard)”"
-            }
-            return command
-        } catch {
-            notice = "Sent as heard. Command cleanup failed: \(error.localizedDescription)"
-            return heard
         }
+        if let cleanupFailure {
+            notice = cleanupFailure + ", sent as heard"
+        } else if command.caseInsensitiveCompare(GameVocabulary.normalize(heard)) != .orderedSame {
+            notice = "Heard “\(heard)”"
+        }
+        return command
     }
 
     /// Discards the current recording without sending it.

@@ -32,10 +32,14 @@ public struct CommandContext: Equatable, Sendable {
     public var location: String?
     /// The end of the transcript, oldest first, with commands written as "> command".
     public var recentOutput: String
+    /// True when the game asked a question (like a save file name) instead of waiting at `>`,
+    /// so the answer can be any word, not just parser vocabulary.
+    public var isAnsweringQuestion: Bool
 
-    public init(location: String?, recentOutput: String) {
+    public init(location: String?, recentOutput: String, isAnsweringQuestion: Bool = false) {
         self.location = location
         self.recentOutput = recentOutput
+        self.isAnsweringQuestion = isAnsweringQuestion
     }
 
     /// The newest transcript entries that fit in about `maxCharacters`.
@@ -62,7 +66,9 @@ public struct CommandContext: Equatable, Sendable {
 extension GameSession {
     /// The current room and recent transcript, for interpreting a spoken command.
     public func commandContext() -> CommandContext {
-        .recent(transcript, location: status?.location)
+        var context = CommandContext.recent(transcript, location: status?.location)
+        context.isAnsweringQuestion = prompt == .question
+        return context
     }
 }
 
@@ -81,12 +87,17 @@ public struct CommandInterpreter: Sendable {
     public let serverSideFallbacks: Bool
     private let urlSession: URLSession
 
+    /// The game parser's words (`GameVocabulary.words`). Given to Claude so commands use only
+    /// words the game knows.
+    public let vocabulary: [String]?
+
     public init(apiKey: String, model: String = "claude-opus-5-5", effort: String? = "low",
-                serverSideFallbacks: Bool = true, urlSession: URLSession = .shared) {
+                serverSideFallbacks: Bool = true, vocabulary: [String]? = nil, urlSession: URLSession = .shared) {
         self.apiKey = apiKey
         self.model = model
         self.effort = effort
         self.serverSideFallbacks = serverSideFallbacks
+        self.vocabulary = vocabulary
         self.urlSession = urlSession
     }
 
@@ -110,8 +121,9 @@ public struct CommandInterpreter: Sendable {
             "model": model,
             // Thinking counts toward this too, so leave room beyond the one-line answer.
             "max_tokens": 4096,
-            // The system prompt never changes, so it's cached; the game state goes in the user turn.
-            "system": [["type": "text", "text": Self.systemPrompt, "cache_control": ["type": "ephemeral"]]],
+            // The instructions and vocabulary never change, so they're cached; the game state goes in
+            // the user turn.
+            "system": systemBlocks,
             "messages": [["role": "user", "content": Self.userMessage(heard: heard, context: context)]],
             "output_config": outputConfig,
         ]
@@ -175,6 +187,32 @@ public struct CommandInterpreter: Sendable {
             "required": ["command"],
             "additionalProperties": false,
         ]
+    }
+
+    /// The instructions, then the vocabulary if there is one. The cache breakpoint goes on the
+    /// last block so both are cached together.
+    var systemBlocks: [[String: Any]] {
+        var texts = [Self.systemPrompt]
+        if let vocabulary, !vocabulary.isEmpty { texts.append(Self.vocabularyPrompt(vocabulary)) }
+        return texts.enumerated().map { index, text in
+            var block: [String: Any] = ["type": "text", "text": text]
+            if index == texts.count - 1 { block["cache_control"] = ["type": "ephemeral"] }
+            return block
+        }
+    }
+
+    static func vocabularyPrompt(_ words: [String]) -> String {
+        """
+        Words the game's parser knows. It reads only the first six letters of each word, so they're \
+        listed cut to six letters ("blathe" is blather, "rat-a" is rat-ant). Every word in your command \
+        must start with one of these; any other word gets "I don't know the word" and the command isn't \
+        sent at all. Numbers are fine. When the game is asking a question, such as a file name, the \
+        answer can be any word.
+
+        <vocabulary>
+        \(words.joined(separator: " "))
+        </vocabulary>
+        """
     }
 
     static let systemPrompt = """

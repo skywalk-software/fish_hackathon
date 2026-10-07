@@ -10,11 +10,28 @@ public struct CharacterVoice: Equatable, Sendable {
     public var names: [String]
     /// Fish Audio voice model id, sent as `reference_id`.
     public var fishVoiceID: String
+    /// For characters the game only paraphrases ("The ambassador asks where Admiral Smithers can
+    /// be found."): the game's exact wording, and what the character says aloud instead.
+    public var reportedSpeech: [ReportedSpeech]
 
-    public init(characterID: String, names: [String], fishVoiceID: String) {
+    public init(characterID: String, names: [String], fishVoiceID: String, reportedSpeech: [ReportedSpeech] = []) {
         self.characterID = characterID
         self.names = names
         self.fishVoiceID = fishVoiceID
+        self.reportedSpeech = reportedSpeech
+    }
+}
+
+/// Speech the game reports instead of quoting, turned into a line the character speaks.
+public struct ReportedSpeech: Equatable, Sendable {
+    /// The game's wording, matched exactly within a paragraph (wrapping doesn't matter).
+    public var phrase: String
+    /// What the character says, with any Fish S2 delivery tags.
+    public var line: String
+
+    public init(_ phrase: String, says line: String) {
+        self.phrase = phrase
+        self.line = line
     }
 }
 
@@ -47,6 +64,35 @@ public struct VoiceCast: Equatable, Sendable {
             // nowhere else in the game.
             CharacterVoice(characterID: "veldina", names: ["Veldina", "woman"],
                            fishVoiceID: "8906b5268cae414fb9b8d3da6e84413d"),  // "Measured Storyteller"
+            // Never quoted: the game reports what he says through "a mechanical translator slung
+            // around his neck", so each report gets a translator line. "Ambassador" (capitalized)
+            // never appears in the text, so no quote is ever attributed to him by name.
+            CharacterVoice(characterID: "ambassador", names: ["Ambassador"],
+                           fishVoiceID: "50b20b6a22e04352877c0c01b194c1aa",  // "IBM-7094": monotone computer
+                           reportedSpeech: [
+                               ReportedSpeech("wheezes loudly",
+                                              says: "[wheezing] Greetings, ensign. A gift from Blow'k-bibben-Gordo."),
+                               ReportedSpeech("introduces himself as Br'gun-te'elkner-ipg'nun",
+                                              says: "Greetings. I am Br'gun-te'elkner-ipg'nun."),
+                               ReportedSpeech("asks if you are performing some sort of religious ceremony",
+                                              says: "Are you performing some sort of religious ceremony?"),
+                               ReportedSpeech("inquires whether you are interested in a game of Bocci",
+                                              says: "Would you be interested in a game of Bocci?"),
+                               ReportedSpeech("recites a plea for coexistence between your races",
+                                              says: "[solemnly] Let our two great races live side by side, in peace."),
+                               ReportedSpeech("asks where Admiral Smithers can be found",
+                                              says: "Where can Admiral Smithers be found?"),
+                               ReportedSpeech("remarks that all humans look alike to him",
+                                              says: "Forgive me. All humans look alike to me."),
+                               ReportedSpeech("offers you a bit of celery",
+                                              says: "Would you care for a bit of celery?"),
+                               ReportedSpeech("grunts a polite farewell",
+                                              says: "[grunting] Farewell, ensign."),
+                               ReportedSpeech("squawks frantically",
+                                              says: "[squawking frantically] Squawk! Squawk!"),
+                               ReportedSpeech("whimpers and slaps your wrist",
+                                              says: "[whimpering] Please, not the translator!"),
+                           ]),
         ])
 
     public static func load() -> VoiceCast {
@@ -122,7 +168,52 @@ public enum DialogueExtractor {
         let range: Range<String.Index>
     }
 
+    /// One piece of speech in a paragraph: a quote, or a phrase the game uses to report speech.
+    private struct Speech {
+        let range: Range<String.Index>
+        let voice: CharacterVoice
+        /// The spoken words, without delivery tags.
+        let words: String
+        /// For quotes, the delivery taken from the verbs around them. Reported speech carries its
+        /// own tags in `taggedLine`.
+        let direction: String?
+        let taggedLine: String?
+    }
+
     private static func script(forParagraph paragraph: String, voices: [CharacterVoice]) -> TurnScript {
+        let speech = (quotedSpeech(in: paragraph, voices: voices) + reportedSpeech(in: paragraph, voices: voices))
+            .sorted { $0.range.lowerBound < $1.range.lowerBound }
+        guard !speech.isEmpty else { return TurnScript(narration: paragraph, lines: []) }
+
+        var narration = ""
+        var narrated = paragraph.startIndex
+        var lines: [SpokenLine] = []
+        var lastDirection: String?
+        for piece in speech where piece.range.lowerBound >= narrated {
+            narration += paragraph[narrated..<piece.range.lowerBound] + "[\(piece.voice.names[0]) speaks]"
+            narrated = piece.range.upperBound
+
+            if var last = lines.last, last.characterID == piece.voice.characterID {
+                // Same speaker in the same breath: keep a quote's tag only if the delivery changes.
+                let tagged = piece.taggedLine
+                    ?? (piece.direction != nil && piece.direction != lastDirection
+                        ? "[\(piece.direction!)] \(piece.words)" : piece.words)
+                last.text += " " + piece.words
+                last.ttsText += " " + tagged
+                lines[lines.count - 1] = last
+            } else {
+                lastDirection = nil
+                let tagged = piece.taggedLine ?? ((piece.direction.map { "[\($0)] " } ?? "") + piece.words)
+                lines.append(SpokenLine(characterID: piece.voice.characterID, text: piece.words, ttsText: tagged))
+            }
+            if piece.direction != nil { lastDirection = piece.direction }
+        }
+        narration += paragraph[narrated...]
+        return TurnScript(narration: narration, lines: lines)
+    }
+
+    /// Quotes, each given to the nearest voiced name before it, else after it.
+    private static func quotedSpeech(in paragraph: String, voices: [CharacterVoice]) -> [Speech] {
         let quotes = paragraph.matches(of: /"([^"]+)"/)
         let quoteRanges = quotes.map(\.range)
         let mentions = voices.flatMap { voice in
@@ -130,12 +221,9 @@ public enum DialogueExtractor {
                 paragraph.ranges(of: wordPattern(name)).map { Mention(voice: voice, range: $0) }
             }
         }.filter { mention in !quoteRanges.contains { $0.overlaps(mention.range) } }
-        guard !quotes.isEmpty, !mentions.isEmpty else { return TurnScript(narration: paragraph, lines: []) }
+        guard !mentions.isEmpty else { return [] }
 
-        var narration = ""
-        var narrated = paragraph.startIndex
-        var lines: [SpokenLine] = []
-        var lastDirection: String?
+        var speech: [Speech] = []
         for (index, quote) in quotes.enumerated() {
             let previousEnd = index > 0 ? quotes[index - 1].range.upperBound : paragraph.startIndex
             let lead = paragraph[previousEnd..<quote.range.lowerBound]
@@ -146,30 +234,36 @@ public enum DialogueExtractor {
                 .min { $0.range.lowerBound < $1.range.lowerBound }
             guard let speaker = (before ?? after)?.voice else { continue }
 
-            narration += paragraph[narrated..<quote.range.lowerBound] + "[\(speaker.names[0]) speaks]"
-            narrated = quote.range.upperBound
-
-            let words = String(quote.output.1).trimmingCharacters(in: .whitespaces)
             let nextStart = index + 1 < quotes.count ? quotes[index + 1].range.lowerBound : paragraph.endIndex
             // The sentence right after the quote ("he sneers.") says how it was delivered, else the
             // one right before it ("Blather shouts", "Blather's sneer softens a bit.").
             let direction = direction(in: firstSentence(paragraph[quote.range.upperBound..<nextStart]))
                 ?? direction(in: lastSentence(lead))
-
-            if var last = lines.last, last.characterID == speaker.characterID {
-                // A later quote in the same breath: keep its tag only if the delivery changes.
-                let tag = direction != nil && direction != lastDirection ? "[\(direction!)] " : ""
-                last.text += " " + words
-                last.ttsText += " " + tag + words
-                lines[lines.count - 1] = last
-            } else {
-                lines.append(SpokenLine(characterID: speaker.characterID, text: words,
-                                        ttsText: (direction.map { "[\($0)] " } ?? "") + words))
-            }
-            if direction != nil { lastDirection = direction }
+            speech.append(Speech(range: quote.range, voice: speaker,
+                                 words: String(quote.output.1).trimmingCharacters(in: .whitespaces),
+                                 direction: direction, taggedLine: nil))
         }
-        narration += paragraph[narrated...]
-        return TurnScript(narration: narration, lines: lines)
+        return speech
+    }
+
+    /// Phrases the game uses to report a character's speech ("asks where Admiral Smithers can be
+    /// found"), outside any quotes.
+    private static func reportedSpeech(in paragraph: String, voices: [CharacterVoice]) -> [Speech] {
+        let quoteRanges = paragraph.matches(of: /"([^"]+)"/).map(\.range)
+        return voices.flatMap { voice in
+            voice.reportedSpeech.flatMap { reported in
+                paragraph.ranges(of: reported.phrase)
+                    .filter { range in !quoteRanges.contains { $0.overlaps(range) } }
+                    .map { range in
+                        Speech(range: range, voice: voice, words: withoutTags(reported.line),
+                               direction: nil, taggedLine: reported.line)
+                    }
+            }
+        }
+    }
+
+    private static func withoutTags(_ line: String) -> String {
+        line.replacing(/\[[^\]]*\]/, with: "").split(whereSeparator: \.isWhitespace).joined(separator: " ")
     }
 
     /// Words just before a quote that mark it as writing, not speech: `labelled "Spam and Egz"`.

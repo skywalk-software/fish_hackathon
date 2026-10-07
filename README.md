@@ -32,7 +32,7 @@ ANTHROPIC_API_KEY=your-anthropic-key   # optional: Claude command cleanup
 - `.env` is gitignored, so never commit it.
 - Environment variables with the same names override the file.
 - Without `FISH_API_KEY`, the game still runs, but the mic button stays disabled.
-- Without `ANTHROPIC_API_KEY`, voice still works, but commands go to the game exactly as heard.
+- Without `ANTHROPIC_API_KEY`, voice still works, but there's no cleanup: a transcript reaches the game only if every word in it is already in the game's vocabulary.
 
 **Using it:**
 - **Hold ⌥ (Option)**, or hold the mic button next to the command line, and speak a command. Release to send.
@@ -44,15 +44,19 @@ ANTHROPIC_API_KEY=your-anthropic-key   # optional: Claude command cleanup
   - It doesn't play for you: it never adds actions, directions or objects you didn't say.
   - When the command differs from what you said, the input field shows `Heard "…"` so you can see what happened.
   - If you weren't giving a command ("hmm, let me think"), nothing is sent.
-  - If Claude can't be reached, the transcript is sent as heard and the input field says why.
+  - **Only accepted text is sent.** Before anything reaches the game, every word is checked against the parser's own dictionary, read from `planetfall.z3` (668 words, compared by their first six letters the way the game does).
+    - A command with an unknown word is held back ("Not sent: the game doesn't know "please""), so the game never answers "I don't know the word".
+    - Claude gets the same vocabulary, so it writes commands using only those words.
+    - When the game asks a question (like a save file name), the answer skips the vocabulary check, since any name is allowed.
+  - If Claude can't be reached, the transcript is sent as heard only if it passes the vocabulary check. The input field says why either way.
 
 **Notes:**
 - **Microphone permission:** the first time you press ⌥, macOS asks for microphone access. With `swift run`, the prompt names Terminal (or whichever app launched it). The built app asks for itself.
 - **Accidental presses:** holds under 0.3 s are ignored, and so is silence, so it doesn't spend API calls. Pressing another key while holding ⌥ (to type a special character or use a shortcut) cancels the recording.
 - **Why push-to-talk:** Fish's speech-to-text has no streaming endpoint. It transcribes one finished clip per request, so you have to mark when you're done talking.
 - **Cost:** speech-to-text costs $0.36 per audio hour.
-- **Cleanup model:** `claude-opus-5-5` at `effort: "low"`, with a cached system prompt and JSON-schema output. It adds a round trip on top of speech-to-text. For lower latency, construct `CommandInterpreter(apiKey:model:effort:serverSideFallbacks:)` with `model: "claude-haiku-4-5", effort: nil, serverSideFallbacks: false` in `PushToTalk`.
-- **Live tests:** run the opt-in tests against the real APIs with `FISH_LIVE_TESTS=1 swift test --filter transcribesRealSpeech` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter interpretsRealSpeech`.
+- **Cleanup model:** `claude-opus-5-5` at `effort: "low"`, with the instructions and vocabulary cached and JSON-schema output. Cleanup took about 2 s per command in testing. It adds a round trip on top of speech-to-text. For lower latency, construct `CommandInterpreter(apiKey:model:effort:serverSideFallbacks:)` with `model: "claude-haiku-4-5", effort: nil, serverSideFallbacks: false` in `PushToTalk`.
+- **Live tests:** run the opt-in tests against the real APIs with `FISH_LIVE_TESTS=1 swift test --filter transcribesRealSpeech` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter "interpretsRealSpeech|cleanedCommandsUseTheGamesWords"`.
 
 ## Voices: narrator, characters, and SNARK-9
 
@@ -75,11 +79,13 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 | Ensign Blather | **arnold** `546972d2053c481d86fe4449a1b54e27` (cloned from `audio/arnold-soundboard-combined.mp3`) | `FISH_VOICE_BLATHER` |
 | Floyd | "Energetic Child" `4fcb3a423c61415fb35604eba567d95f` | `FISH_VOICE_FLOYD` |
 | Veldina | "Measured Storyteller" `8906b5268cae414fb9b8d3da6e84413d` | `FISH_VOICE_VELDINA` |
+| Alien Ambassador | "IBM-7094" (monotone computer, for his translator) `50b20b6a22e04352877c0c01b194c1aa` | `FISH_VOICE_AMBASSADOR` |
 | SNARK-9 | "Robot" `fe5b8eaa8b754a5b8d895265def9e5b2` | `FISH_VOICE_SIDEKICK` |
 
 - **Arnold is an unlisted voice in Gaurav's Fish account.** Any Fish API key can use it by id (Fish's library doesn't list it), so it works for the whole team. The other voices are public, from Fish's voice library. To use a different Blather voice, set `FISH_VOICE_BLATHER`.
 - **Finding character lines:** `DialogueExtractor` gives a quote to the nearest voiced name in its paragraph (`Blather shouts "…"`, `"…" bellows Blather`). Quotes near "labelled", "reads" or "embossed" are signs, so they stay with the narrator.
-- **Adding a character:** add a `CharacterVoice` (id, the names the game uses for them, Fish voice id) to `VoiceCast.defaults`.
+- **The ambassador is never quoted.** The game only reports what he says ("The ambassador asks where Admiral Smithers can be found."). Each of his reported lines and sounds maps to a line he speaks through his translator, e.g. "Where can Admiral Smithers be found?" or `[wheezing] Greetings, ensign.` The narrator gets `[Ambassador speaks]` in place of the report. These mappings are `reportedSpeech` in `VoiceCast.defaults`. To hear him, launch with `PLANETFALL_SEED=10` and `wait` five times: he arrives, speaks three lines, then says goodbye.
+- **Adding a character:** add a `CharacterVoice` (id, the names the game uses for them, Fish voice id, and `reportedSpeech` if the game paraphrases them) to `VoiceCast.defaults`.
 - **Why SNARK-9 isn't a Fish Agent:** Fish's hosted Agents can take text (`user.message` with `audio: true`). But they need the LiveKit WebRTC SDK, an agent configured in Fish's agent platform, and a session open for the whole game (Fish bills agents at $0.06/min). Their audio would also bypass the shared speaker queue. SNARK-9 already writes the commentary with Claude, so it gets a Fish voice instead.
 - **Microphone:** push-to-talk records from the macOS default input (System Settings → Sound → Input), re-read on every press. Headphones that expose no microphone to macOS, like Bluetooth buds in headphone-only mode, can't be recorded from; the Mac's mic is used instead.
 - **Live tests:** `FISH_LIVE_TESTS=1 swift test --filter streamsEveryCastVoice` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter narratesARealTurn`.
@@ -95,6 +101,7 @@ We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39),
 | `GameLocator` | [Sources/PlanetfallEngine/GameLocator.swift](Sources/PlanetfallEngine/GameLocator.swift) | Finds dfrotz and the story file. Override with `DFROTZ_PATH` / `PLANETFALL_STORY`. |
 | `FishAPIKey`, `AnthropicAPIKey` | [Sources/PlanetfallEngine/FishAPIKey.swift](Sources/PlanetfallEngine/FishAPIKey.swift) | Load `FISH_API_KEY` / `ANTHROPIC_API_KEY` from the environment, then from `.env`. |
 | `FishSpeechToText` | [Sources/PlanetfallEngine/FishSpeechToText.swift](Sources/PlanetfallEngine/FishSpeechToText.swift) | Uploads a WAV to Fish `POST /v1/asr` and returns a clean command (speaker markers and cues removed). |
+| `GameVocabulary` | [Sources/PlanetfallEngine/GameVocabulary.swift](Sources/PlanetfallEngine/GameVocabulary.swift) | Reads the parser's dictionary from the story file and checks that every word of a command is one the game knows. |
 | `CommandInterpreter` | [Sources/PlanetfallEngine/CommandInterpreter.swift](Sources/PlanetfallEngine/CommandInterpreter.swift) | Sends what was heard, plus the current room and recent output (`GameSession.commandContext()`), to Claude and returns one parser command. |
 | `VoiceCast`, `DialogueExtractor` | [Sources/PlanetfallEngine/CharacterVoice.swift](Sources/PlanetfallEngine/CharacterVoice.swift) | Which Fish voice each role uses, and splitting a turn into narration and character lines (with delivery tags). |
 | `Narrator` | [Sources/PlanetfallEngine/Narrator.swift](Sources/PlanetfallEngine/Narrator.swift) | Streams Claude's spoken retelling of a turn, a sentence at a time. |
@@ -147,7 +154,7 @@ To add a portrait, drop a square image into [Art/NPCs/](Art/NPCs/), named by the
 
 A head-and-shoulders shot on a plain dark background works best at inset size.
 
-The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession`, or set `PLANETFALL_SEED` when launching the app, to get the same game every time. For example, with seed 8, Blather arrives on turn 4: `PLANETFALL_SEED=8 swift run Planetfall`, or `open --env PLANETFALL_SEED=8 build/Planetfall.app`.
+The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession`, or set `PLANETFALL_SEED` when launching the app, to get the same game every time. For example, with seed 8, Blather arrives on turn 4: `PLANETFALL_SEED=8 swift run Planetfall`, or `open --env PLANETFALL_SEED=8 build/Planetfall.app`. With seed 10, the alien ambassador arrives on turn 1.
 
 ## Sidekick commentary
 
