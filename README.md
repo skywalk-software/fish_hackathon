@@ -116,13 +116,21 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 
 ## App icon
 
-`Art/AppIcon.png` is the app icon: an original image of the player's ensign. To replace it, generate new square artwork, then shape it into a macOS icon (an 824-point rounded square on a 1024-point canvas, with a shadow):
+`Art/AppIcon.png` is the app icon: an original recruitment-poster-style painting of the player's ensign. Icons, and the square artwork they were made from, live in [Art/AppIcons/](Art/AppIcons/):
+
+| Icon | Files | Use |
+|---|---|---|
+| Poster | `poster.png`, `poster-artwork.jpg` | Current icon |
+| Ensign | `ensign.png`, `ensign-artwork.jpg` | Alternate; planned as an unlockable for landing on the planet (see [docs/achievements-plan.md](docs/achievements-plan.md)) |
+
+To make an icon from new square artwork, shape it into a macOS icon (an 824-point rounded square on a 1024-point canvas, with a shadow), then copy it into place:
 
 ```sh
-swift scripts/make-icon.swift path/to/artwork.jpg Art/AppIcon.png
+swift scripts/make-icon.swift Art/AppIcons/new-artwork.jpg Art/AppIcons/new.png
+cp Art/AppIcons/new.png Art/AppIcon.png
 ```
 
-`build-app.sh` turns it into the app bundle's icon, and `swift run` uses it for the Dock icon.
+`build-app.sh` turns `Art/AppIcon.png` into the app bundle's icon, and `swift run` uses it for the Dock icon.
 
 ## How it works
 
