@@ -41,8 +41,10 @@ public struct FishTextToSpeech: Sendable {
 
     /// The voice reading `text`, as PCM chunks of about `chunkBytes` (0.2 s by default).
     /// Cancelling the consuming task cancels the request.
-    public func stream(_ text: String, voiceID: String, chunkBytes: Int = 9_600) -> AsyncThrowingStream<Data, Error> {
-        let request = makeRequest(text: text, voiceID: voiceID)
+    /// `speed` scales the speaking rate (1 is the voice's natural pace).
+    public func stream(_ text: String, voiceID: String, speed: Double = 1,
+                       chunkBytes: Int = 9_600) -> AsyncThrowingStream<Data, Error> {
+        let request = makeRequest(text: text, voiceID: voiceID, speed: speed)
         let urlSession = urlSession
         return AsyncThrowingStream { continuation in
             let task = Task {
@@ -72,13 +74,13 @@ public struct FishTextToSpeech: Sendable {
         }
     }
 
-    func makeRequest(text: String, voiceID: String) -> URLRequest {
+    func makeRequest(text: String, voiceID: String, speed: Double = 1) -> URLRequest {
         var request = URLRequest(url: Self.endpoint, timeoutInterval: 30)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue(model, forHTTPHeaderField: "model")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        let body: [String: Any] = [
+        var body: [String: Any] = [
             "text": text,
             "reference_id": voiceID,
             "format": "pcm",
@@ -86,6 +88,7 @@ public struct FishTextToSpeech: Sendable {
             // "balanced" starts audio in ~0.5 s; "normal" waited ~4 s for the first byte.
             "latency": "balanced",
         ]
+        if speed != 1 { body["prosody"] = ["speed": speed] }
         request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [.sortedKeys])
         return request
     }

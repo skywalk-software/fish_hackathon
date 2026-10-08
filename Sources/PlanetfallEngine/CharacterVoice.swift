@@ -42,6 +42,9 @@ public struct VoiceCast: Equatable, Sendable {
     public var narratorVoiceID: String
     /// SNARK-9, the let's-play commentator.
     public var sidekickVoiceID: String
+    /// Speaking speed for the narrator (1 is the voice's natural pace). Override with
+    /// FISH_SPEED_NARRATOR in `.env`.
+    public var narratorSpeed: Double = 1.1
     public var characters: [CharacterVoice]
 
     public init(narratorVoiceID: String, sidekickVoiceID: String, characters: [CharacterVoice]) {
@@ -50,11 +53,13 @@ public struct VoiceCast: Equatable, Sendable {
         self.characters = characters
     }
 
-    /// Fish voice library picks, plus "arnold" for Blather. Arnold is an unlisted voice in Gaurav's
-    /// Fish account: usable with any API key that has its id, but not listed in Fish's library.
+    /// Fish voice library picks, plus custom unlisted voices: "arnold" for Blather (Gaurav's Fish
+    /// account), and the narrator and SNARK-9, designed with `swift run audition design` and
+    /// saved from the chosen candidates. Unlisted voices work with any API key that has the id
+    /// but aren't listed in Fish's library.
     public static let defaults = VoiceCast(
-        narratorVoiceID: "e686ae649ee44f219a108aacba206c1a",  // "calm storyteller male"
-        sidekickVoiceID: "fe5b8eaa8b754a5b8d895265def9e5b2",  // "Robot": monotone sci-fi drone
+        narratorVoiceID: "8cf8a1fb6e504334941905c844b2a78f",  // "Planetfall Narrator (American female)"
+        sidekickVoiceID: "7fb628f6c7f44f19bf1c2cfaf13e5e24",  // "SNARK-9 (British)": Monty Python-style
         characters: [
             CharacterVoice(characterID: "blather", names: ["Blather"],
                            fishVoiceID: "546972d2053c481d86fe4449a1b54e27"),  // "arnold"
@@ -107,6 +112,10 @@ public struct VoiceCast: Equatable, Sendable {
         var cast = defaults
         cast.narratorVoiceID = override("narrator", cast.narratorVoiceID)
         cast.sidekickVoiceID = override("sidekick", cast.sidekickVoiceID)
+        if let speed = DotEnv.value(for: "FISH_SPEED_NARRATOR", environment: environment, envFile: envFile)
+            .flatMap(Double.init), speed > 0 {
+            cast.narratorSpeed = speed
+        }
         cast.characters = cast.characters.map { voice in
             var voice = voice
             voice.fishVoiceID = override(voice.characterID, voice.fishVoiceID)

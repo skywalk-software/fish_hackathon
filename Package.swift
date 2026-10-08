@@ -13,6 +13,8 @@ let package = Package(
         .target(name: "PlanetfallEngine"),
         // The SwiftUI Mac app.
         .executableTarget(name: "Planetfall", dependencies: ["PlanetfallEngine"]),
+        // Command-line tool for auditioning Fish Audio voices: swift run audition
+        .executableTarget(name: "audition", dependencies: ["PlanetfallEngine"]),
         .testTarget(name: "PlanetfallEngineTests", dependencies: ["PlanetfallEngine"]),
     ]
 )

@@ -123,6 +123,9 @@ public struct Narrator: Sendable {
         - Short replies get short narration: "Taken." becomes "Got it." Parser complaints ("I don't \
         know the word...") become a brief, wry in-world line.
         - Skip the game's title and copyright banner.
+        - You're read aloud by a warm, lively voice actor. Start each sentence with one short delivery \
+        tag in square brackets that tells them how to say it, like [warm], [wry], [amused], [hushed], \
+        [urgent], [ominous], or [deadpan]. Match the moment, and vary them. A SKIP gets no tag.
         - Vary your phrasing from your previous lines.
         - If nothing is left to narrate once the character lines are set aside, reply with exactly \
         \(skipToken) and nothing else.
@@ -165,8 +168,10 @@ struct NarrationFilter {
     mutating func feed(_ delta: String) -> [String] {
         guard decided else {
             held += delta
-            let trimmed = held.trimmingCharacters(in: .whitespacesAndNewlines)
-            if Narrator.skipToken.hasPrefix(trimmed) || trimmed == Narrator.skipToken { return [] }
+            // Decide on the words, not delivery tags, and wait while a tag is being written.
+            if DeliveryTags.hasOpenTag(held) { return [] }
+            let words = DeliveryTags.strip(held)
+            if words.isEmpty || Narrator.skipToken.hasPrefix(words) { return [] }
             decided = true
             return append(held)
         }
@@ -175,8 +180,8 @@ struct NarrationFilter {
 
     mutating func finish() -> [String] {
         if !decided {
-            let trimmed = held.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmed.isEmpty, trimmed.trimmingCharacters(in: .punctuationCharacters) != Narrator.skipToken else {
+            let words = DeliveryTags.strip(held)
+            guard !words.isEmpty, words.trimmingCharacters(in: .punctuationCharacters) != Narrator.skipToken else {
                 return []
             }
             decided = true

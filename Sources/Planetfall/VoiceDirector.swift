@@ -251,11 +251,12 @@ final class VoiceDirector {
             var spoken: [String] = []
             do {
                 for try await text in utterance.texts {
-                    try await speak(text, voiceID: utterance.voiceID, cacheable: utterance.role == .character)
+                    try await speak(text, voiceID: utterance.voiceID, cacheable: utterance.role == .character,
+                                    speed: utterance.role == .narrator ? cast.narratorSpeed : 1)
                     spoken.append(text)
                 }
                 if utterance.role == .narrator, !spoken.isEmpty {
-                    previousNarration.append(spoken.joined(separator: " "))
+                    previousNarration.append(DeliveryTags.strip(spoken.joined(separator: " ")))
                     previousNarration = previousNarration.suffix(Self.maxPreviousNarration)
                 }
                 errorMessage = nil
@@ -276,14 +277,14 @@ final class VoiceDirector {
 
     /// Streams one piece of text in `voiceID` into the player. Character lines repeat, so
     /// finished ones are cached; narration and commentary are new every time.
-    private func speak(_ text: String, voiceID: String, cacheable: Bool) async throws {
+    private func speak(_ text: String, voiceID: String, cacheable: Bool, speed: Double = 1) async throws {
         if cacheable, let cached = cache.load(text: text, voiceID: voiceID, model: speech.model) {
             try Task.checkCancellation()
             player.enqueue(cached)
             return
         }
         var audio = Data()
-        for try await chunk in speech.stream(text, voiceID: voiceID) {
+        for try await chunk in speech.stream(text, voiceID: voiceID, speed: speed) {
             // After stop(), a chunk already in flight must not restart the player.
             try Task.checkCancellation()
             player.enqueue(chunk)

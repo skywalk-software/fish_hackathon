@@ -141,6 +141,11 @@ public struct Commentator: Sendable {
         attempt, not explain the fix.
         - Roast the play, not the person: tease their choices, never anything about who they are. \
         Playful, never cruel. Keep it PG-13.
+        - Your line is read aloud by a voice actor. Start it with one delivery tag in square brackets \
+        that tells them how to say it, like [dripping with sarcasm], [theatrically weary], \
+        [mock-impressed], [deadpan], or [barely suppressing a laugh]; you may add one more before a \
+        later sentence. At most two tags, and pick ones that fit the moment. Tags are removed from \
+        the caption, so never put words the player should read inside brackets. A PASS gets no tag.
         - Vary your material. Don't reuse a joke, opener, or catchphrase from your previous lines.
         - Sometimes the app tells you the player just earned an achievement. Then award it: work \
         the achievement's name into your reaction to what just happened, in your own words and \
@@ -254,18 +259,20 @@ public struct Commentator: Sendable {
         mutating func feed(_ delta: String) -> String? {
             if decided { return delta }
             held += delta
-            let trimmed = held.trimmingCharacters(in: .whitespacesAndNewlines)
-            // Still could be the pass token: keep waiting.
-            if Commentator.passToken.hasPrefix(trimmed) || trimmed == Commentator.passToken { return nil }
+            // Decide on the words, not delivery tags ("[deadpan] PASS" is still a pass), and
+            // wait while a tag is still being written.
+            if DeliveryTags.hasOpenTag(held) { return nil }
+            let words = DeliveryTags.strip(held)
+            if words.isEmpty || Commentator.passToken.hasPrefix(words) { return nil }
             decided = true
-            return held.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : held
+            return held
         }
 
         /// Anything still held at the end of the stream, unless it was the pass token.
         mutating func finish() -> String? {
             guard !decided else { return nil }
-            let trimmed = held.trimmingCharacters(in: .whitespacesAndNewlines)
-            return trimmed.isEmpty || trimmed == Commentator.passToken ? nil : held
+            let words = DeliveryTags.strip(held).trimmingCharacters(in: .punctuationCharacters)
+            return words.isEmpty || words == Commentator.passToken ? nil : held
         }
     }
 }

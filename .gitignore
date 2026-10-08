@@ -10,4 +10,5 @@ Story/*.z3
 
 # Local only: voice-clone source clips and rendered previews, and Claude Code settings
 audio/
+auditions/
 .claude/

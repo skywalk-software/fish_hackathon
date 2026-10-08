@@ -243,6 +243,34 @@ A head-and-shoulders shot on a plain dark background works best at inset size.
 
 The opening is random: on Deck Nine, the game sends Blather, the alien ambassador, or nobody. Pass `randomSeed:` to `GameSession`, or set `PLANETFALL_SEED` when launching the app, to get the same game every time. For example, with seed 8, Blather arrives on turn 4: `PLANETFALL_SEED=8 swift run Planetfall`, or `open --env PLANETFALL_SEED=8 build/Planetfall.app`. With seed 10, the alien ambassador arrives on turn 1.
 
+## Voices and delivery
+
+The narrator ("Planetfall Narrator (American female)") and SNARK-9 ("SNARK-9 (British)", Monty Python-style) are custom voices, designed and picked with `swift run audition`. Both are unlisted in Fish, so any Fish API key can use them.
+
+- **Delivery tags:** Claude starts each narration sentence and each SNARK-9 quip with a delivery tag, such as `[wry]`, `[urgent]`, `[dripping with sarcasm]` or `[mock-impressed]`. Fish reads the tag as direction, not words. The app removes tags from SNARK-9's caption and from the history it sends back to Claude.
+- **Narrator speed:** the narrator speaks at 1.1×. Change it with `FISH_SPEED_NARRATOR` in `.env`.
+- **Swapping a voice:** set `FISH_VOICE_NARRATOR` or `FISH_VOICE_SIDEKICK` in `.env` to override either voice.
+
+## Auditioning voices
+
+`swift run audition` compares Fish Audio voices for the narrator and SNARK-9 by playing them on the same game lines. Clips are saved in `auditions/`, which is gitignored.
+
+| Command | What it does |
+|---|---|
+| `swift run audition` | Plays the current narrator and SNARK-9 voices |
+| `swift run audition search british --play` | Searches Fish's voice library and plays each result's sample |
+| `swift run audition compare sidekick <id> <id>` | Plays the current SNARK-9 voice, then each candidate (`narrator` works too) |
+| `swift run audition design sidekick ["description"]` | Designs 4 candidate voices from a description (about $0.01); without a description it uses a built-in brief |
+| `swift run audition save <candidate.wav> "SNARK-9 (British)"` | Saves a designed candidate as a private voice in your Fish account and prints its id |
+
+Options:
+- `--no-tags`: hear lines without delivery tags like `[dripping with sarcasm]`.
+- `--speed 1.1`: change the speaking speed.
+- `--model drama-3-preview`: try Fish's preview model.
+- `--no-play`: write the clips without playing them.
+
+To use a voice, add `FISH_VOICE_SIDEKICK=<id>` or `FISH_VOICE_NARRATOR=<id>` to `.env` and relaunch the app.
+
 ## Sidekick commentary
 
 **SNARK-9**, a jaded retro-gaming commentary robot, co-hosts your playthrough like a let's-play sidekick. It isn't part of the game: it watches you play from outside, the way a viewer would, and can't be seen or talked to in Planetfall. After each turn, the app sends the recent game output to Claude (`claude-opus-5-5`, low effort, streamed). SNARK-9's reaction types out live in a bar above the command line. It passes on routine turns, so it doesn't comment on everything.

@@ -95,7 +95,8 @@ public final class Sidekick {
                 for try await delta in commentator.commentary(on: context) {
                     if text.isEmpty { self?.line = "" }
                     text += delta
-                    self?.line = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    // The caption hides delivery tags; the voice gets them (onLineFinished).
+                    self?.line = DeliveryTags.strip(text)
                 }
             } catch is CancellationError {
                 return
@@ -116,7 +117,7 @@ public final class Sidekick {
             }
         } else if !text.isEmpty {
             errorMessage = nil
-            previousLines.append(text)
+            previousLines.append(DeliveryTags.strip(text))
             previousLines = previousLines.suffix(Self.maxPreviousLines)
             for handler in finishedHandlers { handler(text) }
         }
