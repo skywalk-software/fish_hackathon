@@ -48,6 +48,8 @@ struct PlanetfallApp: App {
                     if !voices.hasNarrator {
                         Text("Add ANTHROPIC_API_KEY to .env for the narrator")
                     }
+                    Divider()
+                    Toggle("Talking Portraits", isOn: Bindable(voices).talkingPortraitsEnabled)
                 } else {
                     Text("Add FISH_API_KEY to .env to hear the game")
                 }

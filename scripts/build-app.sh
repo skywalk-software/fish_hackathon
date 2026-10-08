@@ -42,5 +42,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 </dict>
 </plist>
 PLIST
+# Finder metadata (e.g. on images dragged into Art/) makes codesign refuse the bundle.
+xattr -cr "$APP"
 codesign --force --sign - "$APP"
 echo "Built $APP"

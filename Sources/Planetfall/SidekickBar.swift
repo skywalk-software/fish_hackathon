@@ -5,6 +5,8 @@ import SwiftUI
 /// covers game text. Their line types in as Claude streams it.
 struct SidekickBar: View {
     let sidekick: Sidekick
+    /// How bright his lens glows (follows the loudness of his voice), 0 when he's quiet.
+    var glow: Double = 0
     /// Called when the avatar is clicked, to show it close up.
     var onShowAvatar: () -> Void = {}
 
@@ -75,9 +77,8 @@ struct SidekickBar: View {
     private var avatarImage: some View {
         Group {
             if let image = Artwork.character(sidekick.persona.artID) {
-                Image(nsImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
+                TalkingPortrait(image: image, jaw: nil,
+                                glow: PortraitGlow.byCharacter[sidekick.persona.artID], openness: glow)
             } else {
                 Image(systemName: "eye.trianglebadge.exclamationmark")
                     .font(.system(size: 36))

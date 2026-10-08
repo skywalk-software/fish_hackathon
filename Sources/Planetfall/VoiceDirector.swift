@@ -13,6 +13,10 @@ import PlanetfallEngine
 @MainActor
 @Observable
 final class VoiceDirector {
+    /// The character whose voice is playing right now (for their portrait's jaw), if any.
+    private(set) var speakingCharacterID: String?
+    /// How far that character's jaw is open, 0 to 1, following the loudness of their speech.
+    private(set) var mouthOpenness: Double = 0
     /// The last failure (bad key, voice not available to this account), until the next line plays.
     private(set) var errorMessage: String?
     /// Each part on or off. Remembered between launches.
@@ -31,6 +35,10 @@ final class VoiceDirector {
             updateAlert()
         }
     }
+    /// Whether character portraits move their jaws (and SNARK-9's lens glows) as they speak.
+    var talkingPortraitsEnabled: Bool {
+        didSet { UserDefaults.standard.set(talkingPortraitsEnabled, forKey: Self.portraitsKey) }
+    }
     /// The narrator needs an Anthropic key; SNARK-9's voice needs SNARK-9.
     let hasNarrator: Bool
     let hasSidekick: Bool
@@ -40,6 +48,8 @@ final class VoiceDirector {
         let role: Role
         /// Tags this utterance's audio in the player, so space can skip just this speaker.
         var id = 0
+        /// The game character speaking (for their portrait's moving jaw), if it's a character.
+        var characterID: String?
         let speaker: String
         let voiceID: String
         /// Text to speak, a piece at a time (the narrator streams sentences from Claude).
@@ -55,11 +65,15 @@ final class VoiceDirector {
                       sound: effect.pcm(sampleRate: FishTextToSpeech.sampleRate))
         }
 
-        static func single(_ role: Role, speaker: String, voiceID: String, text: String) -> Utterance {
-            Utterance(role: role, speaker: speaker, voiceID: voiceID, texts: AsyncThrowingStream { continuation in
-                continuation.yield(text)
-                continuation.finish()
-            })
+        static func single(_ role: Role, speaker: String, voiceID: String, text: String,
+                           characterID: String? = nil) -> Utterance {
+            var utterance = Utterance(role: role, speaker: speaker, voiceID: voiceID,
+                                      texts: AsyncThrowingStream { continuation in
+                                          continuation.yield(text)
+                                          continuation.finish()
+                                      })
+            utterance.characterID = characterID
+            return utterance
         }
     }
 
@@ -77,6 +91,8 @@ final class VoiceDirector {
     @ObservationIgnored private var nextUtteranceID = 1
     /// Who each queued or playing utterance is, by id (for skipping).
     @ObservationIgnored private var roles: [Int: Utterance.Role] = [:]
+    /// Which game character each character line's audio belongs to, by id.
+    @ObservationIgnored private var segmentCharacters: [Int: String] = [:]
     /// An utterance the player skipped while it was still producing audio.
     @ObservationIgnored private var skippedID: Int?
     @ObservationIgnored private var task: Task<Void, Never>?
@@ -95,6 +111,7 @@ final class VoiceDirector {
     private static let charactersKey = "characterVoicesEnabled"
     private static let sidekickKey = "sidekickVoiceEnabled"
     private static let effectsKey = "soundEffectsEnabled"
+    private static let portraitsKey = "talkingPortraitsEnabled"
     private static let maxPreviousNarration = 3
     /// Under the voices, so they stay clear.
     private static let alertVolume: Float = 0.35
@@ -121,6 +138,7 @@ final class VoiceDirector {
         charactersEnabled = defaults.object(forKey: Self.charactersKey) as? Bool ?? true
         sidekickEnabled = defaults.object(forKey: Self.sidekickKey) as? Bool ?? true
         effectsEnabled = defaults.object(forKey: Self.effectsKey) as? Bool ?? true
+        talkingPortraitsEnabled = defaults.object(forKey: Self.portraitsKey) as? Bool ?? true
 
         session.addObserver { [weak self] event in
             guard let self else { return }
@@ -144,6 +162,36 @@ final class VoiceDirector {
         // SNARK-9 asks Claude for its quip only as the narration is wrapping up, so a burst
         // of quick commands doesn't pay for quips nobody would hear.
         sidekick?.readyToComment = { [weak self] in await self?.waitUntilNarrationNearlyDone() }
+        Task { [weak self] in await self?.animateMouths() }
+    }
+
+    /// About 30 times a second, sets the speaking character's jaw from how loud their audio is
+    /// at that moment: it opens quickly and closes a little slower, so it doesn't jitter.
+    private func animateMouths() async {
+        while !Task.isCancelled {
+            var target = 0.0
+            var speaker: String?
+            if talkingPortraitsEnabled, let now = player.currentLevel,
+               let characterID = segmentCharacters[now.segment]
+                   ?? (roles[now.segment] == .sidekick ? sidekick?.persona.artID : nil) {
+                speaker = characterID
+                // Speech RMS runs roughly 0.02 (quiet) to 0.2 (loud).
+                target = min(1, max(0, (Double(now.level) - 0.02) / 0.14))
+            }
+            let rate = target > mouthOpenness ? 0.6 : 0.3
+            var next = mouthOpenness + (target - mouthOpenness) * rate
+            // Snap shut once nearly closed and quiet, rather than creeping toward zero and
+            // leaving a hairline gap.
+            if target < 0.05, next < 0.05 { next = 0 }
+            let settled = next == 0 && speaker == nil
+            // Only touch observed state when it changes visibly, to keep SwiftUI work low.
+            if abs(next - mouthOpenness) > 0.01 || (next == 0 && mouthOpenness != 0) {
+                mouthOpenness = next
+            }
+            if let speaker, speaker != speakingCharacterID { speakingCharacterID = speaker }
+            if settled, speakingCharacterID != nil { speakingCharacterID = nil }
+            try? await Task.sleep(for: .milliseconds(33))
+        }
     }
 
     /// Returns once no narration is queued and the current one has finished being written,
@@ -168,6 +216,7 @@ final class VoiceDirector {
         queue.forEach { $0.cancel() }
         queue.removeAll()
         roles = [:]
+        segmentCharacters = [:]
         skippedID = nil
         player.stop()
     }
@@ -310,7 +359,8 @@ final class VoiceDirector {
         guard charactersEnabled else { return }
         for line in script.lines {
             guard let voice = cast.characters.first(where: { $0.characterID == line.characterID }) else { continue }
-            enqueue(.single(.character, speaker: voice.names[0], voiceID: voice.fishVoiceID, text: line.ttsText))
+            enqueue(.single(.character, speaker: voice.names[0], voiceID: voice.fishVoiceID, text: line.ttsText,
+                            characterID: voice.characterID))
         }
     }
 
@@ -326,6 +376,7 @@ final class VoiceDirector {
         utterance.id = nextUtteranceID
         nextUtteranceID += 1
         roles[utterance.id] = utterance.role
+        if let characterID = utterance.characterID { segmentCharacters[utterance.id] = characterID }
         if first { queue.insert(utterance, at: 0) } else { queue.append(utterance) }
         guard task == nil else { return }
         let generation = self.generation

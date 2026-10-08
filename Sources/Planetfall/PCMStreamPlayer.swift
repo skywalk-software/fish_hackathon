@@ -13,7 +13,9 @@ final class PCMStreamPlayer: @unchecked Sendable {
     private var scheduledEnd: Int64 = 0
     /// Queued audio that hasn't finished playing, tagged with whose it is (a segment, e.g. one
     /// speaker's line), so one segment can be skipped. Guarded by `lock`.
-    private var scheduled: [(segment: Int, buffer: AVAudioPCMBuffer, end: Int64)] = []
+    private var scheduled: [(segment: Int, buffer: AVAudioPCMBuffer, end: Int64, levels: [Float])] = []
+    /// Loudness is measured in steps of this many frames (20 ms at 24 kHz).
+    private static let levelStep = 480
     private let lock = NSLock()
 
     init(sampleRate: Int) {
@@ -42,13 +44,38 @@ final class PCMStreamPlayer: @unchecked Sendable {
     }
 
     /// Schedules a buffer and records where it ends. Call with `lock` held.
-    private func schedule(_ buffer: AVAudioPCMBuffer, segment: Int) {
+    private func schedule(_ buffer: AVAudioPCMBuffer, segment: Int, levels: [Float]? = nil) {
         let played = playedFrames
         // If the queue ran dry, new audio starts now rather than after the old end.
         scheduledEnd = max(scheduledEnd, played) + Int64(buffer.frameLength)
         scheduled.removeAll { $0.end <= played }
-        scheduled.append((segment, buffer, scheduledEnd))
+        scheduled.append((segment, buffer, scheduledEnd, levels ?? Self.levels(of: buffer)))
         node.scheduleBuffer(buffer)
+    }
+
+    /// RMS loudness of each `levelStep` frames of a buffer.
+    private static func levels(of buffer: AVAudioPCMBuffer) -> [Float] {
+        guard let samples = buffer.floatChannelData?[0] else { return [] }
+        let count = Int(buffer.frameLength)
+        return stride(from: 0, to: count, by: levelStep).map { start in
+            let end = min(start + levelStep, count)
+            var sum: Float = 0
+            for index in start..<end { sum += samples[index] * samples[index] }
+            return (sum / Float(end - start)).squareRoot()
+        }
+    }
+
+    /// The segment playing right now and how loud it is at this moment (RMS, 0 to 1), or nil
+    /// when nothing is playing.
+    var currentLevel: (segment: Int, level: Float)? {
+        lock.withLock {
+            let played = playedFrames
+            guard let item = scheduled.first(where: { $0.end > played }) else { return nil }
+            let start = item.end - Int64(item.buffer.frameLength)
+            guard played >= start else { return (item.segment, 0) }
+            let index = Int(played - start) / Self.levelStep
+            return (item.segment, index < item.levels.count ? item.levels[index] : 0)
+        }
     }
 
     /// The segment whose audio is playing right now, or nil when nothing is.
@@ -74,7 +101,7 @@ final class PCMStreamPlayer: @unchecked Sendable {
             let keep = pending.filter { $0.segment != segment }
             if !keep.isEmpty {
                 node.play()
-                for item in keep { schedule(item.buffer, segment: item.segment) }
+                for item in keep { schedule(item.buffer, segment: item.segment, levels: item.levels) }
             }
             return true
         }

@@ -46,7 +46,8 @@ struct GameView: View {
             // Characters in the room appear as portraits over the top corner, so room
             // art never has to be drawn with and without each character.
             .overlay(alignment: .topTrailing) {
-                CharacterInsets(characters: session.presentCharacters) { character in
+                CharacterInsets(characters: session.presentCharacters, speakingID: voices?.speakingCharacterID,
+                                openness: voices?.mouthOpenness ?? 0) { character in
                     closeup = Portrait(artID: character.id, name: character.name)
                 }
             }
@@ -61,7 +62,8 @@ struct GameView: View {
             .animation(.spring(duration: 0.4), value: toast)
             if let sidekick, sidekick.isEnabled {
                 Divider()
-                SidekickBar(sidekick: sidekick) {
+                SidekickBar(sidekick: sidekick,
+                            glow: voices?.speakingCharacterID == sidekick.persona.artID ? voices?.mouthOpenness ?? 0 : 0) {
                     closeup = Portrait(artID: sidekick.persona.artID, name: sidekick.persona.name)
                 }
             }
@@ -71,7 +73,11 @@ struct GameView: View {
         .background(Theme.background)
         .overlay {
             if let closeup, let image = Artwork.character(closeup.artID) {
-                CharacterCloseup(name: closeup.name, image: image) { self.closeup = nil }
+                CharacterCloseup(name: closeup.name, image: image, jaw: PortraitJaw.byCharacter[closeup.artID],
+                                 glow: PortraitGlow.byCharacter[closeup.artID],
+                                 openness: voices?.speakingCharacterID == closeup.artID ? voices?.mouthOpenness ?? 0 : 0) {
+                    self.closeup = nil
+                }
                     .transition(.opacity)
             }
         }
@@ -323,6 +329,9 @@ private struct RoomArtView: View {
 /// Portraits of the characters in the room, top-right. Characters without art are skipped.
 private struct CharacterInsets: View {
     let characters: [GameCharacter]
+    /// Who is talking and how open their jaw is (from the voices), for their portrait.
+    var speakingID: String?
+    var openness: Double = 0
     let onSelect: (GameCharacter) -> Void
 
     var body: some View {
@@ -330,7 +339,9 @@ private struct CharacterInsets: View {
             ForEach(characters) { character in
                 if let image = Artwork.character(character.id) {
                     Button { onSelect(character) } label: {
-                        CharacterPortrait(name: character.name, image: image)
+                        CharacterPortrait(name: character.name, image: image,
+                                          jaw: PortraitJaw.byCharacter[character.id],
+                                          openness: speakingID == character.id ? openness : 0)
                     }
                     .buttonStyle(.plain)
                     .help("Show \(character.name) close up")
@@ -346,14 +357,14 @@ private struct CharacterInsets: View {
 private struct CharacterPortrait: View {
     let name: String
     let image: NSImage
+    var jaw: PortraitJaw?
+    var openness: Double = 0
 
     static let size: CGFloat = 225
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(nsImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            TalkingPortrait(image: image, jaw: jaw, openness: openness)
                 .frame(width: Self.size, height: Self.size)
                 .clipped()
             Text(name)
@@ -384,6 +395,9 @@ struct Portrait: Equatable {
 private struct CharacterCloseup: View {
     let name: String
     let image: NSImage
+    var jaw: PortraitJaw?
+    var glow: PortraitGlow?
+    var openness: Double = 0
     let onClose: () -> Void
 
     var body: some View {
@@ -392,9 +406,7 @@ private struct CharacterCloseup: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 12) {
-                Image(nsImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                TalkingPortrait(image: image, jaw: jaw, glow: glow, openness: openness)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.accent, lineWidth: 2))
                     .shadow(color: .black.opacity(0.8), radius: 24)
