@@ -289,7 +289,7 @@ The narrator ("Planetfall Narrator (American female)") and SNARK-9 ("SNARK-9 (Br
 
 ## Narrator modes and usage
 
-The **Narrator** menu chooses what the narrator says:
+**Voices → Narrator** chooses what the narrator says:
 - **Embellished Text** (default): Claude rewrites each turn as spoken narration with delivery tags. If Claude can't be reached (no key, a rejected key, no credit), the narrator reads the original text instead of going quiet.
 - **Original Text:** Fish reads the game's own text (title banner and character lines left out). It needs no Anthropic key and costs nothing from Claude.
 - **None:** no narrator. Character voices and SNARK-9 still speak.

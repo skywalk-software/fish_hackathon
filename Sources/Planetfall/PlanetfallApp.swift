@@ -33,28 +33,16 @@ struct PlanetfallApp: App {
                 Button("Restart Game") { launch.restart() }
                     .keyboardShortcut("r", modifiers: [.command, .shift])
             }
-            CommandMenu("Narrator") {
+            CommandMenu("Voices") {
                 if let voices = launch.voices {
                     Picker("Narrator", selection: Bindable(voices).narratorChoice) {
                         ForEach(VoiceDirector.NarratorChoice.allCases) { choice in
                             Text(choice.title).tag(choice)
                         }
                     }
-                    .pickerStyle(.inline)
-                    .labelsHidden()
-                    if !voices.hasNarrator {
-                        Divider()
-                        Text("No ANTHROPIC_API_KEY: Embellished Text reads the original text")
-                    }
-                } else {
-                    Text("Add FISH_API_KEY to .env to hear the narrator")
-                }
-            }
-            CommandMenu("Voices") {
-                if let voices = launch.voices {
-                    Toggle("Character Voices", isOn: Bindable(voices).charactersEnabled)
+                    Toggle("Characters", isOn: Bindable(voices).charactersEnabled)
                         .keyboardShortcut("m", modifiers: [.command, .shift])
-                    Toggle("SNARK-9 Voice", isOn: Bindable(voices).sidekickEnabled)
+                    Toggle("SNARK-9", isOn: Bindable(voices).sidekickEnabled)
                         .keyboardShortcut("j", modifiers: [.command, .shift])
                         .disabled(!voices.hasSidekick)
                     Toggle("Sound Effects", isOn: Bindable(voices).effectsEnabled)
