@@ -6,6 +6,8 @@ import Testing
 final class StubURLProtocol: URLProtocol, @unchecked Sendable {
     nonisolated(unsafe) static var statusCode = 200
     nonisolated(unsafe) static var body = Data()
+    /// How many requests have been served (to check how often Claude would be called).
+    nonisolated(unsafe) static var requestCount = 0
 
     static func session(statusCode: Int, body: String) -> URLSession {
         Self.statusCode = statusCode
@@ -20,6 +22,7 @@ final class StubURLProtocol: URLProtocol, @unchecked Sendable {
     override func stopLoading() {}
 
     override func startLoading() {
+        Self.requestCount += 1
         let response = HTTPURLResponse(url: request.url!, statusCode: Self.statusCode, httpVersion: nil,
                                        headerFields: ["content-type": "text/event-stream"])!
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)

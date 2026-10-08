@@ -114,6 +114,16 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 - **Microphone:** push-to-talk records from the macOS default input (System Settings → Sound → Input), re-read on every press. Headphones that expose no microphone to macOS, like Bluetooth buds in headphone-only mode, can't be recorded from; the Mac's mic is used instead.
 - **Live tests:** `FISH_LIVE_TESTS=1 swift test --filter streamsEveryCastVoice` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter narratesARealTurn`.
 
+## Gameplay changes: sleeping on Deck Nine
+
+On Deck Nine before the explosion, `sleep` (or "nap", "take a nap", "go to sleep", "doze off") lets you doze until something happens, which is handy for demos and testing. Anywhere else, or after the explosion, `sleep` goes to the game as usual ("You're not tired!").
+
+- **What wakes you:** the explosion, or the alien ambassador walking in. Blather's visit doesn't; on Deck Nine he only hands out demerits, which the game doesn't track. There's also a safety cap on how long a nap runs.
+- **What you see:** one turn covering the whole nap. It describes dozing off, notes if Blather shouted while you slept, then shows what woke you. Story art, sounds, achievements, SNARK-9 and the voices all react to that one turn.
+- **What's hidden:** while you sleep, the app sends `wait` to the game behind the scenes. Those turns aren't shown and no events go out, so neither Claude (SNARK-9) nor Fish (voices) is called. The command box shows "Sleeping… zzz", and typing and push-to-talk are locked until you wake.
+
+This is an app-side change, not a modified game: it can only do what typed commands could. Rules are in [Sources/PlanetfallEngine/Nap.swift](Sources/PlanetfallEngine/Nap.swift).
+
 ## Achievements
 
 Story milestones earn achievements. They're detected from a sentence the game prints once, and saved on this Mac across games and launches.

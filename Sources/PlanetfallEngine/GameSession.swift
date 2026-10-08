@@ -49,6 +49,8 @@ public final class GameSession {
     public private(set) var transcript: [TranscriptEntry] = []
     public private(set) var status: StatusLine?
     public private(set) var isAwaitingInput = false
+    /// True while a `Nap` is running: the app is sending hidden WAITs, so input is locked.
+    public var isNapping: Bool { nap != nil }
     /// What the game is waiting for: a command at `>`, or an answer to a question such as a
     /// save file name.
     public private(set) var prompt: GameTurn.Prompt = .command
@@ -84,6 +86,13 @@ public final class GameSession {
 
     @ObservationIgnored private var process: Process?
     @ObservationIgnored private var stdin: FileHandle?
+    /// The nap in progress, if any (see `Nap`). Observed, so `isNapping` updates the UI.
+    private var nap: NapState?
+
+    private struct NapState {
+        var turns = 0
+        var blatherVisited = false
+    }
     @ObservationIgnored private var stdout: FileHandle?
     @ObservationIgnored private var parser = FrotzOutputParser()
     @ObservationIgnored private var observers: [(GameEvent) -> Void] = []
@@ -162,11 +171,18 @@ public final class GameSession {
 
     /// Sends one line of input to the game.
     public func send(_ line: String) {
-        guard isRunning, let stdin else { return }
+        guard isRunning, let stdin, nap == nil else { return }
         let line = line.replacingOccurrences(of: "\n", with: " ")
         append(.command(id: takeID(), text: line))
         isAwaitingInput = false
-        stdin.write(Data((line + "\n").utf8))
+        if Nap.isNapCommand(line),
+           Nap.applies(location: status?.location, storyEvents: storyEvents, playerHolder: playerHolder) {
+            // Our SLEEP instead of the game's: wait, unseen, until something wakes the player.
+            nap = NapState()
+            stdin.write(Data("wait\n".utf8))
+        } else {
+            stdin.write(Data((line + "\n").utf8))
+        }
         emit(.command(line))
     }
 
@@ -189,6 +205,7 @@ public final class GameSession {
         characterLocations = [:]
         storyEvents = []
         playerHolder = nil
+        nap = nil
         isAwaitingInput = false
         prompt = .command
         isRunning = false
@@ -215,6 +232,36 @@ public final class GameSession {
     }
 
     private func deliver(_ turn: GameTurn) {
+        if nap != nil {
+            napTurn(turn)
+            return
+        }
+        applyState(from: turn)
+        publish(turn)
+    }
+
+    /// One hidden turn of a nap: track the game's state, but show and emit nothing (so no
+    /// commentary or voices run). Ends the nap with a single combined turn when something
+    /// wakes the player, otherwise sends the next WAIT.
+    private func napTurn(_ turn: GameTurn) {
+        guard var state = nap else { return }
+        applyState(from: turn)
+        state.turns += 1
+        state.blatherVisited = state.blatherVisited || Nap.blatherVisited(in: turn)
+        if let reason = Nap.wakeReason(for: turn, napTurns: state.turns) {
+            nap = nil
+            var woken = turn
+            woken.text = Nap.wakeText(final: turn, reason: reason, blatherVisited: state.blatherVisited)
+            woken.objectEvents = []  // already applied above
+            publish(woken)
+        } else {
+            nap = state
+            stdin?.write(Data("wait\n".utf8))
+        }
+    }
+
+    /// Updates what the session knows about the game from a turn's output.
+    private func applyState(from turn: GameTurn) {
         // A fresh game (including RESTART typed in the game) starts over: forget where
         // characters were and which story events happened.
         if turn.text.contains(StoryEvent.gameStartMarker) {
@@ -230,6 +277,10 @@ public final class GameSession {
         }
         StoryEvent.update(&storyEvents, with: turn.text)
         if let newStatus = turn.status { status = newStatus }
+    }
+
+    /// Shows a turn to the player and everything observing the session.
+    private func publish(_ turn: GameTurn) {
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true
         prompt = turn.prompt
@@ -240,6 +291,7 @@ public final class GameSession {
     }
 
     private func processEnded(exitCode: Int32) {
+        nap = nil
         if let turn = parser.flushPending() {
             if let newStatus = turn.status { status = newStatus }
             if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }

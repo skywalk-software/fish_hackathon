@@ -70,7 +70,7 @@ struct GameView: View {
         }
         .onAppear {
             inputFocused = true
-            pushToTalk.activate(canListen: { session.isRunning }, context: { session.commandContext() },
+            pushToTalk.activate(canListen: { session.isRunning && !session.isNapping }, context: { session.commandContext() },
                                 onCommand: sendVoiceCommand)
         }
         .onDisappear { pushToTalk.deactivate() }
@@ -99,7 +99,7 @@ struct GameView: View {
                     }
                 }
                 .focused($inputFocused)
-                .disabled(!session.isRunning)
+                .disabled(!session.isRunning || session.isNapping)
                 .onSubmit(submit)
                 .onKeyPress(.escape) {
                     // Stop a spoken command from sending itself, leaving it to edit.
@@ -121,6 +121,7 @@ struct GameView: View {
 
     private var placeholder: String {
         guard session.isRunning else { return "The game has ended" }
+        if session.isNapping { return "Sleeping… zzz" }
         switch pushToTalk.phase {
         case .listening: return "Listening… release to send"
         case .transcribing: return "Transcribing…"
