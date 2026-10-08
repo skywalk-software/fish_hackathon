@@ -57,8 +57,14 @@ public struct Narrator: Sendable {
                         throw Commentator.httpError(body, statusCode: http.statusCode)
                     }
                     var filter = NarrationFilter()
+                    var usage = TokenUsage()
+                    defer { ClaudeUsageLedger.shared.record(.narration, usage) }
                     for try await line in bytes.lines {
+                        if let output = Commentator.outputTokens(in: line) { usage.output = output }
                         switch try Commentator.parseEvent(line) {
+                        case .usage(let start):
+                            usage = TokenUsage(input: start.input, cacheRead: start.cacheRead,
+                                               cacheWrite: start.cacheWrite, output: max(usage.output, start.output))
                         case .text(let delta):
                             for sentence in filter.feed(delta) { continuation.yield(sentence) }
                         case .stop(let reason):

@@ -67,8 +67,15 @@ public struct Commentator: Sendable {
                         throw Self.httpError(body, statusCode: http.statusCode)
                     }
                     var filter = PassFilter()
+                    var usage = TokenUsage()
+                    // Recorded however the stream ends, since a cut-off response is still billed.
+                    defer { ClaudeUsageLedger.shared.record(.commentary, usage) }
                     for try await line in bytes.lines {
+                        if let output = Self.outputTokens(in: line) { usage.output = output }
                         switch try Self.parseEvent(line) {
+                        case .usage(let start):
+                            usage = TokenUsage(input: start.input, cacheRead: start.cacheRead,
+                                               cacheWrite: start.cacheWrite, output: max(usage.output, start.output))
                         case .text(let delta):
                             if let visible = filter.feed(delta) { continuation.yield(visible) }
                         case .stop(let reason):
@@ -208,6 +215,8 @@ public struct Commentator: Sendable {
     // MARK: - Server-sent events
 
     enum StreamEvent: Equatable {
+        /// The tokens a message started with (input and cache), from `message_start`.
+        case usage(TokenUsage)
         case text(String)
         case stop(reason: String?)
     }
@@ -219,15 +228,26 @@ public struct Commentator: Sendable {
         let json = Data(line.dropFirst("data:".count).trimmingCharacters(in: .whitespaces).utf8)
         guard let event = try? JSONDecoder().decode(SSEEvent.self, from: json) else { return nil }
         switch event.type {
+        case "message_start":
+            return event.message?.usage.map { .usage($0.tokenUsage) }
         case "content_block_delta" where event.delta?.type == "text_delta":
             return event.delta?.text.map(StreamEvent.text)
         case "message_delta":
+            // Its output-token count is read separately, with `outputTokens(in:)`.
             return .stop(reason: event.delta?.stop_reason)
         case "error":
             throw CommandInterpreterError.http(status: 200, type: event.error?.type, message: event.error?.message)
         default:
             return nil
         }
+    }
+
+    /// The output tokens reported on a `message_delta` line, if it has any.
+    static func outputTokens(in line: String) -> Int? {
+        guard line.hasPrefix("data:") else { return nil }
+        let json = Data(line.dropFirst("data:".count).trimmingCharacters(in: .whitespaces).utf8)
+        guard let event = try? JSONDecoder().decode(SSEEvent.self, from: json), event.type == "message_delta" else { return nil }
+        return event.usage?.output_tokens
     }
 
     static func httpError(_ body: Data, statusCode: Int) -> CommandInterpreterError {
@@ -245,9 +265,25 @@ public struct Commentator: Sendable {
             let type: String?
             let message: String?
         }
+        struct Message: Decodable { let usage: Usage? }
         let type: String?
         let delta: Delta?
         let error: ErrorDetail?
+        let message: Message?
+        let usage: Usage?
+    }
+
+    /// The `usage` object on Messages API responses and stream events.
+    struct Usage: Decodable {
+        let input_tokens: Int?
+        let cache_read_input_tokens: Int?
+        let cache_creation_input_tokens: Int?
+        let output_tokens: Int?
+
+        var tokenUsage: TokenUsage {
+            TokenUsage(input: input_tokens ?? 0, cacheRead: cache_read_input_tokens ?? 0,
+                       cacheWrite: cache_creation_input_tokens ?? 0, output: output_tokens ?? 0)
+        }
     }
 
     /// Holds back the start of the reply until it's clear it isn't the pass token, so

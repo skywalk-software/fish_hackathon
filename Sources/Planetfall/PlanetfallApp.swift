@@ -37,7 +37,11 @@ struct PlanetfallApp: App {
                 if let voices = launch.voices {
                     Toggle("Narrator", isOn: Bindable(voices).narratorEnabled)
                         .keyboardShortcut("n", modifiers: [.command, .shift])
-                        .disabled(!voices.hasNarrator)
+                    Picker("Narrator Reads", selection: Bindable(voices).narratorMode) {
+                        ForEach(VoiceDirector.NarratorMode.allCases) { mode in
+                            Text(mode.title).tag(mode)
+                        }
+                    }
                     Toggle("Character Voices", isOn: Bindable(voices).charactersEnabled)
                         .keyboardShortcut("m", modifiers: [.command, .shift])
                     Toggle("SNARK-9 Voice", isOn: Bindable(voices).sidekickEnabled)
@@ -46,7 +50,7 @@ struct PlanetfallApp: App {
                     Toggle("Sound Effects", isOn: Bindable(voices).effectsEnabled)
                         .keyboardShortcut("e", modifiers: [.command, .shift])
                     if !voices.hasNarrator {
-                        Text("Add ANTHROPIC_API_KEY to .env for the narrator")
+                        Text("No ANTHROPIC_API_KEY: the narrator reads the game text")
                     }
                     Divider()
                     Toggle("Talking Portraits", isOn: Bindable(voices).talkingPortraitsEnabled)
@@ -101,6 +105,10 @@ final class GameLaunch {
             voices = VoiceDirector.makeDefault(session: session, sidekick: sidekick)
             try session.start()
             state = .running(session)
+            // Note the Fish balance at each launch, to estimate how fast credit is going.
+            if let key = FishAPIKey.load() {
+                Task { if let credit = try? await FishCredit.fetch(apiKey: key) { FishCreditHistory.shared.add(credit) } }
+            }
         } catch {
             state = .failed(error.localizedDescription)
         }

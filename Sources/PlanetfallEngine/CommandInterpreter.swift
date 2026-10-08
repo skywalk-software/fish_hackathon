@@ -105,6 +105,10 @@ public struct CommandInterpreter: Sendable {
     public func interpret(_ heard: String, context: CommandContext) async throws -> String {
         let (data, response) = try await urlSession.data(for: makeRequest(heard: heard, context: context))
         guard let http = response as? HTTPURLResponse else { throw CommandInterpreterError.unreadableResponse }
+        struct Body: Decodable { let usage: Commentator.Usage? }
+        if let usage = (try? JSONDecoder().decode(Body.self, from: data))?.usage {
+            ClaudeUsageLedger.shared.record(.commandCleanup, usage.tokenUsage)
+        }
         return try Self.decode(data, statusCode: http.statusCode)
     }
 

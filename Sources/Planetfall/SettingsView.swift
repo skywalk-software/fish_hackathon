@@ -12,6 +12,8 @@ struct SettingsView: View {
                 .tabItem { Label("Dock Icon", systemImage: "app.dashed") }
             AchievementsTab(achievements: achievements)
                 .tabItem { Label("Achievements", systemImage: "rosette") }
+            UsageTab()
+                .tabItem { Label("Usage", systemImage: "gauge.with.dots.needle.33percent") }
         }
         .frame(width: 620, height: 520)
     }

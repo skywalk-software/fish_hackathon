@@ -17,6 +17,8 @@ final class VoiceDirector {
     private(set) var speakingCharacterID: String?
     /// How far that character's jaw is open, 0 to 1, following the loudness of their speech.
     private(set) var mouthOpenness: Double = 0
+    /// Why the narrator last fell back from Claude's retelling to the game text, if it has.
+    private(set) var narrationFallbackReason: String?
     /// The last failure (bad key, voice not available to this account), until the next line plays.
     private(set) var errorMessage: String?
     /// Each part on or off. Remembered between launches.
@@ -39,7 +41,24 @@ final class VoiceDirector {
     var talkingPortraitsEnabled: Bool {
         didSet { UserDefaults.standard.set(talkingPortraitsEnabled, forKey: Self.portraitsKey) }
     }
-    /// The narrator needs an Anthropic key; SNARK-9's voice needs SNARK-9.
+    /// What the narrator reads: Claude's retelling of the turn, or the game's own text.
+    enum NarratorMode: String, CaseIterable, Identifiable {
+        case claude, gameText
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .claude: "Claude's Retelling"
+            case .gameText: "Read the Game Text"
+            }
+        }
+    }
+    /// Remembered between launches. Claude's retelling falls back to the game text whenever
+    /// Claude can't be reached (no key, a rejected key, no credit).
+    var narratorMode: NarratorMode {
+        didSet { UserDefaults.standard.set(narratorMode.rawValue, forKey: Self.narratorModeKey) }
+    }
+    /// The narrator's retelling needs an Anthropic key (reading the game text doesn't);
+    /// SNARK-9's voice needs SNARK-9.
     let hasNarrator: Bool
     let hasSidekick: Bool
 
@@ -112,6 +131,7 @@ final class VoiceDirector {
     private static let sidekickKey = "sidekickVoiceEnabled"
     private static let effectsKey = "soundEffectsEnabled"
     private static let portraitsKey = "talkingPortraitsEnabled"
+    private static let narratorModeKey = "narratorMode"
     private static let maxPreviousNarration = 3
     /// Under the voices, so they stay clear.
     private static let alertVolume: Float = 0.35
@@ -138,6 +158,7 @@ final class VoiceDirector {
         charactersEnabled = defaults.object(forKey: Self.charactersKey) as? Bool ?? true
         sidekickEnabled = defaults.object(forKey: Self.sidekickKey) as? Bool ?? true
         effectsEnabled = defaults.object(forKey: Self.effectsKey) as? Bool ?? true
+        narratorMode = defaults.string(forKey: Self.narratorModeKey).flatMap(NarratorMode.init) ?? .claude
         talkingPortraitsEnabled = defaults.object(forKey: Self.portraitsKey) as? Bool ?? true
 
         session.addObserver { [weak self] event in
@@ -338,19 +359,41 @@ final class VoiceDirector {
             for effect in SoundEffect.triggered(by: turn.text).reversed() { enqueue(.effect(effect), first: true) }
         }
         let script = DialogueExtractor.script(for: turn.text, voices: cast.characters)
-        if narratorEnabled, let narrator,
-           !script.narration.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        let gameText = GameTextNarration.spokenParagraphs(from: script.narration)
+        if narratorEnabled, !gameText.isEmpty {
             let context = NarrationContext(location: turn.status?.location ?? session?.status?.location,
                                            command: lastCommand, output: script.narration,
                                            previousNarration: previousNarration)
+            let claude = narratorMode == .claude ? narrator : nil
             // Start Claude now, while anything already queued is still playing.
             let (texts, continuation) = AsyncThrowingStream<String, Error>.makeStream()
-            let producer = Task {
-                do {
-                    for try await sentence in narrator.sentences(for: context) { continuation.yield(sentence) }
+            let producer = Task { @MainActor [weak self] in
+                guard let claude else {
+                    for paragraph in gameText { continuation.yield(paragraph) }
                     continuation.finish()
+                    return
+                }
+                var spokeAny = false
+                do {
+                    for try await sentence in claude.sentences(for: context) {
+                        spokeAny = true
+                        continuation.yield(sentence)
+                    }
+                    continuation.finish()
+                } catch is CancellationError {
+                    continuation.finish(throwing: CancellationError())
                 } catch {
-                    continuation.finish(throwing: error)
+                    guard !Task.isCancelled else {
+                        continuation.finish(throwing: CancellationError())
+                        return
+                    }
+                    // Claude couldn't narrate (bad key, no credit, network): read the game text
+                    // instead of going quiet, unless Claude had already started speaking.
+                    if !spokeAny {
+                        self?.narrationFallbackReason = error.localizedDescription
+                        for paragraph in gameText { continuation.yield(paragraph) }
+                    }
+                    continuation.finish()
                 }
             }
             enqueue(Utterance(role: .narrator, speaker: "Narrator", voiceID: cast.narratorVoiceID,

@@ -287,6 +287,16 @@ The narrator ("Planetfall Narrator (American female)") and SNARK-9 ("SNARK-9 (Br
 - **Narrator speed:** the narrator speaks at 1.1×. Change it with `FISH_SPEED_NARRATOR` in `.env`.
 - **Swapping a voice:** set `FISH_VOICE_NARRATOR` or `FISH_VOICE_SIDEKICK` in `.env` to override either voice.
 
+## Narrator modes and usage
+
+**Voices → Narrator Reads** chooses what the narrator says:
+- **Claude's Retelling** (default): Claude rewrites each turn as spoken narration with delivery tags. If Claude can't be reached (no key, a rejected key, no credit), the narrator reads the game text instead of going quiet.
+- **Read the Game Text:** Fish reads the game's own text (title banner and character lines left out). It needs no Anthropic key and costs nothing from Claude.
+
+**Settings → Usage** shows:
+- **Fish Audio credit:** the live balance, read from Fish's `/wallet/self/api-credit`. The balance is noted at every launch, and once there's at least an hour of history, the tab estimates when the credit runs out. The voices currently use Fish's free `s2.1-pro-free` model (no charge through 2026-11-30), so only push-to-talk ($0.36 per hour of audio) and voice design spend credit.
+- **Claude usage:** a running tally of tokens and estimated cost per feature, from the token counts each response reports, at Claude Opus 5.5 rates. Anthropic doesn't let an API key read its own balance, so check the Anthropic Console's Billing page for that.
+
 ## Auditioning voices
 
 `swift run audition` compares Fish Audio voices for the narrator and SNARK-9 by playing them on the same game lines. Clips are saved in `auditions/`, which is gitignored.
