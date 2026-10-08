@@ -83,6 +83,13 @@ struct TranscriptTextView: NSViewRepresentable {
 /// By default an unfocused NSTextView draws selections light grey and keeps the text's
 /// own color, which made cream-on-grey unreadable.
 final class InvertedSelectionTextView: NSTextView {
+    /// Only a click focuses the transcript (to select text). Otherwise AppKit would make it the
+    /// window's first focused view at launch, and typing or space wouldn't reach the command line.
+    override var acceptsFirstResponder: Bool {
+        guard let event = NSApp.currentEvent else { return false }
+        return [.leftMouseDown, .rightMouseDown, .otherMouseDown].contains(event.type)
+    }
+
     override func setSelectedRanges(_ ranges: [NSValue], affinity: NSSelectionAffinity, stillSelecting: Bool) {
         super.setSelectedRanges(ranges, affinity: affinity, stillSelecting: stillSelecting)
         guard let layoutManager, let length = textStorage?.length else { return }

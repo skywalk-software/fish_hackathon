@@ -77,11 +77,19 @@ struct GameView: View {
             }
         }
         .onAppear {
-            inputFocused = true
+            focusCommandLine()
             pushToTalk.activate(canListen: { session.isRunning && !session.isNapping && !session.isRunningCheat }, context: { session.commandContext() },
                                 onCommand: sendVoiceCommand)
         }
         .onDisappear { pushToTalk.deactivate() }
+        // The command line is disabled during a nap or a cheat, which drops its focus; give it
+        // back when it's usable again, and whenever the game window becomes active.
+        .onChange(of: session.isNapping || session.isRunningCheat) { _, locked in
+            if !locked { focusCommandLine() }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSWindow.didBecomeKeyNotification)) { note in
+            if (note.object as? NSWindow)?.title == "Planetfall" { focusCommandLine() }
+        }
         // Don't let the microphone hear the game talking.
         .onChange(of: pushToTalk.phase) { _, phase in
             if phase == .listening { voices?.stop() }
@@ -150,6 +158,18 @@ struct GameView: View {
     private var napDimAnimation: Animation? {
         if session.isNapping { return .easeIn(duration: 2) }
         return session.lastWakeReason == .explosion ? nil : .easeOut(duration: 0.8)
+    }
+
+    /// Puts the cursor in the command line. Retried briefly, because at launch the request can
+    /// arrive before the window is ready to take it.
+    private func focusCommandLine() {
+        Task {
+            for _ in 0..<20 {
+                inputFocused = true
+                try? await Task.sleep(for: .milliseconds(100))
+                if inputFocused, NSApp.keyWindow != nil { return }
+            }
+        }
     }
 
     /// How long an achievement banner stays up (it can be clicked away sooner).
