@@ -91,6 +91,12 @@ public final class Sidekick {
         self.pendingCaption = nil
     }
 
+    /// Hides the caption (the player skipped SNARK-9's line).
+    public func dismissCaption() {
+        line = ""
+        pendingCaption = nil
+    }
+
     private func turnFinished() {
         guard isEnabled else { return }
         task?.cancel()

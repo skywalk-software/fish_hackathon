@@ -11,6 +11,9 @@ final class PCMStreamPlayer: @unchecked Sendable {
     private let format: AVAudioFormat
     /// Where the last queued sample ends, in the player node's sample time. Guarded by `lock`.
     private var scheduledEnd: Int64 = 0
+    /// Queued audio that hasn't finished playing, tagged with whose it is (a segment, e.g. one
+    /// speaker's line), so one segment can be skipped. Guarded by `lock`.
+    private var scheduled: [(segment: Int, buffer: AVAudioPCMBuffer, end: Int64)] = []
     private let lock = NSLock()
 
     init(sampleRate: Int) {
@@ -20,8 +23,9 @@ final class PCMStreamPlayer: @unchecked Sendable {
         engine.connect(node, to: engine.mainMixerNode, format: format)
     }
 
-    /// Queues `pcm` (16-bit little-endian samples) after anything already playing.
-    func enqueue(_ pcm: Data) {
+    /// Queues `pcm` (16-bit little-endian samples) after anything already playing. `segment`
+    /// says whose audio it is, for `skip(segment:)`.
+    func enqueue(_ pcm: Data, segment: Int = 0) {
         let frames = pcm.count / 2
         guard frames > 0,
               let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(frames)),
@@ -34,11 +38,46 @@ final class PCMStreamPlayer: @unchecked Sendable {
             }
         }
         guard startIfNeeded() else { return }
-        lock.withLock {
-            // If the queue ran dry, new audio starts now rather than after the old end.
-            scheduledEnd = max(scheduledEnd, playedFrames) + Int64(frames)
-        }
+        lock.withLock { schedule(buffer, segment: segment) }
+    }
+
+    /// Schedules a buffer and records where it ends. Call with `lock` held.
+    private func schedule(_ buffer: AVAudioPCMBuffer, segment: Int) {
+        let played = playedFrames
+        // If the queue ran dry, new audio starts now rather than after the old end.
+        scheduledEnd = max(scheduledEnd, played) + Int64(buffer.frameLength)
+        scheduled.removeAll { $0.end <= played }
+        scheduled.append((segment, buffer, scheduledEnd))
         node.scheduleBuffer(buffer)
+    }
+
+    /// The segment whose audio is playing right now, or nil when nothing is.
+    var audibleSegment: Int? {
+        lock.withLock {
+            let played = playedFrames
+            return scheduled.first { $0.end > played }?.segment
+        }
+    }
+
+    /// Drops a segment's audio, keeping anything queued for other segments. Returns whether
+    /// any of its audio was still waiting to play.
+    @discardableResult
+    func skip(segment: Int) -> Bool {
+        lock.withLock {
+            let played = playedFrames
+            let pending = scheduled.filter { $0.end > played }
+            guard pending.contains(where: { $0.segment == segment }) else { return false }
+            // The node can't unschedule one buffer, so flush everything and requeue the rest.
+            node.stop()
+            scheduledEnd = 0
+            scheduled = []
+            let keep = pending.filter { $0.segment != segment }
+            if !keep.isEmpty {
+                node.play()
+                for item in keep { schedule(item.buffer, segment: item.segment) }
+            }
+            return true
+        }
     }
 
     /// Seconds of queued audio that haven't played yet (0 when idle).
@@ -68,7 +107,10 @@ final class PCMStreamPlayer: @unchecked Sendable {
     /// Cuts off playback and drops anything queued.
     func stop() {
         node.stop()
-        lock.withLock { scheduledEnd = 0 }
+        lock.withLock {
+            scheduledEnd = 0
+            scheduled = []
+        }
     }
 
     private func startIfNeeded() -> Bool {

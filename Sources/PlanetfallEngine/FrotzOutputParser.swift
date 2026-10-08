@@ -24,6 +24,9 @@ public struct GameTurn: Equatable, Sendable {
     public var prompt: Prompt
     /// Objects the game moved this turn, from dfrotz's `-o` trace, in order.
     public var objectEvents: [ObjectEvent] = []
+    /// True for the turn a cheat lands on: the game was restarted and jumped ahead, so
+    /// anything tracking the story from earlier turns should resync to the session's state.
+    public var isCheat = false
 
     public enum Prompt: Equatable, Sendable {
         /// The normal `>` command prompt.

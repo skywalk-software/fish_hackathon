@@ -135,6 +135,29 @@ This is an app-side change, not a modified game: it can only do what typed comma
 
 Plugged ears reset when the game restarts. Rules are in [Sources/PlanetfallEngine/EarPlugs.swift](Sources/PlanetfallEngine/EarPlugs.swift).
 
+## Cheats
+
+Type a cheat to jump to a moment in the story. They're handy for testing and demos:
+
+| Cheat | Where you land |
+|---|---|
+| `cheat: brig` | Thrown in the brig by Blather |
+| `cheat: explode` | Deck Nine, just as the Feinstein starts to explode |
+| `cheat: pod` | Strapped into the escape pod's webbing as the ship blows up |
+| `cheat: splash` | Underwater, swimming out of the sunken pod |
+
+`cheat:pod`, `Cheat pod` and similar spellings work too, and `cheat` on its own lists the cheats.
+
+- **How it works:** a cheat doesn't load a save file. It restarts the game with a fixed random seed and replays a script of commands behind the scenes, so the characters, room art, webbing and siren are all exactly right when you land. Only the final turn is shown, after a "Cheat: …" line.
+- **Achievements:** cheats don't earn them, but anything you play afterwards does.
+- **Undoing it:** ⇧⌘R restarts a normal game.
+
+Scripts are in [Sources/PlanetfallEngine/Cheat.swift](Sources/PlanetfallEngine/Cheat.swift).
+
+## Skipping a speaker
+
+Press **space** on an empty command line to skip whoever is talking. Skip the narrator and SNARK-9 speaks next; skip SNARK-9 and his caption clears. Sound effects can be skipped the same way. When nobody is talking, space just types a space.
+
 ## Achievements
 
 Story milestones earn achievements. They're detected from a sentence the game prints once, and saved on this Mac across games and launches.

@@ -51,6 +51,8 @@ public final class GameSession {
     public private(set) var isAwaitingInput = false
     /// Whether the player has plugged their ears (see `EarPlugs`), silencing the siren.
     public private(set) var earsPlugged = false
+    /// True while a cheat is replaying its script (see `Cheat`): input is locked.
+    public var isRunningCheat: Bool { cheatRun != nil }
     /// True while a `Nap` is running: the app is sending hidden WAITs, so input is locked.
     public var isNapping: Bool { nap != nil }
     /// What the game is waiting for: a command at `>`, or an answer to a question such as a
@@ -93,12 +95,26 @@ public final class GameSession {
     private let dfrotzURL: URL
     private let storyURL: URL
     private let savesDirectory: URL
-    private let randomSeed: Int?
+    /// Fixed by the initializer, or by a cheat (which replays with `Cheat.seed`).
+    private var randomSeed: Int?
+    /// The initializer's seed, which a normal restart goes back to.
+    private let initialSeed: Int?
 
     @ObservationIgnored private var process: Process?
     @ObservationIgnored private var stdin: FileHandle?
     /// The nap in progress, if any (see `Nap`). Observed, so `isNapping` updates the UI.
     private var nap: NapState?
+    /// The cheat being replayed, if any. Observed, so `isRunningCheat` updates the UI.
+    private var cheatRun: CheatRun?
+
+    private struct CheatRun {
+        let cheat: Cheat
+        var steps: [Cheat.Step]
+        /// The game has printed its opening, so the script can start.
+        var started = false
+        /// While waiting for text: the text, how many WAITs so far, and the limit.
+        var waitingFor: (text: String, waits: Int, max: Int)?
+    }
 
     private struct NapState {
         /// What the screen showed when the player fell asleep, kept until they wake.
@@ -138,6 +154,7 @@ public final class GameSession {
         self.storyURL = storyURL
         self.savesDirectory = savesDirectory
         self.randomSeed = randomSeed
+        self.initialSeed = randomSeed
     }
 
     /// Finds dfrotz and the story file in their usual places.
@@ -200,9 +217,22 @@ public final class GameSession {
 
     /// Sends one line of input to the game.
     public func send(_ line: String) {
-        guard isRunning, let stdin, nap == nil else { return }
+        guard isRunning, let stdin, nap == nil, cheatRun == nil else { return }
         let line = line.replacingOccurrences(of: "\n", with: " ")
         append(.command(id: takeID(), text: line))
+        if let request = Cheat.request(in: line) {
+            emit(.command(line))
+            switch request {
+            case .unknown(let name):
+                let text = name.isEmpty
+                    ? "Cheats: \(Cheat.list)."
+                    : "There's no cheat called \"\(name)\". Try \(Cheat.list)."
+                publish(GameTurn(text: text, status: status, prompt: .command))
+            case .cheat(let cheat):
+                startCheat(cheat)
+            }
+            return
+        }
         if let earCommand = EarPlugs.command(in: line) {
             // Handled by the app, not the game: no game time passes.
             emit(.command(line))
@@ -229,6 +259,14 @@ public final class GameSession {
 
     /// Stops the current game and starts a fresh one.
     public func restart() throws {
+        cheatRun = nil
+        randomSeed = initialSeed
+        try restartProcess(keepingTranscript: false)
+    }
+
+    /// Replaces the dfrotz process with a fresh game and forgets everything learned from the
+    /// old one.
+    private func restartProcess(keepingTranscript: Bool) throws {
         // Detach the old process first so its last output and exit don't reach the new game.
         stdout?.readabilityHandler = nil
         process?.terminationHandler = nil
@@ -237,7 +275,7 @@ public final class GameSession {
         stdin = nil
         stdout = nil
         parser = FrotzOutputParser()
-        transcript = []
+        if !keepingTranscript { transcript = [] }
         status = nil
         characterLocations = [:]
         storyEvents = []
@@ -270,12 +308,63 @@ public final class GameSession {
     }
 
     private func deliver(_ turn: GameTurn) {
+        if cheatRun != nil {
+            cheatTurn(turn)
+            return
+        }
         if nap != nil {
             napTurn(turn)
             return
         }
         applyState(from: turn)
         publish(turn)
+    }
+
+    /// Restarts the game with the cheat seed and starts replaying the cheat's script.
+    private func startCheat(_ cheat: Cheat) {
+        randomSeed = Cheat.seed
+        cheatRun = CheatRun(cheat: cheat, steps: cheat.steps)
+        do {
+            try restartProcess(keepingTranscript: true)
+        } catch {
+            cheatRun = nil
+            append(.system(id: takeID(), text: "The cheat couldn't restart the game: \(error.localizedDescription)"))
+        }
+    }
+
+    /// One hidden turn of a cheat's replay: track the game's state, show nothing, and send the
+    /// script's next command. After the last one, shows that turn as where the cheat landed.
+    private func cheatTurn(_ turn: GameTurn) {
+        guard var run = cheatRun else { return }
+        applyState(from: turn)
+        if run.started, let waiting = run.waitingFor {
+            if !turn.text.contains(waiting.text), waiting.waits < waiting.max, turn.prompt == .command {
+                run.waitingFor = (waiting.text, waiting.waits + 1, waiting.max)
+                cheatRun = run
+                stdin?.write(Data("wait\n".utf8))
+                return
+            }
+            run.waitingFor = nil
+        }
+        run.started = true
+        if turn.prompt == .command, !run.steps.isEmpty {
+            switch run.steps.removeFirst() {
+            case .send(let command):
+                stdin?.write(Data((command + "\n").utf8))
+            case .waitUntil(let text, let max):
+                run.waitingFor = (text, 1, max)
+                stdin?.write(Data("wait\n".utf8))
+            }
+            cheatRun = run
+            return
+        }
+        // Done (or the game asked something unexpected): land here.
+        cheatRun = nil
+        append(.system(id: takeID(), text: "Cheat: \(run.cheat.rawValue). \(run.cheat.summary)"))
+        var landing = turn
+        landing.objectEvents = []  // already applied
+        landing.isCheat = true
+        publish(landing)
     }
 
     /// One hidden turn of a nap: track the game's state, but show and emit nothing (so no
@@ -347,7 +436,8 @@ public final class GameSession {
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true
         prompt = turn.prompt
-        for achievement in achievements?.record(turn.text) ?? [] {
+        // A cheat's landing doesn't earn achievements (though anything played after it does).
+        for achievement in turn.isCheat ? [] : achievements?.record(turn.text) ?? [] {
             emit(.achievementUnlocked(achievement))
         }
         emit(.turn(turn))
@@ -355,6 +445,7 @@ public final class GameSession {
 
     private func processEnded(exitCode: Int32) {
         nap = nil
+        cheatRun = nil
         if let turn = parser.flushPending() {
             if let newStatus = turn.status { status = newStatus }
             if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }

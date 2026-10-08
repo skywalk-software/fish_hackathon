@@ -38,6 +38,8 @@ final class VoiceDirector {
     private struct Utterance {
         enum Role { case effect, narrator, character, sidekick }
         let role: Role
+        /// Tags this utterance's audio in the player, so space can skip just this speaker.
+        var id = 0
         let speaker: String
         let voiceID: String
         /// Text to speak, a piece at a time (the narrator streams sentences from Claude).
@@ -72,6 +74,11 @@ final class VoiceDirector {
     /// Whether `current` has produced all its text (e.g. the narrator's Claude stream ended).
     @ObservationIgnored private var currentProduced = false
     @ObservationIgnored private weak var sidekick: Sidekick?
+    @ObservationIgnored private var nextUtteranceID = 1
+    /// Who each queued or playing utterance is, by id (for skipping).
+    @ObservationIgnored private var roles: [Int: Utterance.Role] = [:]
+    /// An utterance the player skipped while it was still producing audio.
+    @ObservationIgnored private var skippedID: Int?
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var generation = 0
     @ObservationIgnored private var lastCommand: String?
@@ -160,7 +167,42 @@ final class VoiceDirector {
         current = nil
         queue.forEach { $0.cancel() }
         queue.removeAll()
+        roles = [:]
+        skippedID = nil
         player.stop()
+    }
+
+    /// Cuts off whoever is speaking (the narrator, a character, SNARK-9, or a sound effect) and
+    /// lets the next one start: skip the narrator and SNARK-9 speaks next. Returns false when
+    /// nobody is speaking. Press space on an empty command line to call this.
+    @discardableResult
+    func skipSpeaker() -> Bool {
+        // The audible speaker, or, before any audio arrives, the one being prepared.
+        let audible = player.audibleSegment
+        guard let id = audible ?? (currentProduced ? nil : current?.id) else { return false }
+        player.skip(segment: id)
+        if current?.id == id, !currentProduced {
+            // Still producing: stop its text (e.g. the narrator's Claude stream) and audio.
+            skippedID = id
+            current?.cancel()
+        }
+        if roles[id] == .sidekick { sidekick?.dismissCaption() }
+        return true
+    }
+
+    /// Reveals SNARK-9's caption once its audio (`id`) is the one playing.
+    private func revealCaptionWhenAudible(_ id: Int, generation: Int) {
+        Task { [weak self] in
+            let deadline = ContinuousClock.now + .seconds(60)
+            while ContinuousClock.now < deadline {
+                guard let self, self.generation == generation, self.skippedID != id else { return }
+                if let audible = self.player.audibleSegment, audible >= id {
+                    if audible == id { self.sidekick?.revealCaption() }
+                    return
+                }
+                try? await Task.sleep(for: .milliseconds(50))
+            }
+        }
     }
 
     /// Forget the previous game's narration (e.g. after a restart).
@@ -217,7 +259,15 @@ final class VoiceDirector {
     // MARK: - Casting each turn
 
     private func turnArrived(_ turn: GameTurn) {
-        let sounding = RedAlert.isSounding(after: turn.text, wasSounding: alertSounding)
+        if turn.isCheat {
+            // A cheat jumped ahead in a fresh game: start the narration history over.
+            previousNarration = []
+        }
+        // After a cheat, the siren follows the story state (on while the ship is exploding);
+        // otherwise it follows the turn's text.
+        let sounding = turn.isCheat
+            ? session?.storyEvents.contains("explosion") ?? false
+            : RedAlert.isSounding(after: turn.text, wasSounding: alertSounding)
         if sounding != alertSounding {
             alertSounding = sounding
             // Let the explosion hit first, then bring the siren up under it.
@@ -266,6 +316,10 @@ final class VoiceDirector {
     // MARK: - Playback
 
     private func enqueue(_ utterance: Utterance, first: Bool = false) {
+        var utterance = utterance
+        utterance.id = nextUtteranceID
+        nextUtteranceID += 1
+        roles[utterance.id] = utterance.role
         if first { queue.insert(utterance, at: 0) } else { queue.append(utterance) }
         guard task == nil else { return }
         let generation = self.generation
@@ -280,24 +334,19 @@ final class VoiceDirector {
             current = utterance
             currentProduced = false
             if let sound = utterance.sound {
-                player.enqueue(sound)
+                player.enqueue(sound, segment: utterance.id)
                 continue
             }
             var spoken: [String] = []
-            // SNARK-9's caption appears as its line starts playing, which is after whatever is
-            // still queued ahead of it (the end of the narration) has played.
-            if utterance.role == .sidekick {
-                let wait = player.secondsRemaining
-                Task { [weak self] in
-                    try? await Task.sleep(for: .seconds(wait))
-                    guard let self, self.generation == generation else { return }
-                    self.sidekick?.revealCaption()
-                }
-            }
+            // SNARK-9's caption appears when its audio actually starts playing, after whatever
+            // is still queued ahead of it (the end of the narration, unless that's skipped).
+            if utterance.role == .sidekick { revealCaptionWhenAudible(utterance.id, generation: generation) }
             do {
                 for try await text in utterance.texts {
+                    guard skippedID != utterance.id else { break }
                     try await speak(text, voiceID: utterance.voiceID, cacheable: utterance.role == .character,
-                                    speed: utterance.role == .narrator ? cast.narratorSpeed : 1)
+                                    speed: utterance.role == .narrator ? cast.narratorSpeed : 1,
+                                    segment: utterance.id)
                     spoken.append(text)
                 }
                 currentProduced = true
@@ -307,6 +356,9 @@ final class VoiceDirector {
                 }
                 errorMessage = nil
             } catch is CancellationError {
+                // Skipping cancels this speaker's text (e.g. the narrator's Claude request);
+                // the queue carries on with the next one.
+                if skippedID == utterance.id, !Task.isCancelled { continue }
                 break
             } catch CommandInterpreterError.refused {
                 continue  // Claude declined to narrate this turn; just move on.
@@ -323,17 +375,20 @@ final class VoiceDirector {
 
     /// Streams one piece of text in `voiceID` into the player. Character lines repeat, so
     /// finished ones are cached; narration and commentary are new every time.
-    private func speak(_ text: String, voiceID: String, cacheable: Bool, speed: Double = 1) async throws {
+    private func speak(_ text: String, voiceID: String, cacheable: Bool, speed: Double = 1,
+                       segment: Int) async throws {
         if cacheable, let cached = cache.load(text: text, voiceID: voiceID, model: speech.model) {
             try Task.checkCancellation()
-            player.enqueue(cached)
+            player.enqueue(cached, segment: segment)
             return
         }
         var audio = Data()
         for try await chunk in speech.stream(text, voiceID: voiceID, speed: speed) {
             // After stop(), a chunk already in flight must not restart the player.
             try Task.checkCancellation()
-            player.enqueue(chunk)
+            // Skipped mid-line: stop adding this speaker's audio (and don't cache a partial line).
+            if skippedID == segment { return }
+            player.enqueue(chunk, segment: segment)
             if cacheable { audio.append(chunk) }
         }
         // A cancelled stream just ends early; only cache lines that arrived whole.
