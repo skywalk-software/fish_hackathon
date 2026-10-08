@@ -1,6 +1,14 @@
 import Foundation
 import Observation
 
+/// One line in the chat history: something the player typed, or something SNARK-9 said.
+public struct SidekickChatEntry: Identifiable, Equatable, Sendable {
+    public enum Speaker: Sendable { case player, sidekick }
+    public let id: Int
+    public let speaker: Speaker
+    public let text: String
+}
+
 /// The let's-play sidekick: watches the game and streams a quip from Claude after the
 /// player's turns. Observe `line` for the caption; add a handler with `onLineFinished` to
 /// speak it (e.g. Fish TTS in the sidekick's own voice).
@@ -11,6 +19,9 @@ public final class Sidekick {
     /// The caption: the quip being spoken (or, with no voice, as it streams in). Blank while
     /// SNARK-9 is waiting, thinking, or passing, and from the moment the player sends a command.
     public private(set) var line = ""
+    /// The game so far as a chat: the player's commands and SNARK-9's quips, oldest first.
+    /// Quips are added when they're shown, so ones cut off before being spoken don't appear.
+    public private(set) var chat: [SidekickChatEntry] = []
     /// True while Claude is writing a quip.
     public private(set) var isThinking = false
     /// The last error, shown in place of a quip; cleared by the next successful one.
@@ -44,6 +55,7 @@ public final class Sidekick {
     /// Achievements earned since the last quip was requested, to be awarded in the next one.
     @ObservationIgnored private var pendingAwards: [Achievement] = []
     @ObservationIgnored private var finishedHandlers: [(String) -> Void] = []
+    @ObservationIgnored private var nextChatID = 0
 
     private static let enabledKey = "sidekickEnabled"
     private static let maxPreviousLines = 8
@@ -68,10 +80,11 @@ public final class Sidekick {
                 // Skip mid-command questions like the save filename prompt.
                 guard turn.prompt == .command else { return }
                 self.turnFinished()
-            case .command:
+            case .command(let command):
                 // The player moved on: drop any quip in progress and clear the caption.
                 self.cancel(keepingAwards: true)
                 self.line = ""
+                self.addToChat(.player, command)
             case .ended:
                 self.cancel(keepingAwards: false)
                 self.line = ""
@@ -88,13 +101,15 @@ public final class Sidekick {
     public func revealCaption() {
         guard let pendingCaption else { return }
         line = pendingCaption
+        addToChat(.sidekick, pendingCaption)
         self.pendingCaption = nil
     }
 
-    /// Hides the caption (the player skipped SNARK-9's line).
-    public func dismissCaption() {
-        line = ""
-        pendingCaption = nil
+    private func addToChat(_ speaker: SidekickChatEntry.Speaker, _ text: String) {
+        let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        chat.append(SidekickChatEntry(id: nextChatID, speaker: speaker, text: text))
+        nextChatID += 1
     }
 
     private func turnFinished() {
@@ -161,6 +176,7 @@ public final class Sidekick {
                 pendingCaption = caption
             } else {
                 line = caption
+                addToChat(.sidekick, caption)
             }
             for handler in finishedHandlers { handler(text) }
         }
@@ -180,5 +196,6 @@ public final class Sidekick {
         line = ""
         errorMessage = nil
         previousLines = []
+        chat = []
     }
 }

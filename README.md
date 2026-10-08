@@ -156,7 +156,7 @@ Scripts are in [Sources/PlanetfallEngine/Cheat.swift](Sources/PlanetfallEngine/C
 
 ## Skipping a speaker
 
-Press **space** on an empty command line to skip whoever is talking. Skip the narrator and SNARK-9 speaks next; skip SNARK-9 and his caption clears. Sound effects can be skipped the same way. When nobody is talking, space just types a space.
+Press **space** on an empty command line to skip whoever is talking. Skip the narrator and SNARK-9 speaks next; skip SNARK-9 and his voice stops, but his caption stays. Sound effects can be skipped the same way. When nobody is talking, space just types a space.
 
 ## Achievements
 
@@ -317,6 +317,8 @@ To use a voice, add `FISH_VOICE_SIDEKICK=<id>` or `FISH_VOICE_NARRATOR=<id>` to 
 - **Caption:** the bar is blank unless SNARK-9 is speaking. It clears the moment you send a command, stays blank while SNARK-9 thinks or passes, and shows the quip when its voice starts (or as it's written, with SNARK-9's voice off).
 - **Cost:** each commented turn sends about 1–3K input tokens, roughly a cent or two per turn.
 - **Live test:** run it against the real API with `ANTHROPIC_LIVE_TESTS=1 swift test --filter commentsOnARealTurn`.
+
+- **Chat history:** the speech-bubble button on SNARK-9's bar shows the game so far as a chat, with your commands on the right and SNARK-9's quips on the left.
 
 **For voice:** `sidekick.onLineFinished { line in … }` delivers each finished quip, ready to speak in SNARK-9's own Fish voice. `sidekick.line` updates as the text streams, if you'd rather start speaking sooner.
 

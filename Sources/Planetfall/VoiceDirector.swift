@@ -186,7 +186,9 @@ final class VoiceDirector {
             skippedID = id
             current?.cancel()
         }
-        if roles[id] == .sidekick { sidekick?.dismissCaption() }
+        // Skipping SNARK-9 only stops his voice; his caption stays (or appears, if he was
+        // skipped before his audio started).
+        if roles[id] == .sidekick { sidekick?.revealCaption() }
         return true
     }
 
@@ -195,7 +197,11 @@ final class VoiceDirector {
         Task { [weak self] in
             let deadline = ContinuousClock.now + .seconds(60)
             while ContinuousClock.now < deadline {
-                guard let self, self.generation == generation, self.skippedID != id else { return }
+                guard let self, self.generation == generation else { return }
+                if self.skippedID == id {
+                    self.sidekick?.revealCaption()
+                    return
+                }
                 if let audible = self.player.audibleSegment, audible >= id {
                     if audible == id { self.sidekick?.revealCaption() }
                     return

@@ -64,6 +64,9 @@ struct SidekickTimingTests {
         try await Task.sleep(for: .milliseconds(900))
         #expect(stub.requestCount == 2)
         #expect(sidekick.line.isEmpty)  // SNARK-9 passed, so the caption stays blank
+        // The chat has both commands but only the quip SNARK-9 actually said.
+        #expect(sidekick.chat.map(\.speaker) == [.player, .sidekick, .player])
+        #expect(sidekick.chat.map(\.text) == ["wait", "Riveting.", "wait"])
     }
 
     @Test func withAVoiceTheCaptionWaitsForSpeechAndTheRequestWaitsForNarration() async throws {
@@ -88,7 +91,9 @@ struct SidekickTimingTests {
         #expect(stub.requestCount == 1)
         #expect(spoken == ["[deadpan] Riveting."])  // the voice gets the tag
         #expect(sidekick.line.isEmpty)  // but the caption waits for the voice to start
+        #expect(sidekick.chat.map(\.text) == ["wait"])  // and so does its place in the chat
         sidekick.revealCaption()
         #expect(sidekick.line == "Riveting.")
+        #expect(sidekick.chat.map(\.text) == ["wait", "Riveting."])
     }
 }
