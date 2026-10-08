@@ -114,6 +114,16 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 - **Microphone:** push-to-talk records from the macOS default input (System Settings → Sound → Input), re-read on every press. Headphones that expose no microphone to macOS, like Bluetooth buds in headphone-only mode, can't be recorded from; the Mac's mic is used instead.
 - **Live tests:** `FISH_LIVE_TESTS=1 swift test --filter streamsEveryCastVoice` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter narratesARealTurn`.
 
+## App icon
+
+`Art/AppIcon.png` is the app icon: an original image of the player's ensign. To replace it, generate new square artwork, then shape it into a macOS icon (an 824-point rounded square on a 1024-point canvas, with a shadow):
+
+```sh
+swift scripts/make-icon.swift path/to/artwork.jpg Art/AppIcon.png
+```
+
+`build-app.sh` turns it into the app bundle's icon, and `swift run` uses it for the Dock icon.
+
 ## How it works
 
 We don't port the game. `planetfall.z3` is Infocom's compiled game (Release 39), which runs on a Z-machine interpreter. The app runs **dfrotz** in the background and passes text in and out over pipes.
