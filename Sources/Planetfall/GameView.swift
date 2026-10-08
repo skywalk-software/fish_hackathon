@@ -32,6 +32,14 @@ struct GameView: View {
                             .allowsHitTesting(false)
                             .animation(napDimAnimation, value: session.isNapping)
                     }
+                    // Dying tints the room red over a second; it clears when you restart or restore.
+                    .overlay {
+                        Color.red
+                            .opacity(session.isDead ? 0.38 : 0)
+                            .allowsHitTesting(false)
+                            .animation(session.isDead ? .easeIn(duration: 1) : .easeOut(duration: 0.4),
+                                       value: session.isDead)
+                    }
                 Divider()
                 TranscriptTextView(entries: session.transcript)
             }

@@ -253,6 +253,8 @@ For each room, the app tries `Art/Rooms/<room>-<tags>` with the active tags in t
 | In the webbing, approaching the planet | planet, webbing | `escape-pod-planet-webbing.jpg` |
 | Out of the webbing | none | `escape-pod.jpg` |
 
+When you die ("You have died"), a see-through red film fades in over the room art in one second. It clears when you RESTART, RESTORE a game, press ⇧⌘R or use a cheat.
+
 Changing art takes no code: name the image for the room plus its tags. Tags reset when the game restarts, including RESTART typed in the game. One limitation: RESTORE doesn't reset them.
 
 ## Character portraits

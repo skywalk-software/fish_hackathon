@@ -49,6 +49,8 @@ public final class GameSession {
     public private(set) var transcript: [TranscriptEntry] = []
     public private(set) var status: StatusLine?
     public private(set) var isAwaitingInput = false
+    /// True from the game's "You have died" until the player restarts or restores a game.
+    public private(set) var isDead = false
     /// Whether the player has plugged their ears (see `EarPlugs`), silencing the siren.
     public private(set) var earsPlugged = false
     /// True while a cheat is replaying its script (see `Cheat`): input is locked.
@@ -282,6 +284,7 @@ public final class GameSession {
         playerHolder = nil
         nap = nil
         earsPlugged = false
+        isDead = false
         isAwaitingInput = false
         prompt = .command
         isRunning = false
@@ -420,6 +423,7 @@ public final class GameSession {
             storyEvents = []
             playerHolder = nil
             earsPlugged = false
+            isDead = false
         }
         for event in turn.objectEvents {
             GameCharacter.apply(event, to: &characterLocations)
@@ -428,8 +432,16 @@ public final class GameSession {
             }
         }
         StoryEvent.update(&storyEvents, with: turn.text)
+        if turn.text.contains(Self.deathMarker) {
+            isDead = true
+        } else if isDead, turn.text.hasPrefix("Ok.") {
+            isDead = false  // RESTORE worked
+        }
         if let newStatus = turn.status { status = newStatus }
     }
+
+    /// What the game prints when the player dies.
+    static let deathMarker = "****  You have died  ****"
 
     /// Shows a turn to the player and everything observing the session.
     private func publish(_ turn: GameTurn) {
