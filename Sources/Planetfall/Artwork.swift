@@ -42,6 +42,15 @@ enum Artwork {
         roots.lazy.compactMap { NSImage(contentsOf: $0.appendingPathComponent("AppIcon.png")) }.first
     }
 
+    /// A Dock icon choice: Art/AppIcons/<id>.png.
+    static func dockIcon(_ id: String) -> NSImage? {
+        let key = "AppIcons/\(id)"
+        if let cached = cache[key] { return cached }
+        let image = roots.lazy.compactMap { NSImage(contentsOf: $0.appendingPathComponent("\(key).png")) }.first
+        cache[key] = image
+        return image
+    }
+
     /// "Deck Nine" -> "deck-nine", "Escape Pod" -> "escape-pod".
     static func slug(for name: String) -> String {
         name.lowercased()

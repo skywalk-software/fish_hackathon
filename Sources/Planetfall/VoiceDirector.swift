@@ -116,6 +116,8 @@ final class VoiceDirector {
                 self.stop()
                 self.alertSounding = false
                 self.updateAlert()
+            case .achievementUnlocked:
+                break  // SNARK-9 announces it; its line is voiced like any other.
             }
         }
         sidekick?.onLineFinished { [weak self] line in self?.sidekickSaid(line) }

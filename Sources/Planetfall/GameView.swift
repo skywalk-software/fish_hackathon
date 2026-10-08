@@ -5,6 +5,7 @@ struct GameView: View {
     let session: GameSession
     var sidekick: Sidekick?
     var voices: VoiceDirector?
+    var achievements: AchievementStore?
 
     @State private var input = ""
     @State private var history: [String] = []
@@ -14,6 +15,8 @@ struct GameView: View {
     @State private var pendingVoiceCommand: String?
     /// The portrait shown full-window, if any: a character in the room or the sidekick.
     @State private var closeup: Portrait?
+    /// The achievement banner currently showing, if any.
+    @State private var toast: Achievement?
     @FocusState private var inputFocused: Bool
 
     var body: some View {
@@ -31,6 +34,15 @@ struct GameView: View {
                     closeup = Portrait(artID: character.id, name: character.name)
                 }
             }
+            // New achievements, top-left so they don't cover character portraits.
+            .overlay(alignment: .topLeading) {
+                if let toast {
+                    AchievementToast(achievement: toast) { self.toast = nil }
+                        .padding(16)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .animation(.spring(duration: 0.4), value: toast)
             if let sidekick, sidekick.isEnabled {
                 Divider()
                 SidekickBar(sidekick: sidekick) {
@@ -48,6 +60,14 @@ struct GameView: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: closeup)
+        .onChange(of: achievements?.latestUnlock) { _, unlocked in
+            guard let unlocked else { return }
+            toast = unlocked
+            Task {
+                try? await Task.sleep(for: Self.toastDuration)
+                if toast == unlocked { toast = nil }
+            }
+        }
         .onAppear {
             inputFocused = true
             pushToTalk.activate(canListen: { session.isRunning }, context: { session.commandContext() },
@@ -110,6 +130,9 @@ struct GameView: View {
                 ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
         }
     }
+
+    /// How long an achievement banner stays up (it can be clicked away sooner).
+    private static let toastDuration: Duration = .seconds(8)
 
     /// How long a spoken command sits in the command box before it's sent.
     private static let voiceCommandPreview: Duration = .milliseconds(800)

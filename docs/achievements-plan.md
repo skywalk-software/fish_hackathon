@@ -1,6 +1,6 @@
 # Achievements and unlockable app icons (plan)
 
-Status: planned, not built yet.
+Status: **built** (2026-10-08). Decisions: the ensign icon unlocks on **escaping** (not landing), only the Dock icon changes, the icon picker lives in Settings with full-size previews, SNARK-9's award lines are generated (not scripted), no iCloud sync, and the toast shows even with commentary off. The sections below are the original plan, kept for reference.
 
 ## The idea
 

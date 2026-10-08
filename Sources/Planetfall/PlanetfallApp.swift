@@ -12,12 +12,17 @@ struct PlanetfallApp: App {
             Group {
                 switch launch.state {
                 case .running(let session):
-                    GameView(session: session, sidekick: launch.sidekick, voices: launch.voices)
+                    GameView(session: session, sidekick: launch.sidekick, voices: launch.voices,
+                             achievements: launch.achievements)
                 case .failed(let message):
                     SetupErrorView(message: message)
                 }
             }
             .frame(minWidth: 560, minHeight: 420)
+            // The player's chosen Dock icon. Re-applied when achievements change, so a chosen
+            // icon that becomes locked (achievements reset) falls back to the default.
+            .onAppear { launch.dockIcons.apply() }
+            .onChange(of: launch.achievements.earned) { _, _ in launch.dockIcons.apply() }
             // The app is always dark; this keeps system-drawn parts (text cursor, scrollbars,
             // selection) readable when macOS itself is in Light Mode.
             .preferredColorScheme(.dark)
@@ -56,6 +61,11 @@ struct PlanetfallApp: App {
                 }
             }
         }
+
+        Settings {
+            SettingsView(dockIcons: launch.dockIcons, achievements: launch.achievements)
+                .preferredColorScheme(.dark)
+        }
     }
 }
 
@@ -73,10 +83,16 @@ final class GameLaunch {
     private(set) var sidekick: Sidekick?
     /// The narrator, characters, and SNARK-9's voices; nil without a Fish API key.
     private(set) var voices: VoiceDirector?
+    /// Achievements earned on this Mac (kept across games and launches).
+    let achievements = AchievementStore()
+    /// Which Dock icon to show; some unlock with achievements.
+    let dockIcons: DockIconSettings
 
     init() {
+        dockIcons = DockIconSettings(achievements: achievements)
         do {
             let session = try GameSession.makeDefault()
+            session.achievements = achievements
             // Created before start() so it sees the opening turn.
             let sidekick = Sidekick.makeDefault(session: session)
             self.sidekick = sidekick
@@ -104,7 +120,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Needed when launched with `swift run`, which starts us as a background process.
         NSApp.setActivationPolicy(.regular)
-        // Without a bundle, the Dock would show the generic executable icon.
+        // Without a bundle, the Dock would show the generic executable icon until the game
+        // window applies the chosen one.
         if let icon = Artwork.appIcon() { NSApp.applicationIconImage = icon }
         NSApp.activate()
     }

@@ -12,9 +12,12 @@ public struct CommentaryContext: Equatable, Sendable {
     public var recentOutput: String
     /// The commentator's own recent lines, oldest first, so it doesn't repeat its jokes.
     public var previousLines: [String]
+    /// Achievements the player earned on this turn, for the commentator to award.
+    public var newAchievements: [Achievement] = []
 
     public init(location: String?, score: Int?, moves: Int?, turnsPlayed: Int? = nil,
-                recentOutput: String, previousLines: [String]) {
+                recentOutput: String, previousLines: [String], newAchievements: [Achievement] = []) {
+        self.newAchievements = newAchievements
         self.location = location
         self.score = score
         self.moves = moves
@@ -139,6 +142,10 @@ public struct Commentator: Sendable {
         - Roast the play, not the person: tease their choices, never anything about who they are. \
         Playful, never cruel. Keep it PG-13.
         - Vary your material. Don't reuse a joke, opener, or catchphrase from your previous lines.
+        - Sometimes the app tells you the player just earned an achievement. Then award it: work \
+        the achievement's name into your reaction to what just happened, in your own words and \
+        your own attitude, still within the length limit. If it came with a new Dock icon, \
+        mention that too. Never pass on an achievement turn.
         - If the latest turn is routine and you have nothing good to say (a repeated look, checking \
         inventory again, waiting with nothing happening), reply with exactly \(Commentator.passToken) \
         and nothing else. Pass on roughly a third of turns so the commentary stays punchy.
@@ -167,7 +174,29 @@ public struct Commentator: Sendable {
             \(previous)
             </previous_lines>
 
-            Your reaction to the latest turn (or \(passToken)):
+            \(achievementBlock(context.newAchievements))Your reaction to the latest turn (or \(passToken)):
+            """
+    }
+
+    /// Tells the commentator about achievements earned this turn, or nothing if there are none.
+    static func achievementBlock(_ achievements: [Achievement]) -> String {
+        guard !achievements.isEmpty else { return "" }
+        let lines = achievements.map { achievement in
+            var line = "- \(achievement.title): \(achievement.description)"
+            if achievement.unlocksIcon != nil {
+                line += " It also unlocks a new Dock icon for the app, the player's own "
+                    + "Ensign Seventh Class portrait, which they can choose in Settings."
+            }
+            return line
+        }.joined(separator: "\n")
+        return """
+            The player just earned \(achievements.count == 1 ? "an achievement" : "achievements") \
+            on this turn. Award it in your reaction (don't pass):
+            <achievement_unlocked>
+            \(lines)
+            </achievement_unlocked>
+
+
             """
     }
 

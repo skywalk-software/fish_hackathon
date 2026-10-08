@@ -114,6 +114,26 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 - **Microphone:** push-to-talk records from the macOS default input (System Settings → Sound → Input), re-read on every press. Headphones that expose no microphone to macOS, like Bluetooth buds in headphone-only mode, can't be recorded from; the Mac's mic is used instead.
 - **Live tests:** `FISH_LIVE_TESTS=1 swift test --filter streamsEveryCastVoice` and `ANTHROPIC_LIVE_TESTS=1 swift test --filter narratesARealTurn`.
 
+## Achievements
+
+Story milestones earn achievements. They're detected from a sentence the game prints once, and saved on this Mac across games and launches.
+
+| Achievement | Earned when | Unlocks |
+|---|---|---|
+| Detention, Again | Blather throws you in the brig | — |
+| Abandon Ship | The escape pod clears the Feinstein ("…you see the Feinstein dwindle…") | Ensign Dock icon |
+| Planetfall | The pod lands ("The pod lands with a thud") | — |
+
+When you earn one:
+- **A toast appears** over the room art, even with commentary off.
+- **SNARK-9 awards it** in its own words. The prompt gets the achievement and what just happened, never a scripted line, and Gaurav's voices speak it like any other quip.
+
+**Settings (⌘,):**
+- **Dock Icon:** pick the Dock icon. Click one to see it full size; locked icons show which achievement unlocks them. Only the Dock icon changes; the Finder icon stays the bundle's.
+- **Achievements:** see what you've earned (locked ones show "???" so they don't spoil the story), and **Reset Achievements** for demos.
+
+Achievements are defined in [Sources/PlanetfallEngine/Achievement.swift](Sources/PlanetfallEngine/Achievement.swift), and Dock icons in [Sources/Planetfall/DockIcons.swift](Sources/Planetfall/DockIcons.swift).
+
 ## App icon
 
 `Art/AppIcon.png` is the app icon: an original recruitment-poster-style painting of the player's ensign. Icons, and the square artwork they were made from, live in [Art/AppIcons/](Art/AppIcons/):
@@ -121,7 +141,7 @@ Sending a command, or starting push-to-talk, cuts everyone off, so the game neve
 | Icon | Files | Use |
 |---|---|---|
 | Poster | `poster.png`, `poster-artwork.jpg` | Current icon |
-| Ensign | `ensign.png`, `ensign-artwork.jpg` | Alternate; planned as an unlockable for landing on the planet (see [docs/achievements-plan.md](docs/achievements-plan.md)) |
+| Ensign | `ensign.png`, `ensign-artwork.jpg` | Alternate Dock icon, unlocked by the Abandon Ship achievement |
 
 To make an icon from new square artwork, shape it into a macOS icon (an 824-point rounded square on a 1024-point canvas, with a shadow), then copy it into place:
 

@@ -10,6 +10,9 @@ public enum GameEvent: Sendable {
     case command(String)
     /// The dfrotz process exited.
     case ended(exitCode: Int32)
+    /// The player earned an achievement. Sent just before the `.turn` it happened in, so
+    /// observers (like the sidekick) know about it when they handle that turn.
+    case achievementUnlocked(Achievement)
 }
 
 public enum TranscriptEntry: Identifiable, Equatable, Sendable {
@@ -53,6 +56,8 @@ public final class GameSession {
     /// Where each character is (character id -> room name), tracked from dfrotz's
     /// object-movement trace. Characters not yet seen or removed from play are absent.
     public private(set) var characterLocations: [String: String] = [:]
+    /// Where earned achievements are recorded; nil to not track them.
+    @ObservationIgnored public var achievements: AchievementStore?
     /// Ids of the active `StoryEvent`s, oldest first.
     public private(set) var storyEvents: [String] = []
     /// The object the player is inside, from the object trace (e.g. "safety web"), or the
@@ -228,6 +233,9 @@ public final class GameSession {
         if !turn.text.isEmpty { append(.narration(id: takeID(), text: turn.text)) }
         isAwaitingInput = true
         prompt = turn.prompt
+        for achievement in achievements?.record(turn.text) ?? [] {
+            emit(.achievementUnlocked(achievement))
+        }
         emit(.turn(turn))
     }
 

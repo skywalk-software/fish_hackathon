@@ -28,6 +28,8 @@ public final class Sidekick {
     /// A turn arrived while a quip was still streaming; comment on the latest state afterwards.
     @ObservationIgnored private var hasPendingTurn = false
     @ObservationIgnored private var previousLines: [String] = []
+    /// Achievements earned since the last quip was requested, to be awarded in the next one.
+    @ObservationIgnored private var pendingAwards: [Achievement] = []
     @ObservationIgnored private var finishedHandlers: [(String) -> Void] = []
 
     private static let enabledKey = "sidekickEnabled"
@@ -44,10 +46,18 @@ public final class Sidekick {
         self.persona = commentator.persona
         self.isEnabled = UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true
         session.addObserver { [weak self] event in
-            guard let self, case .turn(let turn) = event else { return }
-            // Skip mid-command questions like the save filename prompt.
-            guard turn.prompt == .command else { return }
-            self.turnFinished()
+            guard let self else { return }
+            switch event {
+            case .achievementUnlocked(let achievement):
+                // Arrives just before its turn, so the next quip can award it.
+                if self.isEnabled { self.pendingAwards.append(achievement) }
+            case .turn(let turn):
+                // Skip mid-command questions like the save filename prompt.
+                guard turn.prompt == .command else { return }
+                self.turnFinished()
+            case .command, .ended:
+                break
+            }
         }
     }
 
@@ -73,7 +83,9 @@ public final class Sidekick {
             moves: session.status?.moves,
             turnsPlayed: session.transcript.filter { if case .command = $0 { true } else { false } }.count,
             recentOutput: CommandContext.recent(session.transcript, location: nil).recentOutput,
-            previousLines: previousLines)
+            previousLines: previousLines,
+            newAchievements: pendingAwards)
+        pendingAwards = []
         hasPendingTurn = false
         isThinking = true
         task = Task { [weak self, commentator] in
@@ -115,6 +127,7 @@ public final class Sidekick {
         task?.cancel()
         task = nil
         hasPendingTurn = false
+        pendingAwards = []
         isThinking = false
     }
 
