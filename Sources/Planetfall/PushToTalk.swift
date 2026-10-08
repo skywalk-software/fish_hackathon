@@ -78,6 +78,8 @@ final class PushToTalk {
         case .authorized:
             break
         case .notDetermined:
+            // The permission dialog takes focus, so ⌥'s release won't reach us.
+            optionKeyHeld = false
             Task {
                 let granted = await AVCaptureDevice.requestAccess(for: .audio)
                 notice = granted ? "Microphone ready. Hold ⌥ and speak." : Self.micDeniedMessage
@@ -183,7 +185,10 @@ final class PushToTalk {
         switch event.type {
         case .flagsChanged:
             let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask).subtracting(.capsLock)
-            if flags == .option, !optionKeyHeld, phase == .idle {
+            // No `optionKeyHeld` check here: if the release went to another window (the
+            // microphone permission dialog takes focus mid-press), a stale "held" mustn't
+            // swallow the next press.
+            if flags == .option, phase == .idle {
                 optionKeyHeld = true
                 begin()
             } else if optionKeyHeld, !flags.contains(.option) {

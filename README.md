@@ -194,7 +194,7 @@ swift scripts/make-icon.swift Art/AppIcons/new-artwork.jpg Art/AppIcons/new.png
 cp Art/AppIcons/new.png Art/AppIcon.png
 ```
 
-`build-app.sh` turns `Art/AppIcon.png` into the app bundle's icon, and `swift run` uses it for the Dock icon.
+`build-app.sh` signs the app with your Apple Development certificate if you have one (override with `PLANETFALL_SIGN_IDENTITY`), so macOS remembers its microphone permission across rebuilds. Without one, it falls back to an ad-hoc signature, and macOS asks for the microphone again after each rebuild. It also turns `Art/AppIcon.png` into the app bundle's icon, and `swift run` uses it for the Dock icon.
 
 ## How it works
 
@@ -289,9 +289,12 @@ The narrator ("Planetfall Narrator (American female)") and SNARK-9 ("SNARK-9 (Br
 
 ## Narrator modes and usage
 
-**Voices → Narrator Reads** chooses what the narrator says:
-- **Claude's Retelling** (default): Claude rewrites each turn as spoken narration with delivery tags. If Claude can't be reached (no key, a rejected key, no credit), the narrator reads the game text instead of going quiet.
-- **Read the Game Text:** Fish reads the game's own text (title banner and character lines left out). It needs no Anthropic key and costs nothing from Claude.
+The **Narrator** menu chooses what the narrator says:
+- **Embellished Text** (default): Claude rewrites each turn as spoken narration with delivery tags. If Claude can't be reached (no key, a rejected key, no credit), the narrator reads the original text instead of going quiet.
+- **Original Text:** Fish reads the game's own text (title banner and character lines left out). It needs no Anthropic key and costs nothing from Claude.
+- **None:** no narrator. Character voices and SNARK-9 still speak.
+
+SNARK-9 always sees the game's own text, never the narrator's retelling, so choosing Original Text or None removes the narrator's Claude cost completely.
 
 **Settings → Usage** shows:
 - **Fish Audio credit:** the live balance, read from Fish's `/wallet/self/api-credit`. The balance is noted at every launch, and once there's at least an hour of history, the tab estimates when the credit runs out. The voices currently use Fish's free `s2.1-pro-free` model (no charge through 2026-11-30), so only push-to-talk ($0.36 per hour of audio) and voice design spend credit.

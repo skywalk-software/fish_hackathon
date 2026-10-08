@@ -44,5 +44,9 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 PLIST
 # Finder metadata (e.g. on images dragged into Art/) makes codesign refuse the bundle.
 xattr -cr "$APP"
-codesign --force --sign - "$APP"
+# Sign with an Apple Development certificate when there is one: macOS then recognizes the app
+# across rebuilds and remembers its microphone permission. An ad-hoc signature ("-") changes
+# with every build, so macOS would ask again after each one. Override with PLANETFALL_SIGN_IDENTITY.
+IDENTITY="${PLANETFALL_SIGN_IDENTITY:-$(security find-identity -v -p codesigning 2>/dev/null | awk '/Apple Development/ { print $2; exit }')}"
+codesign --force --sign "${IDENTITY:--}" "$APP"
 echo "Built $APP"

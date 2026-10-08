@@ -33,15 +33,25 @@ struct PlanetfallApp: App {
                 Button("Restart Game") { launch.restart() }
                     .keyboardShortcut("r", modifiers: [.command, .shift])
             }
-            CommandMenu("Voices") {
+            CommandMenu("Narrator") {
                 if let voices = launch.voices {
-                    Toggle("Narrator", isOn: Bindable(voices).narratorEnabled)
-                        .keyboardShortcut("n", modifiers: [.command, .shift])
-                    Picker("Narrator Reads", selection: Bindable(voices).narratorMode) {
-                        ForEach(VoiceDirector.NarratorMode.allCases) { mode in
-                            Text(mode.title).tag(mode)
+                    Picker("Narrator", selection: Bindable(voices).narratorChoice) {
+                        ForEach(VoiceDirector.NarratorChoice.allCases) { choice in
+                            Text(choice.title).tag(choice)
                         }
                     }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                    if !voices.hasNarrator {
+                        Divider()
+                        Text("No ANTHROPIC_API_KEY: Embellished Text reads the original text")
+                    }
+                } else {
+                    Text("Add FISH_API_KEY to .env to hear the narrator")
+                }
+            }
+            CommandMenu("Voices") {
+                if let voices = launch.voices {
                     Toggle("Character Voices", isOn: Bindable(voices).charactersEnabled)
                         .keyboardShortcut("m", modifiers: [.command, .shift])
                     Toggle("SNARK-9 Voice", isOn: Bindable(voices).sidekickEnabled)
@@ -49,9 +59,6 @@ struct PlanetfallApp: App {
                         .disabled(!voices.hasSidekick)
                     Toggle("Sound Effects", isOn: Bindable(voices).effectsEnabled)
                         .keyboardShortcut("e", modifiers: [.command, .shift])
-                    if !voices.hasNarrator {
-                        Text("No ANTHROPIC_API_KEY: the narrator reads the game text")
-                    }
                     Divider()
                     Toggle("Talking Portraits", isOn: Bindable(voices).talkingPortraitsEnabled)
                 } else {

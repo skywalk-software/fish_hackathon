@@ -52,6 +52,26 @@ final class VoiceDirector {
             }
         }
     }
+    /// The Narrator menu's choice: Claude's embellished retelling, the original game text, or no
+    /// narrator. Combines `narratorEnabled` and `narratorMode`.
+    enum NarratorChoice: String, CaseIterable, Identifiable {
+        case embellished, original, none
+        var id: String { rawValue }
+        var title: String {
+            switch self {
+            case .embellished: "Embellished Text"
+            case .original: "Original Text"
+            case .none: "None"
+            }
+        }
+    }
+    var narratorChoice: NarratorChoice {
+        get { !narratorEnabled ? .none : narratorMode == .claude ? .embellished : .original }
+        set {
+            narratorEnabled = newValue != .none
+            if newValue != .none { narratorMode = newValue == .embellished ? .claude : .gameText }
+        }
+    }
     /// Remembered between launches. Claude's retelling falls back to the game text whenever
     /// Claude can't be reached (no key, a rejected key, no credit).
     var narratorMode: NarratorMode {
