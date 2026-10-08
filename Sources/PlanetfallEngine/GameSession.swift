@@ -49,6 +49,8 @@ public final class GameSession {
     public private(set) var transcript: [TranscriptEntry] = []
     public private(set) var status: StatusLine?
     public private(set) var isAwaitingInput = false
+    /// Whether the player has plugged their ears (see `EarPlugs`), silencing the siren.
+    public private(set) var earsPlugged = false
     /// True while a `Nap` is running: the app is sending hidden WAITs, so input is locked.
     public var isNapping: Bool { nap != nil }
     /// What the game is waiting for: a command at `>`, or an answer to a question such as a
@@ -174,6 +176,14 @@ public final class GameSession {
         guard isRunning, let stdin, nap == nil else { return }
         let line = line.replacingOccurrences(of: "\n", with: " ")
         append(.command(id: takeID(), text: line))
+        if let earCommand = EarPlugs.command(in: line) {
+            // Handled by the app, not the game: no game time passes.
+            emit(.command(line))
+            let response = EarPlugs.response(to: earCommand, wasPlugged: earsPlugged)
+            earsPlugged = earCommand == .plug
+            publish(GameTurn(text: response, status: status, prompt: .command))
+            return
+        }
         isAwaitingInput = false
         if Nap.isNapCommand(line),
            Nap.applies(location: status?.location, storyEvents: storyEvents, playerHolder: playerHolder) {
@@ -206,6 +216,7 @@ public final class GameSession {
         storyEvents = []
         playerHolder = nil
         nap = nil
+        earsPlugged = false
         isAwaitingInput = false
         prompt = .command
         isRunning = false
@@ -268,6 +279,7 @@ public final class GameSession {
             characterLocations = [:]
             storyEvents = []
             playerHolder = nil
+            earsPlugged = false
         }
         for event in turn.objectEvents {
             GameCharacter.apply(event, to: &characterLocations)

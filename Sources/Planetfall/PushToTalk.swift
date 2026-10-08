@@ -133,6 +133,11 @@ final class PushToTalk {
     /// game's questions, like a save file name, are exempt). If Claude can't be reached, what was
     /// heard still goes through only if the parser would accept it as is.
     private func acceptedCommand(from heard: String, context: CommandContext) async -> String? {
+        // App commands (plug your ears, sleep) skip Claude's cleanup and the game-vocabulary
+        // check: the app understands them as spoken.
+        if !context.isAnsweringQuestion, AppCommands.recognizes(heard) {
+            return heard.trimmingCharacters(in: .whitespacesAndNewlines.union(.punctuationCharacters))
+        }
         var candidate = heard
         var cleanupFailure: String?
         if let interpreter {

@@ -69,6 +69,8 @@ final class VoiceDirector {
     /// The red alert's loop, separate from the speech queue so commands don't silence it.
     @ObservationIgnored private let alertPlayer = LoopPlayer(sampleRate: FishTextToSpeech.sampleRate)
     @ObservationIgnored private var alertSounding = false
+    /// The session's plugged-ears state when the siren was last updated.
+    @ObservationIgnored private var earsWerePlugged = false
     @ObservationIgnored private var isListening = false
     @ObservationIgnored private var alertFade: Task<Void, Never>?
     @ObservationIgnored private var previousNarration: [String] = []
@@ -153,7 +155,8 @@ final class VoiceDirector {
 
     /// Starts, fades, ducks, or stops the red alert to match the game and settings.
     private func updateAlert(startDelay: Double = 0) {
-        let audible = alertSounding && effectsEnabled
+        // Plugged ears (an app command) silence only the siren; everything else keeps playing.
+        let audible = alertSounding && effectsEnabled && !(session?.earsPlugged ?? false)
         let target: Float = audible && !isListening ? Self.alertVolume : 0
         if audible, !alertPlayer.isPlaying {
             alertPlayer.volume = 0
@@ -193,6 +196,11 @@ final class VoiceDirector {
             alertSounding = sounding
             // Let the explosion hit first, then bring the siren up under it.
             updateAlert(startDelay: sounding ? 1.0 : 0)
+        }
+        let earsPlugged = session?.earsPlugged ?? false
+        if earsPlugged != earsWerePlugged {
+            earsWerePlugged = earsPlugged
+            updateAlert()
         }
         // Effects go to the front of the queue, so they play before anything else this turn.
         if effectsEnabled {

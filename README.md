@@ -124,6 +124,16 @@ On Deck Nine before the explosion, `sleep` (or "nap", "take a nap", "go to sleep
 
 This is an app-side change, not a modified game: it can only do what typed commands could. Rules are in [Sources/PlanetfallEngine/Nap.swift](Sources/PlanetfallEngine/Nap.swift).
 
+## Gameplay changes: plugging your ears
+
+`plug your ears` works anywhere and silences the red-alert siren until you unplug them. Variations work too: "cover your ears", "put my fingers in my ears", "put in earplugs". Unplug with "unplug your ears", "take your fingers out of your ears" or "take out the earplugs".
+
+- **What it affects:** only the siren. Narration, SNARK-9, character voices and other sound effects keep playing.
+- **How it's handled:** like the nap, the app handles it and the game never sees it, so no game time passes. You get a short response, and the narrator and SNARK-9 react to it like any other turn.
+- **Voice input:** it works by voice too. Spoken app commands skip the game-vocabulary check, since "ears" isn't in the game's dictionary.
+
+Plugged ears reset when the game restarts. Rules are in [Sources/PlanetfallEngine/EarPlugs.swift](Sources/PlanetfallEngine/EarPlugs.swift).
+
 ## Achievements
 
 Story milestones earn achievements. They're detected from a sentence the game prints once, and saved on this Mac across games and launches.
