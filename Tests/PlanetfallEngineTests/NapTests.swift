@@ -139,4 +139,27 @@ struct NapGameTests {
         #expect(elapsed >= .seconds(3) && elapsed < .seconds(4))
         #expect(session.lastWakeReason == .ambassador)
     }
+
+    @Test func anExplosionWakeUpClearsPortraitsWhileItIsStillDark() async throws {
+        let (session, recorder) = try await start(seed: 2)  // ambassador arrives turn 4; explosion turn 8 removes him
+        defer { session.stop() }
+        for _ in 0..<4 { _ = try await play("wait", session, recorder) }
+        #expect(session.presentCharacters.map(\.id) == ["ambassador"])
+
+        session.send("sleep")
+        try await Task.sleep(for: .milliseconds(300))
+        #expect(session.presentCharacters.map(\.id) == ["ambassador"])  // as it was when you dozed off
+        // Shortly before waking, still asleep, his portrait is gone...
+        var clearedWhileAsleep = false
+        for _ in 0..<150 where session.isNapping {
+            if session.presentCharacters.isEmpty { clearedWhileAsleep = true; break }
+            try await Task.sleep(for: .milliseconds(20))
+        }
+        #expect(clearedWhileAsleep)
+        #expect(session.isNapping)
+        // ...then the explosion wakes you.
+        for _ in 0..<100 where session.isNapping { try await Task.sleep(for: .milliseconds(20)) }
+        #expect(session.lastWakeReason == .explosion)
+        #expect(session.artTags == ["explosion"])
+    }
 }

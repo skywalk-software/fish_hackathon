@@ -81,6 +81,11 @@ public final class GameSession {
     /// Characters in the same room as the player, in `GameCharacter.all` order.
     public var presentCharacters: [GameCharacter] {
         if let nap { return nap.shownCharacters }
+        return actuallyPresentCharacters
+    }
+
+    /// Who is really in the room, even mid-nap.
+    private var actuallyPresentCharacters: [GameCharacter] {
         guard let here = status?.location else { return [] }
         return GameCharacter.all.filter { characterLocations[$0.id] == here }
     }
@@ -112,6 +117,9 @@ public final class GameSession {
     @ObservationIgnored public var napMinimumDuration: Duration = .seconds(2)
     /// Extra time before the ambassador wakes the player (the explosion wakes them instantly).
     @ObservationIgnored public var napAmbassadorDelay: Duration = .seconds(1)
+    /// Before an explosion wake-up, portraits clear this long ahead of it (they slide out in
+    /// about 0.35 s).
+    static let napPortraitClearLead: Duration = .milliseconds(500)
     /// What ended the most recent nap, for the wake-up presentation.
     public private(set) var lastWakeReason: Nap.WakeReason?
     @ObservationIgnored private var stdout: FileHandle?
@@ -291,7 +299,17 @@ public final class GameSession {
             if reason == .ambassador { delay += napAmbassadorDelay }
             let napID = state.id
             Task { [weak self] in
-                try? await Task.sleep(for: delay)
+                if reason == .explosion {
+                    // Clear anyone who left (or was swept away) while it's still dark, so no
+                    // portrait lingers over the explosion when the player snaps awake.
+                    let clearing = Self.napPortraitClearLead
+                    try? await Task.sleep(for: delay > clearing ? delay - clearing : .zero)
+                    guard let self, self.nap?.id == napID else { return }
+                    self.nap?.shownCharacters = self.actuallyPresentCharacters
+                    try? await Task.sleep(for: delay > clearing ? clearing : delay)
+                } else {
+                    try? await Task.sleep(for: delay)
+                }
                 // A restart (or the game ending) during the wait cancels the wake-up.
                 guard let self, self.nap?.id == napID else { return }
                 self.lastWakeReason = reason
