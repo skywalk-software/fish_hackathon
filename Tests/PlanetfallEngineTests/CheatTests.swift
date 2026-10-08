@@ -11,6 +11,12 @@ struct CheatParsingTests {
         #expect(Cheat.request(in: "cheat: warp") == .unknown("warp"))
         #expect(Cheat.request(in: "cheat") == .unknown(""))
         #expect(Cheat.request(in: "cheater") == nil)
+        // As speech-to-text writes them.
+        #expect(Cheat.request(in: "Cheat, pod.") == .cheat(.pod))
+        #expect(Cheat.request(in: "Cheat code splash") == .cheat(.splash))
+        #expect(Cheat.request(in: "cheat brick") == .cheat(.brig))
+        #expect(Cheat.request(in: "Cheat: explosion!") == .cheat(.explode))
+        #expect(AppCommands.recognizes("Cheat, splash."))
         #expect(Cheat.request(in: "take brush") == nil)
     }
 }

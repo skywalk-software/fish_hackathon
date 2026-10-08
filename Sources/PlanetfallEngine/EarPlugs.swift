@@ -59,11 +59,11 @@ public enum EarPlugs {
 
 /// Commands the app handles itself instead of the game's parser.
 public enum AppCommands {
-    /// Whether `line` is handled by the app wherever the player is (ear commands), or could
+    /// Whether `line` is handled by the app wherever the player is (ear commands, cheats), or could
     /// be (SLEEP, which the app only takes over on Deck Nine before the explosion; elsewhere
     /// the game answers it). Voice input sends these as heard, skipping the game-vocabulary
-    /// check, since words like "ears" and "nap" aren't in the game's dictionary.
+    /// check, since words like "ears", "nap", and "cheat" aren't in the game's dictionary.
     public static func recognizes(_ line: String) -> Bool {
-        EarPlugs.command(in: line) != nil || Nap.isNapCommand(line)
+        EarPlugs.command(in: line) != nil || Nap.isNapCommand(line) || Cheat.request(in: line) != nil
     }
 }

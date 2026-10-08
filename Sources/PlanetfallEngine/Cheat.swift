@@ -52,16 +52,28 @@ public enum Cheat: String, CaseIterable, Sendable {
         case unknown(String)
     }
 
-    /// The cheat `line` asks for: "cheat: pod", "Cheat pod", "cheat:splash". Nil if it isn't
-    /// a cheat command at all.
+    /// The cheat `line` asks for: "cheat: pod", "Cheat pod", "cheat:splash", or as speech-to-text
+    /// writes it ("Cheat, pod.", "cheat code splash", "cheat brick"). Nil if it isn't a cheat
+    /// command at all.
     public static func request(in line: String) -> Request? {
-        let trimmed = line.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        guard trimmed.hasPrefix("cheat") else { return nil }
-        let rest = trimmed.dropFirst("cheat".count)
-        guard rest.isEmpty || rest.first == ":" || rest.first == " " else { return nil }
-        let name = rest.trimmingCharacters(in: CharacterSet(charactersIn: ": ").union(.punctuationCharacters))
-        return Cheat(rawValue: name).map(Request.cheat) ?? .unknown(name)
+        let words = line.lowercased()
+            .components(separatedBy: CharacterSet.letters.inverted)
+            .filter { !$0.isEmpty }
+        guard words.first == "cheat" else { return nil }
+        var rest = words.dropFirst()
+        if rest.first == "code" { rest = rest.dropFirst() }
+        let name = rest.joined(separator: " ")
+        if let cheat = Cheat(rawValue: name) ?? spokenAliases[name] { return .cheat(cheat) }
+        return .unknown(name)
     }
+
+    /// Names speech-to-text tends to produce instead of the cheat's.
+    static let spokenAliases: [String: Cheat] = [
+        "brick": .brig, "the brig": .brig,
+        "explosion": .explode, "exploding": .explode, "explodes": .explode, "boom": .explode,
+        "pods": .pod, "the pod": .pod, "escape pod": .pod,
+        "splashed": .splash, "splashes": .splash, "underwater": .splash,
+    ]
 
     static var list: String {
         allCases.map { "cheat: \($0.rawValue)" }.joined(separator: ", ")

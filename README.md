@@ -146,7 +146,7 @@ Type a cheat to jump to a moment in the story. They're handy for testing and dem
 | `cheat: pod` | Strapped into the escape pod's webbing as the ship blows up |
 | `cheat: splash` | Underwater, swimming out of the sunken pod |
 
-`cheat:pod`, `Cheat pod` and similar spellings work too, and `cheat` on its own lists the cheats.
+`cheat:pod`, `Cheat pod`, `cheat code splash` and similar spellings work too, and `cheat` on its own lists the cheats. You can speak them with push-to-talk, and common mishearings are accepted, such as "cheat brick" for the brig.
 
 - **How it works:** a cheat doesn't load a save file. It restarts the game with a fixed random seed and replays a script of commands behind the scenes, so the characters, room art, webbing and siren are all exactly right when you land. Only the final turn is shown, after a "Cheat: …" line.
 - **Achievements:** cheats don't earn them, but anything you play afterwards does.
