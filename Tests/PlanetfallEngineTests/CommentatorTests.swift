@@ -2,12 +2,51 @@ import Foundation
 import Testing
 @testable import PlanetfallEngine
 
-/// Serves a canned response to every request, so the streaming path runs without the network.
+/// A canned API reply with its own request counter. Each `Stub` owns a URLSession whose
+/// requests carry the stub's id, so stubs used by tests running in parallel don't interfere.
+final class Stub: @unchecked Sendable {
+    let id = UUID().uuidString
+    private let lock = NSLock()
+    private var _statusCode: Int
+    private var _body: Data
+    private var _requestCount = 0
+
+    init(statusCode: Int = 200, body: String) {
+        _statusCode = statusCode
+        _body = Data(body.utf8)
+        lock.withLock { StubURLProtocol.registry[id] = self }
+    }
+
+    var statusCode: Int { lock.withLock { _statusCode } }
+    var body: String {
+        get { lock.withLock { String(decoding: _body, as: UTF8.self) } }
+        set { lock.withLock { _body = Data(newValue.utf8) } }
+    }
+    /// How many requests have been served (to check how often Claude would be called).
+    var requestCount: Int { lock.withLock { _requestCount } }
+
+    lazy var session: URLSession = {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [StubURLProtocol.self]
+        configuration.httpAdditionalHeaders = [StubURLProtocol.header: id]
+        return URLSession(configuration: configuration)
+    }()
+
+    fileprivate func serve() -> (Int, Data) {
+        lock.withLock {
+            _requestCount += 1
+            return (_statusCode, _body)
+        }
+    }
+}
+
+/// Serves canned responses, so the streaming path runs without the network.
 final class StubURLProtocol: URLProtocol, @unchecked Sendable {
+    static let header = "X-Stub-ID"
+    nonisolated(unsafe) static var registry: [String: Stub] = [:]
+    /// The shared fallback for `session(statusCode:body:)` (tests in one serialized suite).
     nonisolated(unsafe) static var statusCode = 200
     nonisolated(unsafe) static var body = Data()
-    /// How many requests have been served (to check how often Claude would be called).
-    nonisolated(unsafe) static var requestCount = 0
 
     static func session(statusCode: Int, body: String) -> URLSession {
         Self.statusCode = statusCode
@@ -22,11 +61,12 @@ final class StubURLProtocol: URLProtocol, @unchecked Sendable {
     override func stopLoading() {}
 
     override func startLoading() {
-        Self.requestCount += 1
-        let response = HTTPURLResponse(url: request.url!, statusCode: Self.statusCode, httpVersion: nil,
+        let stub = request.value(forHTTPHeaderField: Self.header).flatMap { Self.registry[$0] }
+        let (statusCode, body) = stub?.serve() ?? (Self.statusCode, Self.body)
+        let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: nil,
                                        headerFields: ["content-type": "text/event-stream"])!
         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        client?.urlProtocol(self, didLoad: Self.body)
+        client?.urlProtocol(self, didLoad: body)
         client?.urlProtocolDidFinishLoading(self)
     }
 }

@@ -35,18 +35,14 @@ struct SidekickBar: View {
         .animation(.easeOut(duration: 0.15), value: sidekick.line)
     }
 
+    /// Only what SNARK-9 is saying right now (or an error). Blank while it waits, thinks,
+    /// or passes; the avatar's pulse shows when it's thinking.
     @ViewBuilder
     private var caption: some View {
-        if let error = sidekick.errorMessage, !sidekick.isThinking {
+        if let error = sidekick.errorMessage, !sidekick.isThinking, sidekick.line.isEmpty {
             Text(verbatim: error).foregroundStyle(Theme.dim).italic()
-        } else if sidekick.line.isEmpty {
-            Text(verbatim: sidekick.isThinking ? "…" : "Watching. Judging.")
-                .foregroundStyle(Theme.dim)
         } else {
-            Text(verbatim: sidekick.line)
-                .foregroundStyle(Theme.text)
-                // Dim the previous quip while the next one is being written.
-                .opacity(sidekick.isThinking ? 0.55 : 1)
+            Text(verbatim: sidekick.line).foregroundStyle(Theme.text)
         }
     }
 

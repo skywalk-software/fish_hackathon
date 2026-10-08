@@ -72,11 +72,15 @@ public final class GameSession {
     /// player is (in the safety web: "webbing"). Rooms look for
     /// Art/Rooms/<room>-<tags>.jpg, most specific first.
     public var artTags: [String] {
-        storyEvents + (playerHolder.flatMap { StoryEvent.holderTags[$0] }.map { [$0] } ?? [])
+        // While asleep, the room looks as it did when the player dozed off: the hidden turns
+        // mustn't give away what wakes them.
+        if let nap { return nap.shownArtTags }
+        return storyEvents + (playerHolder.flatMap { StoryEvent.holderTags[$0] }.map { [$0] } ?? [])
     }
 
     /// Characters in the same room as the player, in `GameCharacter.all` order.
     public var presentCharacters: [GameCharacter] {
+        if let nap { return nap.shownCharacters }
         guard let here = status?.location else { return [] }
         return GameCharacter.all.filter { characterLocations[$0.id] == here }
     }
@@ -92,9 +96,24 @@ public final class GameSession {
     private var nap: NapState?
 
     private struct NapState {
+        /// What the screen showed when the player fell asleep, kept until they wake.
+        var shownArtTags: [String]
+        var shownCharacters: [GameCharacter]
+        var id = UUID()
+        var started = ContinuousClock.now
         var turns = 0
         var blatherVisited = false
+        /// Set once something woke the player, while the wake-up turn waits to be shown.
+        var waking = false
     }
+
+    /// The shortest a nap appears to last (it really takes a fraction of a second), so the
+    /// player sees "Sleeping…" and the room darken.
+    @ObservationIgnored public var napMinimumDuration: Duration = .seconds(2)
+    /// Extra time before the ambassador wakes the player (the explosion wakes them instantly).
+    @ObservationIgnored public var napAmbassadorDelay: Duration = .seconds(1)
+    /// What ended the most recent nap, for the wake-up presentation.
+    public private(set) var lastWakeReason: Nap.WakeReason?
     @ObservationIgnored private var stdout: FileHandle?
     @ObservationIgnored private var parser = FrotzOutputParser()
     @ObservationIgnored private var observers: [(GameEvent) -> Void] = []
@@ -188,7 +207,7 @@ public final class GameSession {
         if Nap.isNapCommand(line),
            Nap.applies(location: status?.location, storyEvents: storyEvents, playerHolder: playerHolder) {
             // Our SLEEP instead of the game's: wait, unseen, until something wakes the player.
-            nap = NapState()
+            nap = NapState(shownArtTags: artTags, shownCharacters: presentCharacters)
             stdin.write(Data("wait\n".utf8))
         } else {
             stdin.write(Data((line + "\n").utf8))
@@ -255,16 +274,30 @@ public final class GameSession {
     /// commentary or voices run). Ends the nap with a single combined turn when something
     /// wakes the player, otherwise sends the next WAIT.
     private func napTurn(_ turn: GameTurn) {
-        guard var state = nap else { return }
+        guard var state = nap, !state.waking else { return }
         applyState(from: turn)
         state.turns += 1
         state.blatherVisited = state.blatherVisited || Nap.blatherVisited(in: turn)
         if let reason = Nap.wakeReason(for: turn, napTurns: state.turns) {
-            nap = nil
             var woken = turn
             woken.text = Nap.wakeText(final: turn, reason: reason, blatherVisited: state.blatherVisited)
             woken.objectEvents = []  // already applied above
-            publish(woken)
+            // Show the wake-up once the nap has visibly lasted its minimum, plus a beat for the
+            // ambassador's wheezing; the explosion wakes the player the moment that's up.
+            state.waking = true
+            nap = state
+            let elapsed = ContinuousClock.now - state.started
+            var delay = napMinimumDuration > elapsed ? napMinimumDuration - elapsed : .zero
+            if reason == .ambassador { delay += napAmbassadorDelay }
+            let napID = state.id
+            Task { [weak self] in
+                try? await Task.sleep(for: delay)
+                // A restart (or the game ending) during the wait cancels the wake-up.
+                guard let self, self.nap?.id == napID else { return }
+                self.lastWakeReason = reason
+                self.nap = nil
+                self.publish(woken)
+            }
         } else {
             nap = state
             stdin?.write(Data("wait\n".utf8))

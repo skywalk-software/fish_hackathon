@@ -18,7 +18,13 @@ final class VoiceDirector {
     /// Each part on or off. Remembered between launches.
     var narratorEnabled: Bool { didSet { settingChanged(narratorEnabled, key: Self.narratorKey) } }
     var charactersEnabled: Bool { didSet { settingChanged(charactersEnabled, key: Self.charactersKey) } }
-    var sidekickEnabled: Bool { didSet { settingChanged(sidekickEnabled, key: Self.sidekickKey) } }
+    var sidekickEnabled: Bool {
+        didSet {
+            settingChanged(sidekickEnabled, key: Self.sidekickKey)
+            // With SNARK-9's voice off, its caption shouldn't wait for speech that never comes.
+            sidekick?.captionWaitsForVoice = sidekickEnabled
+        }
+    }
     var effectsEnabled: Bool {
         didSet {
             settingChanged(effectsEnabled, key: Self.effectsKey)
@@ -63,6 +69,9 @@ final class VoiceDirector {
     @ObservationIgnored private let player = PCMStreamPlayer(sampleRate: FishTextToSpeech.sampleRate)
     @ObservationIgnored private var queue: [Utterance] = []
     @ObservationIgnored private var current: Utterance?
+    /// Whether `current` has produced all its text (e.g. the narrator's Claude stream ended).
+    @ObservationIgnored private var currentProduced = false
+    @ObservationIgnored private weak var sidekick: Sidekick?
     @ObservationIgnored private var task: Task<Void, Never>?
     @ObservationIgnored private var generation = 0
     @ObservationIgnored private var lastCommand: String?
@@ -122,7 +131,24 @@ final class VoiceDirector {
                 break  // SNARK-9 announces it; its line is voiced like any other.
             }
         }
+        self.sidekick = sidekick
         sidekick?.onLineFinished { [weak self] line in self?.sidekickSaid(line) }
+        sidekick?.captionWaitsForVoice = sidekickEnabled
+        // SNARK-9 asks Claude for its quip only as the narration is wrapping up, so a burst
+        // of quick commands doesn't pay for quips nobody would hear.
+        sidekick?.readyToComment = { [weak self] in await self?.waitUntilNarrationNearlyDone() }
+    }
+
+    /// Returns once no narration is queued and the current one has finished being written,
+    /// with at most `lead` seconds of audio left to play. Gives up after 30 s.
+    func waitUntilNarrationNearlyDone(lead: Double = 2.5) async {
+        let deadline = ContinuousClock.now + .seconds(30)
+        while ContinuousClock.now < deadline {
+            let narrationPending = queue.contains { $0.role == .narrator }
+                || (current?.role == .narrator && !currentProduced)
+            if !narrationPending, player.secondsRemaining <= lead { return }
+            do { try await Task.sleep(for: .milliseconds(100)) } catch { return }
+        }
     }
 
     /// Cuts off whoever is speaking and drops everything queued.
@@ -252,17 +278,29 @@ final class VoiceDirector {
         while !queue.isEmpty, !Task.isCancelled {
             let utterance = queue.removeFirst()
             current = utterance
+            currentProduced = false
             if let sound = utterance.sound {
                 player.enqueue(sound)
                 continue
             }
             var spoken: [String] = []
+            // SNARK-9's caption appears as its line starts playing, which is after whatever is
+            // still queued ahead of it (the end of the narration) has played.
+            if utterance.role == .sidekick {
+                let wait = player.secondsRemaining
+                Task { [weak self] in
+                    try? await Task.sleep(for: .seconds(wait))
+                    guard let self, self.generation == generation else { return }
+                    self.sidekick?.revealCaption()
+                }
+            }
             do {
                 for try await text in utterance.texts {
                     try await speak(text, voiceID: utterance.voiceID, cacheable: utterance.role == .character,
                                     speed: utterance.role == .narrator ? cast.narratorSpeed : 1)
                     spoken.append(text)
                 }
+                currentProduced = true
                 if utterance.role == .narrator, !spoken.isEmpty {
                     previousNarration.append(DeliveryTags.strip(spoken.joined(separator: " ")))
                     previousNarration = previousNarration.suffix(Self.maxPreviousNarration)

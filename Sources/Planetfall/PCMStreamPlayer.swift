@@ -9,6 +9,9 @@ final class PCMStreamPlayer: @unchecked Sendable {
     private let engine = AVAudioEngine()
     private let node = AVAudioPlayerNode()
     private let format: AVAudioFormat
+    /// Where the last queued sample ends, in the player node's sample time. Guarded by `lock`.
+    private var scheduledEnd: Int64 = 0
+    private let lock = NSLock()
 
     init(sampleRate: Int) {
         format = AVAudioFormat(commonFormat: .pcmFormatFloat32, sampleRate: Double(sampleRate),
@@ -31,7 +34,23 @@ final class PCMStreamPlayer: @unchecked Sendable {
             }
         }
         guard startIfNeeded() else { return }
+        lock.withLock {
+            // If the queue ran dry, new audio starts now rather than after the old end.
+            scheduledEnd = max(scheduledEnd, playedFrames) + Int64(frames)
+        }
         node.scheduleBuffer(buffer)
+    }
+
+    /// Seconds of queued audio that haven't played yet (0 when idle).
+    var secondsRemaining: Double {
+        lock.withLock { Double(max(0, scheduledEnd - playedFrames)) / format.sampleRate }
+    }
+
+    /// Samples played since the node last started.
+    private var playedFrames: Int64 {
+        guard node.isPlaying, let renderTime = node.lastRenderTime,
+              let playerTime = node.playerTime(forNodeTime: renderTime) else { return 0 }
+        return playerTime.sampleTime
     }
 
     /// Returns once everything queued so far has played, or playback is stopped.
@@ -49,6 +68,7 @@ final class PCMStreamPlayer: @unchecked Sendable {
     /// Cuts off playback and drops anything queued.
     func stop() {
         node.stop()
+        lock.withLock { scheduledEnd = 0 }
     }
 
     private func startIfNeeded() -> Bool {

@@ -99,14 +99,44 @@ struct NapGameTests {
     @Test func snarkCommentsOnceForTheWholeNap() async throws {
         let (session, recorder) = try await start(seed: 8)
         defer { session.stop() }
-        let urlSession = StubURLProtocol.session(statusCode: 200, body: "")
-        let sidekick = Sidekick(session: session, commentator: Commentator(apiKey: "sk-test", urlSession: urlSession))
+        let stub = Stub(body: "")
+        let sidekick = Sidekick(session: session, commentator: Commentator(apiKey: "sk-test", urlSession: stub.session))
         sidekick.isEnabled = true
-        StubURLProtocol.requestCount = 0
+        sidekick.commentDelay = .zero
 
         _ = try await play("sleep", session, recorder)
-        for _ in 0..<50 where StubURLProtocol.requestCount < 1 { try await Task.sleep(for: .milliseconds(20)) }
+        for _ in 0..<50 where stub.requestCount < 1 { try await Task.sleep(for: .milliseconds(20)) }
         try await Task.sleep(for: .milliseconds(200))
-        #expect(StubURLProtocol.requestCount == 1)
+        #expect(stub.requestCount == 1)
+    }
+
+    @Test func theNapLastsTwoSecondsAndTheExplosionWakesYouRightAway() async throws {
+        let (session, recorder) = try await start(seed: 8)
+        defer { session.stop() }
+        let started = ContinuousClock.now
+        session.send("sleep")
+        try await Task.sleep(for: .milliseconds(500))
+        #expect(session.isNapping)  // still "Sleeping…" well after the game finished the waits
+        // The game already exploded behind the scenes, but the screen mustn't give it away.
+        #expect(session.storyEvents == ["explosion"])
+        #expect(session.artTags.isEmpty)
+        #expect(session.presentCharacters.isEmpty)
+        _ = try await play("look", session, recorder)  // ignored while napping; waits for the wake-up
+        let elapsed = ContinuousClock.now - started
+        #expect(elapsed >= .seconds(2) && elapsed < .seconds(3))
+        #expect(session.lastWakeReason == .explosion)
+        #expect(!session.isNapping)
+        #expect(session.artTags == ["explosion"])  // revealed with the wake-up
+        #expect(recorder.turns.last?.text.contains("You wake with a start!") == true)
+    }
+
+    @Test func theAmbassadorTakesAnExtraSecondToWakeYou() async throws {
+        let (session, recorder) = try await start(seed: 2)
+        defer { session.stop() }
+        let started = ContinuousClock.now
+        _ = try await play("sleep", session, recorder)
+        let elapsed = ContinuousClock.now - started
+        #expect(elapsed >= .seconds(3) && elapsed < .seconds(4))
+        #expect(session.lastWakeReason == .ambassador)
     }
 }

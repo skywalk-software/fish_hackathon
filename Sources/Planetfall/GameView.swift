@@ -24,6 +24,14 @@ struct GameView: View {
             StatusBar(status: session.status)
             VStack(spacing: 0) {
                 RoomArtView(location: session.status?.location, artTags: session.artTags)
+                    // Sleeping darkens the room over the nap. The explosion snaps it back
+                    // instantly; the ambassador's wheezing fades it back in.
+                    .overlay {
+                        Color.black
+                            .opacity(session.isNapping ? 0.85 : 0)
+                            .allowsHitTesting(false)
+                            .animation(napDimAnimation, value: session.isNapping)
+                    }
                 Divider()
                 TranscriptTextView(entries: session.transcript)
             }
@@ -121,7 +129,7 @@ struct GameView: View {
 
     private var placeholder: String {
         guard session.isRunning else { return "The game has ended" }
-        if session.isNapping { return "Sleeping… zzz" }
+        if session.isNapping { return "Sleeping…" }
         switch pushToTalk.phase {
         case .listening: return "Listening… release to send"
         case .transcribing: return "Transcribing…"
@@ -130,6 +138,11 @@ struct GameView: View {
             return pushToTalk.notice ?? voices?.errorMessage
                 ?? (pushToTalk.unavailableReason == nil ? "What next? (hold ⌥ to speak)" : "What next?")
         }
+    }
+
+    private var napDimAnimation: Animation? {
+        if session.isNapping { return .easeIn(duration: 2) }
+        return session.lastWakeReason == .explosion ? nil : .easeOut(duration: 0.8)
     }
 
     /// How long an achievement banner stays up (it can be clicked away sooner).

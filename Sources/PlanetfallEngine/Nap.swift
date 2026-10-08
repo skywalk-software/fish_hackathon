@@ -29,7 +29,7 @@ public enum Nap {
             && (playerHolder == nil || playerHolder == "Deck Nine")
     }
 
-    enum WakeReason: Equatable {
+    public enum WakeReason: Equatable, Sendable {
         case explosion, ambassador, other
     }
 

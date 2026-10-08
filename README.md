@@ -120,7 +120,8 @@ On Deck Nine before the explosion, `sleep` (or "nap", "take a nap", "go to sleep
 
 - **What wakes you:** the explosion, or the alien ambassador walking in. Blather's visit doesn't; on Deck Nine he only hands out demerits, which the game doesn't track. There's also a safety cap on how long a nap runs.
 - **What you see:** one turn covering the whole nap. It describes dozing off, notes if Blather shouted while you slept, then shows what woke you. Story art, sounds, achievements, SNARK-9 and the voices all react to that one turn.
-- **What's hidden:** while you sleep, the app sends `wait` to the game behind the scenes. Those turns aren't shown and no events go out, so neither Claude (SNARK-9) nor Fish (voices) is called. The command box shows "Sleeping… zzz", and typing and push-to-talk are locked until you wake.
+- **What's hidden:** while you sleep, the app sends `wait` to the game behind the scenes. Those turns aren't shown and no events go out, so neither Claude (SNARK-9) nor Fish (voices) is called. The room art and portraits stay as they were when you dozed off, so nothing gives away what wakes you. Typing and push-to-talk are locked until you wake.
+- **How it looks:** the command box shows "Sleeping…" and the room art darkens over 2 seconds. The explosion wakes you instantly: the room snaps back and the explosion art appears. The ambassador takes one more second, and the room fades back in.
 
 This is an app-side change, not a modified game: it can only do what typed commands could. Rules are in [Sources/PlanetfallEngine/Nap.swift](Sources/PlanetfallEngine/Nap.swift).
 
@@ -289,7 +290,8 @@ To use a voice, add `FISH_VOICE_SIDEKICK=<id>` or `FISH_VOICE_NARRATOR=<id>` to 
 - **Turning it off:** use **Sidekick → SNARK-9 Commentary** (⇧⌘K). The setting is remembered between launches.
 - **Recasting the sidekick:** edit `SidekickPersona.default` in [Sources/PlanetfallEngine/Commentator.swift](Sources/PlanetfallEngine/Commentator.swift) to change the name, description and personality. The rules (short, no spoilers, PG-13, no invented events) are in the system prompt in the same file.
 - **Avatar:** a square image at `Art/NPCs/sidekick.jpg`, shown at 80 points beside the quip. Click it to see it close up, like character portraits. Without the image, the bar shows an icon.
-- **Pacing:** if you type while a quip is still streaming, the sidekick finishes it, then comments once on the latest state, so quips never pile up.
+- **Pacing:** SNARK-9 only calls Claude after the turn's narration is nearly over (or 2 seconds after the turn, without narration). Every command cancels a pending or in-flight quip, so a burst of quick moves costs one request, not one per move.
+- **Caption:** the bar is blank unless SNARK-9 is speaking. It clears the moment you send a command, stays blank while SNARK-9 thinks or passes, and shows the quip when its voice starts (or as it's written, with SNARK-9's voice off).
 - **Cost:** each commented turn sends about 1–3K input tokens, roughly a cent or two per turn.
 - **Live test:** run it against the real API with `ANTHROPIC_LIVE_TESTS=1 swift test --filter commentsOnARealTurn`.
 
