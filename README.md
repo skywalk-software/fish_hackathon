@@ -145,6 +145,7 @@ Type a cheat to jump to a moment in the story. They're handy for testing and dem
 | `cheat: explode` | Deck Nine, just as the Feinstein starts to explode |
 | `cheat: pod` | Strapped into the escape pod's webbing as the ship blows up |
 | `cheat: splash` | Underwater, swimming out of the sunken pod |
+| `cheat: floyd` | The Robot Shop, with Floyd still switched off (`turn on robot` to meet him) |
 
 `cheat:pod`, `Cheat pod`, `cheat code splash` and similar spellings work too, and `cheat` on its own lists the cheats. You can speak them with push-to-talk, and common mishearings are accepted, such as "cheat brick" for the brig.
 

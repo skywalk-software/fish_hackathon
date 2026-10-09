@@ -432,6 +432,12 @@ public final class GameSession {
             }
         }
         StoryEvent.update(&storyEvents, with: turn.text)
+        // A character switched on where they stand is now present there.
+        if let here = turn.status?.location ?? status?.location {
+            for character in GameCharacter.all {
+                if let cue = character.appearsWith, turn.text.contains(cue) { characterLocations[character.id] = here }
+            }
+        }
         if turn.text.contains(Self.deathMarker) {
             isDead = true
         } else if isDead, turn.text.hasPrefix("Ok.") {

@@ -8,7 +8,7 @@ import Foundation
 /// (characters, story events, the safety web) is exactly right when it lands. Only the last
 /// turn is shown.
 public enum Cheat: String, CaseIterable, Sendable {
-    case brig, explode, pod, splash
+    case brig, explode, pod, splash, floyd
 
     /// The random seed every cheat replays with, so its script plays out the same each time.
     static let seed = 8
@@ -27,6 +27,7 @@ public enum Cheat: String, CaseIterable, Sendable {
         case .explode: "The Feinstein has just started to explode."
         case .pod: "Strapped into the escape pod's webbing as the ship blows up."
         case .splash: "The escape pod has landed and sunk. You're swimming out."
+        case .floyd: "In the Robot Shop, where a switched-off robot waits."
         }
     }
 
@@ -40,10 +41,19 @@ public enum Cheat: String, CaseIterable, Sendable {
         case .pod:
             return [explosion, .send("west"), .send("get in webbing")]
         case .splash:
-            return [explosion, .send("west"), .send("get in webbing"),
-                    .waitUntil("The pod lands with a thud", max: 30),
-                    .send("get out of webbing"), .send("open door"), .send("up")]
+            return Self.splashSteps
+        case .floyd:
+            // From the water up the cliff to the castle, then through the complex. (The parser
+            // knows "ne" but not "northeast".)
+            return Self.splashSteps + ["up", "up", "up", "up", "north", "ne", "east", "east", "east",
+                                       "south", "south", "south", "se"].map(Step.send)
         }
+    }
+
+    private static var splashSteps: [Step] {
+        [.waitUntil("A massive explosion rocks the ship", max: 20), .send("west"), .send("get in webbing"),
+         .waitUntil("The pod lands with a thud", max: 30),
+         .send("get out of webbing"), .send("open door"), .send("up")]
     }
 
     public enum Request: Equatable, Sendable {
@@ -73,6 +83,7 @@ public enum Cheat: String, CaseIterable, Sendable {
         "explosion": .explode, "exploding": .explode, "explodes": .explode, "boom": .explode,
         "pods": .pod, "the pod": .pod, "escape pod": .pod,
         "splashed": .splash, "splashes": .splash, "underwater": .splash,
+        "floyed": .floyd, "lloyd": .floyd, "robot": .floyd, "robot shop": .floyd,
     ]
 
     static var list: String {

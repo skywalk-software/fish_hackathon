@@ -8,6 +8,8 @@ struct CheatParsingTests {
         #expect(Cheat.request(in: "Cheat: Splash") == .cheat(.splash))
         #expect(Cheat.request(in: "cheat:explode") == .cheat(.explode))
         #expect(Cheat.request(in: "cheat brig") == .cheat(.brig))
+        #expect(Cheat.request(in: "cheat: floyd") == .cheat(.floyd))
+        #expect(Cheat.request(in: "Cheat Lloyd.") == .cheat(.floyd))
         #expect(Cheat.request(in: "cheat: warp") == .unknown("warp"))
         #expect(Cheat.request(in: "cheat") == .unknown(""))
         #expect(Cheat.request(in: "cheater") == nil)
@@ -91,5 +93,33 @@ struct CheatGameTests {
         defer { session.stop() }
         #expect(turns.last?.text.contains("cheat: splash") == true)
         #expect(session.status?.location == "Deck Nine")  // nothing restarted
+    }
+
+    @Test func floydLandsInTheRobotShopAndFloydAppearsOnlyOnceSwitchedOn() async throws {
+        let (session, _, turns) = try await run("cheat: floyd")
+        defer { session.stop() }
+        #expect(turns.last?.text.contains("Only one robot, about four feet high") == true)
+        #expect(session.status?.location == "Robot Shop")
+        #expect(session.presentCharacters.isEmpty)  // switched off: no portrait yet
+
+        var count = 0
+        session.addObserver { if case .turn = $0 { count += 1 } }
+        func play(_ command: String) async throws {
+            let target = count + 1
+            session.send(command)
+            for _ in 0..<200 where count < target { try await Task.sleep(for: .milliseconds(20)) }
+        }
+        try await play("turn on robot")  // "Nothing happens." He wakes up a turn later.
+        for _ in 0..<3 where session.presentCharacters.isEmpty { try await play("wait") }
+        #expect(session.presentCharacters.map(\.id) == ["floyd"])
+
+        try await play("west")
+        #expect(session.status?.location == "Machine Shop")
+        // He follows, sometimes after dawdling a turn or two; until then his portrait stays hidden.
+        for _ in 0..<6 where session.characterLocations["floyd"] != "Machine Shop" {
+            #expect(session.presentCharacters.isEmpty)
+            try await play("wait")
+        }
+        #expect(session.presentCharacters.map(\.id) == ["floyd"])
     }
 }
