@@ -75,6 +75,7 @@ struct GameView: View {
             if let closeup, let image = Artwork.character(closeup.artID) {
                 CharacterCloseup(name: closeup.name, image: image, jaw: PortraitJaw.byCharacter[closeup.artID],
                                  glow: PortraitGlow.byCharacter[closeup.artID],
+                                 speaker: PortraitSpeaker.byCharacter[closeup.artID],
                                  openness: voices?.speakingCharacterID == closeup.artID ? voices?.mouthOpenness ?? 0 : 0) {
                     self.closeup = nil
                 }
@@ -341,6 +342,7 @@ private struct CharacterInsets: View {
                     Button { onSelect(character) } label: {
                         CharacterPortrait(name: character.name, image: image,
                                           jaw: PortraitJaw.byCharacter[character.id],
+                                          speaker: PortraitSpeaker.byCharacter[character.id],
                                           openness: speakingID == character.id ? openness : 0)
                     }
                     .buttonStyle(.plain)
@@ -358,13 +360,14 @@ private struct CharacterPortrait: View {
     let name: String
     let image: NSImage
     var jaw: PortraitJaw?
+    var speaker: PortraitSpeaker?
     var openness: Double = 0
 
     static let size: CGFloat = 225
 
     var body: some View {
         VStack(spacing: 0) {
-            TalkingPortrait(image: image, jaw: jaw, openness: openness)
+            TalkingPortrait(image: image, jaw: jaw, speaker: speaker, openness: openness)
                 .frame(width: Self.size, height: Self.size)
                 .clipped()
             Text(name)
@@ -397,6 +400,7 @@ private struct CharacterCloseup: View {
     let image: NSImage
     var jaw: PortraitJaw?
     var glow: PortraitGlow?
+    var speaker: PortraitSpeaker?
     var openness: Double = 0
     let onClose: () -> Void
 
@@ -406,7 +410,7 @@ private struct CharacterCloseup: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 12) {
-                TalkingPortrait(image: image, jaw: jaw, glow: glow, openness: openness)
+                TalkingPortrait(image: image, jaw: jaw, glow: glow, speaker: speaker, openness: openness)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.accent, lineWidth: 2))
                     .shadow(color: .black.opacity(0.8), radius: 24)

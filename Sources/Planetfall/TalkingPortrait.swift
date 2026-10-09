@@ -118,12 +118,31 @@ struct PortraitGlow {
     ]
 }
 
+/// A robot that talks through a speaker (Floyd): as they speak, the speaker grille shakes and
+/// their eyes flicker brighter, both following the loudness of their voice.
+struct PortraitSpeaker {
+    /// The perforated grille's outline, as fractions of the image. Only this part shakes.
+    var grille: [CGPoint]
+    /// Glowing eyes: centers and radii, as fractions of the image.
+    var eyes: [(center: CGPoint, radius: CGFloat)]
+
+    static let byCharacter: [String: PortraitSpeaker] = [
+        // A half moon, flat edge on top, tilted with his head.
+        "floyd": PortraitSpeaker(grille: [(0.4667, 0.4125), (0.5833, 0.3817), (0.5847, 0.3917), (0.5825, 0.4017),
+                                          (0.5783, 0.4100), (0.5700, 0.4175), (0.5567, 0.4250), (0.5400, 0.4308),
+                                          (0.5200, 0.4350), (0.4983, 0.4370), (0.4817, 0.4353), (0.4725, 0.4300),
+                                          (0.4675, 0.4217)].map { CGPoint(x: $0.0, y: $0.1) },
+                                 eyes: [(CGPoint(x: 0.400, y: 0.324), 0.028), (CGPoint(x: 0.592, y: 0.272), 0.027)]),
+    ]
+}
+
 /// A square portrait whose jaw (if the character has one mapped) drops by `openness` (0 to 1),
 /// or whose glow (if it has one) brightens by it.
 struct TalkingPortrait: View {
     let image: NSImage
     let jaw: PortraitJaw?
     var glow: PortraitGlow? = nil
+    var speaker: PortraitSpeaker? = nil
     var openness: Double = 0
 
     /// Inside of the mouth: very dark red-brown, since pure black looks like a hole in the image.
@@ -159,6 +178,12 @@ struct TalkingPortrait: View {
                             .mask { PortraitJaw.polygon(foreground, in: size) }
                     }
                 }
+                if let speaker, openness > 0.02 {
+                    TimelineView(.animation(minimumInterval: 1.0 / 30)) { timeline in
+                        speakerEffects(speaker, size: size, time: timeline.date.timeIntervalSinceReferenceDate)
+                    }
+                    .allowsHitTesting(false)
+                }
                 if let glow, openness > 0.02 {
                     let center = CGPoint(x: glow.center.x * size.width, y: glow.center.y * size.height)
                     let radius = glow.radius * size.width
@@ -173,5 +198,47 @@ struct TalkingPortrait: View {
             }
         }
         .aspectRatio(1, contentMode: .fit)
+    }
+
+    /// The grille buzzing in place, and the eyes flickering, at this moment.
+    @ViewBuilder
+    private func speakerEffects(_ speaker: PortraitSpeaker, size: CGSize, time: Double) -> some View {
+        let loudness = CGFloat(openness)
+        let noise = { (seed: Double) in Self.noise(time, seed) }
+        let grille = speaker.grille.map { CGPoint(x: $0.x * size.width, y: $0.y * size.height) }
+        let xs = speaker.grille.map(\.x), ys = speaker.grille.map(\.y)
+        let middle = UnitPoint(x: (xs.min()! + xs.max()!) / 2, y: (ys.min()! + ys.max()!) / 2)
+        // Stronger in small portraits, where the closeup's amount would barely show.
+        let boost = min(3, max(1, 600 / size.width))
+        let shake = size.width * 0.0035 * boost * loudness
+        ZStack(alignment: .topLeading) {
+            // The perforated grille, jiggled and pulsed inside its rim, which stays put.
+            Image(nsImage: image)
+                .resizable()
+                .frame(width: size.width, height: size.height)
+                .scaleEffect(1 + 0.03 * boost * loudness * (0.5 + noise(5) / 2),
+                             anchor: middle)
+                .offset(x: shake * noise(1), y: shake * noise(3))
+                .mask {
+                    Path { $0.addLines(grille); $0.closeSubpath() }
+                        .blur(radius: size.width * 0.0015)
+                }
+            // Eyes flaring and flickering.
+            ForEach(Array(speaker.eyes.enumerated()), id: \.offset) { index, eye in
+                let radius = eye.radius * size.width
+                let flicker = max(0, 0.55 + 0.45 * noise(Double(index) * 11 + 7))
+                RadialGradient(colors: [Color.white.opacity(0.95), Color(red: 1, green: 0.75, blue: 0.9).opacity(0.5), .clear],
+                               center: .center, startRadius: 0, endRadius: radius * 2.2)
+                    .frame(width: radius * 4.4, height: radius * 4.4)
+                    .position(x: eye.center.x * size.width, y: eye.center.y * size.height)
+                    .blendMode(.screen)
+                    .opacity(Double(loudness * flicker))
+            }
+        }
+    }
+
+    /// Cheap repeatable jitter in -1...1: a few sines at unrelated rates.
+    private static func noise(_ time: Double, _ seed: Double) -> CGFloat {
+        CGFloat((sin(time * 47 + seed) + sin(time * 83 + seed * 1.7) + sin(time * 131 + seed * 2.3)) / 3)
     }
 }

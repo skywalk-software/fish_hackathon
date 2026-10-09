@@ -63,7 +63,8 @@ public struct VoiceCast: Equatable, Sendable {
         characters: [
             CharacterVoice(characterID: "blather", names: ["Blather"],
                            fishVoiceID: "546972d2053c481d86fe4449a1b54e27"),  // "arnold"
-            CharacterVoice(characterID: "floyd", names: ["Floyd"],
+            // Before he introduces himself, the game calls him "the robot".
+            CharacterVoice(characterID: "floyd", names: ["Floyd", "robot"],
                            fishVoiceID: "4fcb3a423c61415fb35604eba567d95f"),  // "Energetic Child"
             // Only named inside her first line, so "the woman" attributes it. "Woman" appears
             // nowhere else in the game.
@@ -241,6 +242,14 @@ public enum DialogueExtractor {
                 .max { $0.range.lowerBound < $1.range.lowerBound }
             let after = mentions.filter { $0.range.lowerBound >= quote.range.upperBound }
                 .min { $0.range.lowerBound < $1.range.lowerBound }
+                .flatMap { mention -> Mention? in
+                    // Right after the quote ('"Hi!" says Floyd'), with no other quote in between.
+                    let between = paragraph[quote.range.upperBound..<mention.range.lowerBound]
+                    guard between.count <= 40, !between.contains("\"") else { return nil }
+                    let around = paragraph[quote.range.upperBound..<(paragraph.index(
+                        mention.range.upperBound, offsetBy: 20, limitedBy: paragraph.endIndex) ?? paragraph.endIndex)]
+                    return speaksAfterQuote(around) ? mention : nil
+                }
             guard let speaker = (before ?? after)?.voice else { continue }
 
             let nextStart = index + 1 < quotes.count ? quotes[index + 1].range.lowerBound : paragraph.endIndex
@@ -278,8 +287,23 @@ public enum DialogueExtractor {
     /// Words just before a quote that mark it as writing, not speech: `labelled "Spam and Egz"`.
     private static func introducesWrittenText(_ lead: Substring) -> Bool {
         let nearby = lead.suffix(30).lowercased()
-        return ["label", "reads", "embossed", "marked", "painted", "written", "inscribed", "engraved",
-                "titled", "the word", "sign"].contains { nearby.contains($0) }
+        if ["label", "reads", "embossed", "marked", "painted", "written", "inscribed", "engraved",
+            "titled", "the word", "sign"].contains(where: { nearby.contains($0) }) { return true }
+        // Things that "say" something are showing text: 'the button ... says "ASID."'
+        let sentence = lastSentence(lead).lowercased()
+        return sentence.contains("says")
+            && ["button", "plaque", "screen", "display", "panel", "card", "note", "sticker", "door",
+                "machine", "dial", "brochure", "sheet", "paper", "slip"].contains { sentence.contains($0) }
+    }
+
+    /// Whether a name after a quote is its speaker: only with a speech verb close by, as in
+    /// '"Hi!" says Floyd' or '"Hi!" Floyd squeals.' A mention like 'Floyd follows you.' isn't.
+    private static func speaksAfterQuote(_ between: Substring) -> Bool {
+        let nearby = between.lowercased()
+        return ["say", "said", "ask", "shout", "yell", "exclaim", "repl", "whisper", "cry", "cries", "sing",
+                "sang", "announc", "add", "call", "squeal", "giggl", "mutter", "bellow", "sneer", "chirp",
+                "grumbl", "complain", "wheez", "remark", "inquir", "beg", "plead", "explain", "tell", "insist"]
+            .contains { nearby.contains($0) }
     }
 
     /// Speech verbs near a quote, mapped to Fish S2 inline tags. Checked in order, so
