@@ -1,0 +1,2673 @@
+{
+ "BRIG": {
+  "desc": "Brig",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "\"The cell door is locked.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "DECK-NINE": {
+  "desc": "Deck Nine",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO REACTOR-LOBBY IF CORRIDOR-DOOR IS OPEN"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ESCAPE-POD IF POD-DOOR IS OPEN"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO ESCAPE-POD IF POD-DOOR IS OPEN"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO GANGWAY IF GANGWAY-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "REACTOR-LOBBY": {
+  "desc": "Reactor Lobby",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO DECK-NINE IF CORRIDOR-DOOR IS OPEN"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "\"Ensign Blather pushes you roughly back toward your post.\""
+   },
+   {
+    "dir": "EAST",
+    "raw": "\"Ensign Blather blocks your way, snarling angrily.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "GANGWAY": {
+  "desc": "Gangway",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO DECK-EIGHT"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO DECK-NINE IF GANGWAY-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "DECK-EIGHT": {
+  "desc": "Deck Eight",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO GANGWAY"
+   },
+   {
+    "dir": "EAST",
+    "raw": "\"Blather throws you to the deck and makes you do 20 push-ups.\""
+   },
+   {
+    "dir": "WEST",
+    "raw": "\"Blather throws you to the deck and makes you do 20 push-ups.\""
+   },
+   {
+    "dir": "NORTH",
+    "raw": "\"Blather blocks your path, growling about extra galley duty.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ESCAPE-POD": {
+  "desc": "Escape Pod",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "PER POD-EXIT-F"
+   },
+   {
+    "dir": "OUT",
+    "raw": "PER POD-EXIT-F"
+   },
+   {
+    "dir": "UP",
+    "raw": "PER POD-EXIT-F"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SHUTTLE-CAR-ALFIE": {
+  "desc": "Shuttle Car Alfie",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER SHUTTLE-EXIT-F"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ALFIE-CONTROL-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ALFIE-CONTROL-WEST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ALFIE-CONTROL-EAST": {
+  "desc": "Alfie Control East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SHUTTLE-CAR-ALFIE IF SHUTTLE-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ALFIE-CONTROL-WEST": {
+  "desc": "Alfie Control West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SHUTTLE-CAR-ALFIE IF SHUTTLE-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SHUTTLE-CAR-BETTY": {
+  "desc": "Shuttle Car Betty",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER SHUTTLE-EXIT-F"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO BETTY-CONTROL-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO BETTY-CONTROL-WEST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BETTY-CONTROL-EAST": {
+  "desc": "Betty Control East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SHUTTLE-CAR-BETTY IF SHUTTLE-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BETTY-CONTROL-WEST": {
+  "desc": "Betty Control West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SHUTTLE-CAR-BETTY IF SHUTTLE-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "UNDERWATER": {
+  "desc": "Underwater",
+  "lengths": {
+   "UP": 35
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO CRAG"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO UNDERWATER"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO UNDERWATER"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO UNDERWATER"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO UNDERWATER"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RWATERBIT"
+  ]
+ },
+ "CRAG": {
+  "desc": "Crag",
+  "lengths": {
+   "UP": 40
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO UNDERWATER"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO BALCONY"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "BALCONY": {
+  "desc": "Balcony",
+  "lengths": {
+   "UP": 30
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "PER WATER-LEVEL-F"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO WINDING-STAIR"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "WINDING-STAIR": {
+  "desc": "Winding Stair",
+  "lengths": {
+   "UP": 30
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "PER WATER-LEVEL-F"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO COURTYARD"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "COURTYARD": {
+  "desc": "Courtyard",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO WINDING-STAIR"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO WINDING-STAIR"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO WEST-WING"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO PLAIN-HALL"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "WEST-WING": {
+  "desc": "West Wing",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO COURTYARD"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "\"Certain death.\""
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "PLAIN-HALL": {
+  "desc": "Plain Hall",
+  "lengths": {
+   "NE": 25
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO COURTYARD"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO REC-AREA"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO REC-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "REC-AREA": {
+  "desc": "Rec Area",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO CONFERENCE-ROOM IF CONFERENCE-DOOR IS OPEN"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO PLAIN-HALL"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO REC-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "CONFERENCE-ROOM": {
+  "desc": "Conference Room",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO REC-AREA IF CONFERENCE-DOOR IS OPEN"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO REC-AREA IF CONFERENCE-DOOR IS OPEN"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO BOOTH-1"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO BOOTH-1"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BOOTH-1": {
+  "desc": "Booth 1",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO CONFERENCE-ROOM"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO CONFERENCE-ROOM"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "REC-CORRIDOR": {
+  "desc": "Rec Corridor",
+  "lengths": {
+   "SW": 25
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO REC-AREA"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO DORM-B"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO DORM-A"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO MESS-CORRIDOR"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO PLAIN-HALL"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "DORM-A": {
+  "desc": "Dorm A",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO SANFAC-A"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO REC-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "SANFAC-A": {
+  "desc": "SanFac A",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO DORM-A"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "DORM-B": {
+  "desc": "Dorm B",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO REC-CORRIDOR"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO SANFAC-B"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "SANFAC-B": {
+  "desc": "SanFac B",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO DORM-B"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "DORM-C": {
+  "desc": "Dorm C",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO DORM-CORRIDOR"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO SANFAC-C"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "FLOYDBIT",
+   "RLANDBIT"
+  ]
+ },
+ "SANFAC-C": {
+  "desc": "SanFac C",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO DORM-C"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "DORM-D": {
+  "desc": "Dorm D",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO DORM-CORRIDOR"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO SANFAC-D"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "SANFAC-D": {
+  "desc": "SanFac D",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO DORM-D"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "FLOYDBIT",
+   "RLANDBIT"
+  ]
+ },
+ "MESS-CORRIDOR": {
+  "desc": "Mess Corridor",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MESS-HALL"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO STORAGE-WEST IF STORAGE-WEST-DOOR IS OPEN"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO DORM-CORRIDOR"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO REC-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "STORAGE-WEST": {
+  "desc": "Storage West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MESS-CORRIDOR IF STORAGE-WEST-DOOR IS OPEN"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO MESS-CORRIDOR IF STORAGE-WEST-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "DORM-CORRIDOR": {
+  "desc": "Dorm Corridor",
+  "lengths": {
+   "EAST": 160
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO DORM-D"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO DORM-C"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MESS-CORRIDOR"
+   },
+   {
+    "dir": "EAST",
+    "raw": "PER LONG-HALL-F"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "MESS-HALL": {
+  "desc": "Mess Hall",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MESS-CORRIDOR"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO MESS-CORRIDOR"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO KITCHEN IF KITCHEN-DOOR IS OPEN"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO KITCHEN IF KITCHEN-DOOR IS OPEN"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "FLOYDBIT",
+   "RLANDBIT"
+  ]
+ },
+ "KITCHEN": {
+  "desc": "Kitchen",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MESS-HALL"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO MESS-HALL"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "CORRIDOR-JUNCTION": {
+  "desc": "Corridor Junction",
+  "lengths": {
+   "WEST": 160,
+   "EAST": 30
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO ADMIN-CORRIDOR-S"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MECH-CORRIDOR-N"
+   },
+   {
+    "dir": "WEST",
+    "raw": "PER LONG-HALL-F"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ELEVATOR-LOBBY"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ADMIN-CORRIDOR-S": {
+  "desc": "Admin Corridor South",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO CORRIDOR-JUNCTION"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO ADMIN-CORRIDOR"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SANFAC-E"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ADMIN-CORRIDOR": {
+  "desc": "Admin Corridor",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO ADMIN-CORRIDOR-S"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER LADDER-EXIT-F"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SYSTEMS-MONITORS"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ADMIN-CORRIDOR-N": {
+  "desc": "Admin Corridor North",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER LADDER-EXIT-F"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO TRANSPORTATION-SUPPLY"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO PLAN-ROOM"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SMALL-OFFICE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SANFAC-E": {
+  "desc": "SanFac E",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ADMIN-CORRIDOR-S"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO ADMIN-CORRIDOR-S"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SYSTEMS-MONITORS": {
+  "desc": "Systems Monitors",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ADMIN-CORRIDOR"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO ADMIN-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PLAN-ROOM": {
+  "desc": "Plan Room",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ADMIN-CORRIDOR-N"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "TRANSPORTATION-SUPPLY": {
+  "desc": "Transportation Supply",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO ADMIN-CORRIDOR-N"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO TRANSPORTATION-SUPPLY"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO TRANSPORTATION-SUPPLY"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO TRANSPORTATION-SUPPLY"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO ADMIN-CORRIDOR-N"
+   }
+  ],
+  "flags": [
+   "RLANDBIT"
+  ]
+ },
+ "SMALL-OFFICE": {
+  "desc": "Small Office",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ADMIN-CORRIDOR-N"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO LARGE-OFFICE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "LARGE-OFFICE": {
+  "desc": "Large Office",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SMALL-OFFICE"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "MECH-CORRIDOR-N": {
+  "desc": "Mech Corridor North",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO STORAGE-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PHYSICAL-PLANT"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO CORRIDOR-JUNCTION"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MECH-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "MECH-CORRIDOR": {
+  "desc": "Mech Corridor",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO REACTOR-CONTROL"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PHYSICAL-PLANT"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MECH-CORRIDOR-N"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MECH-CORRIDOR-S"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "MECH-CORRIDOR-S": {
+  "desc": "Mech Corridor South",
+  "lengths": {
+   "SW": 25,
+   "SE": 25
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MECH-CORRIDOR"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO TOOL-ROOM"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MACHINE-SHOP"
+   },
+   {
+    "dir": "SE",
+    "raw": "TO ROBOT-SHOP"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "STORAGE-EAST": {
+  "desc": "Storage East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MECH-CORRIDOR-N"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "PHYSICAL-PLANT": {
+  "desc": "Physical Plant",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO MECH-CORRIDOR-N"
+   },
+   {
+    "dir": "SE",
+    "raw": "TO MECH-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "REACTOR-CONTROL": {
+  "desc": "Reactor Control",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MECH-CORRIDOR"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO REACTOR-ELEVATOR IF REACTOR-ELEVATOR-DOOR IS OPEN"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO REACTOR-ELEVATOR IF REACTOR-ELEVATOR-DOOR IS OPEN"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO REACTOR-ACCESS-STAIRS"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "REACTOR-ACCESS-STAIRS": {
+  "desc": "Reactor Access Stairs",
+  "lengths": {
+   "UP": 30
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO REACTOR-ACCESS-STAIRS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO REACTOR-CONTROL"
+   }
+  ],
+  "flags": [
+   "RLANDBIT"
+  ]
+ },
+ "REACTOR-ELEVATOR": {
+  "desc": "Reactor Elevator",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO REACTOR-CONTROL"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO REACTOR-CONTROL"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "TOOL-ROOM": {
+  "desc": "Tool Room",
+  "lengths": {
+   "NE": 25
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO MECH-CORRIDOR-S"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO MACHINE-SHOP"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "MACHINE-SHOP": {
+  "desc": "Machine Shop",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MECH-CORRIDOR-S"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ROBOT-SHOP"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO TOOL-ROOM"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "ROBOT-SHOP": {
+  "desc": "Robot Shop",
+  "lengths": {
+   "NW": 25
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MACHINE-SHOP"
+   },
+   {
+    "dir": "NW",
+    "raw": "TO MECH-CORRIDOR-S"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "ELEVATOR-LOBBY": {
+  "desc": "Elevator Lobby",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER ELEVATOR-ENTER-F"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER ELEVATOR-ENTER-F"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO CORRIDOR-JUNCTION"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO BOOTH-2"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO BOOTH-2"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "UPPER-ELEVATOR": {
+  "desc": "Upper Elevator",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "OUT",
+    "raw": "PER ELEVATOR-EXIT-F"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER ELEVATOR-EXIT-F"
+   },
+   {
+    "dir": "UP",
+    "raw": "\"You'll have to use the elevator controls.\""
+   },
+   {
+    "dir": "DOWN",
+    "raw": "\"You'll have to use the elevator controls.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "LOWER-ELEVATOR": {
+  "desc": "Lower Elevator",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER ELEVATOR-EXIT-F"
+   },
+   {
+    "dir": "OUT",
+    "raw": "PER ELEVATOR-EXIT-F"
+   },
+   {
+    "dir": "UP",
+    "raw": "\"You'll have to use the elevator controls.\""
+   },
+   {
+    "dir": "DOWN",
+    "raw": "\"You'll have to use the elevator controls.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BOOTH-2": {
+  "desc": "Booth 2",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ELEVATOR-LOBBY"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO ELEVATOR-LOBBY"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "TOWER-CORE": {
+  "desc": "Tower Core",
+  "lengths": {
+   "UP": 30
+  },
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO UPPER-ELEVATOR"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO HELIPAD"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO OBSERVATION-DECK"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO COMM-ROOM"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "HELIPAD": {
+  "desc": "Helipad",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO TOWER-CORE"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO HELICOPTER"
+   },
+   {
+    "dir": "EAST",
+    "raw": "\"A fence keeps you away from the edge, where you would probably be swept over the brink by the high winds.\""
+   },
+   {
+    "dir": "WEST",
+    "raw": "\"A fence keeps you away from the edge, where you would probably be swept over the brink by the high winds.\""
+   },
+   {
+    "dir": "NORTH",
+    "raw": "\"A fence keeps you away from the edge, where you would probably be swept over the brink by the high winds.\""
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "\"A fence keeps you away from the edge, where you would probably be swept over the brink by the high winds.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "HELICOPTER": {
+  "desc": "Helicopter",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO HELIPAD"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "COMM-ROOM": {
+  "desc": "Comm Room",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO TOWER-CORE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "OBSERVATION-DECK": {
+  "desc": "Observation Deck",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO TOWER-CORE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "WAITING-AREA": {
+  "desc": "Waiting Area",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO KALAMONTEE-PLATFORM"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER OTHER-ELEVATOR-ENTER-F"
+   },
+   {
+    "dir": "IN",
+    "raw": "PER OTHER-ELEVATOR-ENTER-F"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "KALAMONTEE-PLATFORM": {
+  "desc": "Kalamontee Platform",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO WAITING-AREA"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER SHUTTLE-ENTER-F"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER SHUTTLE-ENTER-F"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "LAWANDA-PLATFORM": {
+  "desc": "Lawanda Platform",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER SHUTTLE-ENTER-F"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "PER SHUTTLE-ENTER-F"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO ESCALATOR"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO ESCALATOR"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "ESCALATOR": {
+  "desc": "Escalator",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO FORK"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO FORK"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO LAWANDA-PLATFORM"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO LAWANDA-PLATFORM"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "FORK": {
+  "desc": "Fork",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO ESCALATOR"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO ESCALATOR"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   },
+   {
+    "dir": "SE",
+    "raw": "TO PROJECT-CORRIDOR-WEST"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "INFIRMARY": {
+  "desc": "Infirmary",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SE",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "REPAIR-ROOM": {
+  "desc": "Repair Room",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "\"It is a robot-sized doorway -- a bit too small for you.\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "SYSTEMS-CORRIDOR-WEST": {
+  "desc": "Systems Corridor West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NW",
+    "raw": "TO INFIRMARY"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO REPAIR-ROOM"
+   },
+   {
+    "dir": "DOWN",
+    "raw": "TO REPAIR-ROOM"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SYSTEMS-CORRIDOR"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO FORK"
+   }
+  ],
+  "flags": [
+   "ONBIT",
+   "RLANDBIT"
+  ]
+ },
+ "SYSTEMS-CORRIDOR": {
+  "desc": "Systems Corridor",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO PLANETARY-DEFENSE"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SYSTEMS-CORRIDOR-WEST"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SYSTEMS-CORRIDOR-EAST": {
+  "desc": "Systems Corridor East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SYSTEMS-CORRIDOR"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO LIBRARY-LOBBY"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO PLANETARY-COURSE-CONTROL"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO PHYSICAL-PLANT-TWO"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PHYSICAL-PLANT-TWO": {
+  "desc": "Physical Plant",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PLANETARY-DEFENSE": {
+  "desc": "Planetary Defense",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO SYSTEMS-CORRIDOR"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO SYSTEMS-CORRIDOR"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "PLANETARY-COURSE-CONTROL": {
+  "desc": "Course Control",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "LIBRARY-LOBBY": {
+  "desc": "Library Lobby",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "UP",
+    "raw": "TO LIBRARY"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO LIBRARY"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO SYSTEMS-CORRIDOR-EAST"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO PROJECT-CORRIDOR-EAST"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO BOOTH-3"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO BOOTH-3"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BOOTH-3": {
+  "desc": "Booth 3",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO LIBRARY-LOBBY"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO LIBRARY-LOBBY"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "LIBRARY": {
+  "desc": "Library",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO LIBRARY-LOBBY"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO LIBRARY-LOBBY"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT",
+   "FLOYDBIT"
+  ]
+ },
+ "PROJECT-CORRIDOR-WEST": {
+  "desc": "Project Corridor West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO SANFAC-F"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO PROJECT-CORRIDOR"
+   },
+   {
+    "dir": "NW",
+    "raw": "TO FORK"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "SANFAC-F": {
+  "desc": "SanFac F",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO PROJECT-CORRIDOR-WEST"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO PROJECT-CORRIDOR-WEST"
+   }
+  ],
+  "flags": [
+   "FLOYDBIT",
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PROJECT-CORRIDOR": {
+  "desc": "Project Corridor",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO PROJECT-CORRIDOR-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PROJECT-CORRIDOR-WEST"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO PROJCON-OFFICE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PROJCON-OFFICE": {
+  "desc": "ProjCon Office",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO PROJECT-CORRIDOR"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO CRYO-ELEVATOR IF CRYO-ELEVATOR-DOOR IS OPEN ELSE \"You can't go that way.\""
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO COMPUTER-ROOM"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "CRYO-ELEVATOR": {
+  "desc": "Cryo-Elevator",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "PER CRYO-EXIT-F"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "CRYO-ANTEROOM": {
+  "desc": "Cryo-Anteroom",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "PROJECT-CORRIDOR-EAST": {
+  "desc": "Project Corridor East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO LIBRARY-LOBBY"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO COMPUTER-ROOM"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PROJECT-CORRIDOR"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO MAIN-LAB"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "COMPUTER-ROOM": {
+  "desc": "Computer Room",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO PROJECT-CORRIDOR-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PROJCON-OFFICE"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MINI-BOOTH"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO MINI-BOOTH"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO MAIN-LAB"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "MINI-BOOTH": {
+  "desc": "Miniaturization Booth",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO COMPUTER-ROOM"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO COMPUTER-ROOM"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "MAIN-LAB": {
+  "desc": "Main Lab",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO PROJECT-CORRIDOR-EAST"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO LAB-STORAGE"
+   },
+   {
+    "dir": "SW",
+    "raw": "TO COMPUTER-ROOM"
+   },
+   {
+    "dir": "SE",
+    "raw": "TO BIO-LOCK-WEST IF BIO-DOOR-WEST IS OPEN"
+   },
+   {
+    "dir": "NE",
+    "raw": "TO RADIATION-LOCK-WEST IF RAD-DOOR-WEST IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "LAB-STORAGE": {
+  "desc": "Lab Storage",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MAIN-LAB"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO MAIN-LAB"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "FLOYDBIT",
+   "ONBIT"
+  ]
+ },
+ "BIO-LOCK-WEST": {
+  "desc": "Bio Lock West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO BIO-LOCK-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MAIN-LAB IF BIO-DOOR-WEST IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BIO-LOCK-EAST": {
+  "desc": "Bio Lock East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO BIO-LAB IF BIO-DOOR-EAST IS OPEN"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO BIO-LOCK-WEST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "RADIATION-LOCK-WEST": {
+  "desc": "Radiation Lock West",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO RADIATION-LOCK-EAST"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO MAIN-LAB IF RAD-DOOR-WEST IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "RADIATION-LOCK-EAST": {
+  "desc": "Radiation Lock East",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO RADIATION-LAB IF RAD-DOOR-EAST IS OPEN"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO RADIATION-LOCK-WEST"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "BIO-LAB": {
+  "desc": "Bio Lab",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO LAB-OFFICE IF OFFICE-DOOR IS OPEN"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO BIO-LOCK-EAST IF BIO-DOOR-EAST IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "RADIATION-LAB": {
+  "desc": "Radiation Lab",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO RADIATION-LOCK-EAST IF RAD-DOOR-EAST IS OPEN"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "LAB-OFFICE": {
+  "desc": "Lab Office",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO BIO-LAB IF OFFICE-DOOR IS OPEN"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO AUXILIARY-BOOTH"
+   },
+   {
+    "dir": "IN",
+    "raw": "TO AUXILIARY-BOOTH"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "AUXILIARY-BOOTH": {
+  "desc": "Auxiliary Booth",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO LAB-OFFICE"
+   },
+   {
+    "dir": "OUT",
+    "raw": "TO LAB-OFFICE"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "STATION-384": {
+  "desc": "Station 384",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "EAST",
+    "raw": "TO STRIP-NEAR-STATION"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "STRIP-NEAR-STATION": {
+  "desc": "Strip Near Station",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "\"The plunge would probably be fatal.\""
+   },
+   {
+    "dir": "EAST",
+    "raw": "\"The plunge would probably be fatal.\""
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO MIDDLE-OF-STRIP"
+   },
+   {
+    "dir": "WEST",
+    "raw": "TO STATION-384"
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "MIDDLE-OF-STRIP": {
+  "desc": "Middle of Strip",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "TO STRIP-NEAR-RELAY"
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO STRIP-NEAR-STATION IF NO-MICROBE ELSE \"Not a chance -- unless, of course, you don't mind walking into the gullet of a hungry microbe.\""
+   },
+   {
+    "dir": "EAST",
+    "raw": "\"Do you have a penchant for bottomless voids?\""
+   },
+   {
+    "dir": "WEST",
+    "raw": "\"Do you have a penchant for bottomless voids?\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ },
+ "STRIP-NEAR-RELAY": {
+  "desc": "Strip Near Relay",
+  "lengths": {},
+  "exits": [
+   {
+    "dir": "IN",
+    "raw": "ROOMS"
+   },
+   {
+    "dir": "NORTH",
+    "raw": "\"There is a huge featureless wall there, remember?\""
+   },
+   {
+    "dir": "SOUTH",
+    "raw": "TO MIDDLE-OF-STRIP IF NO-MICROBE ELSE \"Not a chance -- unless, of course, you don't mind walking into the gullet of a hungry microbe.\""
+   },
+   {
+    "dir": "EAST",
+    "raw": "PER RELAY-EXIT-F"
+   },
+   {
+    "dir": "WEST",
+    "raw": "\"Do you have a penchant for bottomless voids?\""
+   }
+  ],
+  "flags": [
+   "RLANDBIT",
+   "ONBIT"
+  ]
+ }
+}
