@@ -294,7 +294,21 @@ def region_of(room):
             best = (title, (x1 - x0) * (y1 - y0))
     return best[0] if best else None
 
-def render(notes):
+START = 'DECK-NINE'          # where the game starts: the static map's "you are here"
+HERE_INSET, HERE_R = 11, 8.5  # the marker's center sits this far in from a room's lower-right corner
+HERE_RED = '#d62a1e'
+
+def you_are_here(x, y, r=HERE_R):
+    """A red disc with a white five-pointed star, centered at (x, y)."""
+    pts = []
+    for i in range(10):
+        ang = math.radians(-90 + 36 * i)
+        rad = r * (0.66 if i % 2 == 0 else 0.27)
+        pts.append(f'{x + rad * math.cos(ang):.2f},{y + rad * math.sin(ang) + r * 0.04:.2f}')
+    return (f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{r}" fill="{HERE_RED}" stroke="#ffffff" stroke-width="1.2"/>'
+            f'<polygon points="{" ".join(pts)}" fill="#ffffff"/>')
+
+def render(notes, path=None, mark_start=False):
     """Draws the map. `notes` are the room notes found by a first pass, which the region boxes grow to hold."""
 
     RECTS = {title: region_rect(title, members) for title, members, _ in REGIONS}
@@ -324,7 +338,7 @@ def render(notes):
 
     # the legend and compass sit side by side, centered in the space right of the tower, above Lawanda
     band = (RECTS['Tower'][2], kal[1], RECTS['Lawanda Complex'][2], RECTS['Lawanda Complex'][1])
-    LEGEND_W, LEGEND_H, COMPASS_R, GAP = 560, 22 + 8 * 25, 84, 110
+    LEGEND_W, LEGEND_H, COMPASS_R, GAP = 560, 22 + 9 * 25, 84, 110
     COMPASS_SPAN = 2 * (COMPASS_R + 40)
     block_w = LEGEND_W + GAP + COMPASS_SPAN
     bx = band[0] + (band[2] - band[0] - block_w) / 2
@@ -338,7 +352,7 @@ def render(notes):
     COMPASS_AT = (bx + LEGEND_W + GAP + COMPASS_SPAN / 2, by)
 
     C = {'bg': '#f6f1e4', 'ink': '#1f2a44', 'room': '#ffffff', 'line': '#1f2a44', 'door': '#1f2a44',
-         'lock': '#c0392b', 'story': '#7d3c98', 'ride': '#1f7a8c', 'floyd': '#b9770e', 'stub': '#7f8c8d'}
+         'lock': '#2563c9', 'story': '#7d3c98', 'ride': '#1f7a8c', 'floyd': '#b9770e', 'stub': '#7f8c8d'}
     out = []
     A = out.append
     A(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W:.0f}" height="{H:.0f}" viewBox="0 0 {W:.0f} {H:.0f}" '
@@ -372,14 +386,14 @@ def render(notes):
             x2, y2 = bez(pts, min(1, t + 0.02)); ang = math.degrees(math.atan2(y2 - y, x2 - x))
             A(f'<rect x="{x - 2.5:.1f}" y="{y - 8:.1f}" width="5" height="16" fill="{col}" transform="rotate({ang:.1f} {x:.1f} {y:.1f})"/>')
         else:
-            glyph = {'lock': '\U0001F512', 'story': '★', 'floyd': '⚙'}.get(kind, '?')
+            glyph = {'lock': '\U0001F512', 'story': '?', 'floyd': '⚙'}.get(kind, '?')
             A(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{col}"/>')
             if kind == 'lock':
                 # a padlock drawn in lines (emoji don't print reliably)
                 A(f'<rect x="{x - 4:.1f}" y="{y - 1:.1f}" width="8" height="6" rx="1" fill="#fff"/>'
                   f'<path d="M{x - 2.5:.1f},{y - 1:.1f} v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>')
             else:
-                A(f'<text x="{x:.1f}" y="{y + 4:.1f}" font-size="12" text-anchor="middle" fill="#fff">{glyph}</text>')
+                A(f'<text x="{x:.1f}" y="{y + 4:.1f}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">{glyph}</text>')
         if text:
             (sx, sy), (ex, ey) = pts[0], pts[3]
             side = abs(ey - sy) > abs(ex - sx)
@@ -536,6 +550,10 @@ def render(notes):
         if sub:
             A(f'<text x="{cx:.1f}" y="{y0 + len(lines) * 13 - 1:.1f}" font-size="9" font-style="italic" text-anchor="middle" fill="{C["ink"]}" opacity="0.7">{html.escape(sub)}</text>')
 
+    if mark_start:   # the static map shows where the game starts
+        cx, cy = center(START); w, h = size(START)
+        A(you_are_here(cx + w / 2 - HERE_INSET, cy + h / 2 - HERE_INSET))
+
     # labels on top
     for r, text in BADGES.items():
         cx, cy = center(r)
@@ -604,10 +622,11 @@ def render(notes):
     lx, ly = LEGEND_AT
     A(f'<text x="{lx:.0f}" y="{ly:.0f}" font-size="15" font-weight="700" fill="{C["ink"]}">Legend</text>')
     items = [
+        ('here', 'You are here'),
         ('line', 'Open passage, leaving each room from the side you type. Tags mark up, down, in, out.'),
         ('arrow', 'One-way: you can go this way but not back.'),
         ('door', 'Door that opens freely (or with a button)'),
-        ('lock', 'Locked: needs an item or a puzzle solved (red line)'),
+        ('lock', 'Locked: needs an item or a puzzle solved (blue line)'),
         ('story', 'Opens or closes with story events (purple line)'),
         ('ride', 'Ride: elevator, shuttle, teleport, miniaturization'),
         ('updown', 'Up and down exits leave and enter at a slant'),
@@ -615,7 +634,9 @@ def render(notes):
     ]
     for i, (k, text) in enumerate(items):
         x = lx; y = ly + 28 + i * 25
-        if k in ('line', 'arrow'):
+        if k == 'here':
+            A(you_are_here(x + 22, y))
+        elif k in ('line', 'arrow'):
             A(f'<path d="M{x},{y} h44" stroke="{C["line"]}" stroke-width="2.4"' + (' marker-end="url(#arrow)"' if k == 'arrow' else '') + '/>')
         elif k == 'door':
             A(f'<path d="M{x},{y} h44" stroke="{C["line"]}" stroke-width="2.4"/><rect x="{x + 19.5}" y="{y - 8}" width="5" height="16" fill="{C["door"]}"/>')
@@ -624,7 +645,7 @@ def render(notes):
             if k == 'lock':
                 A(f'<rect x="{x + 18}" y="{y - 1}" width="8" height="6" rx="1" fill="#fff"/><path d="M{x + 19.5},{y - 1} v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>')
             else:
-                A(f'<text x="{x + 22}" y="{y + 4}" font-size="12" text-anchor="middle" fill="#fff">★</text>')
+                A(f'<text x="{x + 22}" y="{y + 4.5}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>')
         elif k == 'updown':
             A(f'<path d="M{x},{y + 7} q14,0 22,-7 t22,-7" fill="none" stroke="{C["line"]}" stroke-width="2.4"/>')
         elif k == 'ride':
@@ -634,18 +655,36 @@ def render(notes):
         A(f'<text x="{x + 56}" y="{y + 4}" font-size="12.5" fill="{C["ink"]}">{html.escape(text)}</text>')
 
     A('</g></svg>')
-    if notes is not None: open('../../docs/map/planetfall-map.svg', 'w').write('\n'.join(out))
+    if path: open(path, 'w').write('\n'.join(out))
+    if path and mark_start:
+        # Where each room sits on the page (fractions of the page, from the top left), its name as
+        # the game prints it, and which rooms connect: the in-game map places its marker from this.
+        rooms = {}
+        for r in POS:
+            cx, cy = center(r); w, h = size(r)
+            rooms[r] = {'name': RAW[r.split('@')[0]]['desc'],
+                        'x': round((cx - w / 2 + ox) / W, 5), 'y': round((cy - h / 2 + oy) / H, 5),
+                        'w': round(w / W, 5), 'h': round(h / H, 5)}
+        pairs = {tuple(sorted(k)) for k in links}
+        pairs |= {tuple(sorted((a_, b_))) for a_, _, b_, _, _, _, _ in RIDES}
+        pairs |= {tuple(sorted((a_, b_))) for a_, _, _, b_, _, _, _ in SHAFTS}
+        json.dump({'width': round(W), 'height': round(H), 'marker': {'inset': HERE_INSET, 'radius': HERE_R},
+                   'start': START, 'rooms': rooms, 'links': sorted(list(p) for p in pairs)},
+                  open('../../docs/map/planetfall-map.json', 'w'), indent=1)
     for i, a in enumerate(POS):
         for b in list(POS)[i + 1:]:
             (ax, ay), (bx, by) = center(a), center(b); (aw, ah), (bw_, bh_) = size(a), size(b)
             if tuple(sorted([a, b])) in INSIDE: continue
             if abs(ax - bx) < (aw + bw_) / 2 + 12 and abs(ay - by) < (ah + bh_) / 2 + 12:
-                if notes is not None: print('too close:', a, b, file=sys.stderr)
-    if notes is not None: print('rooms drawn:', len(POS), 'links:', len(links), 'size:', int(W), 'x', int(H))
+                if path and mark_start: print('too close:', a, b, file=sys.stderr)
+    if path and mark_start: print('rooms drawn:', len(POS), 'links:', len(links), 'size:', int(W), 'x', int(H))
     missing = [r for r in RAW if r not in POS and r != 'ROOMS' and not r.startswith('ROOMS')]
-    if notes is not None: print('rooms not placed:', missing)
+    if path and mark_start: print('rooms not placed:', missing)
 
     return owned
 
-render(None)
-render(render(None))
+notes = render(None)
+# The static map marks where the game starts; the game's copy leaves the marker to the app,
+# which draws it on whatever room the player is in.
+render(notes, '../../docs/map/planetfall-map.svg', mark_start=True)
+render(notes, '../../docs/map/planetfall-map-base.svg')

@@ -1,0 +1,1222 @@
+{
+ "width": 3625,
+ "height": 1814,
+ "marker": {
+  "inset": 11,
+  "radius": 8.5
+ },
+ "start": "DECK-NINE",
+ "rooms": {
+  "DECK-EIGHT": {
+   "name": "Deck Eight",
+   "x": 0.17246,
+   "y": 0.79061,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BRIG": {
+   "name": "Brig",
+   "x": 0.21262,
+   "y": 0.79061,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "GANGWAY": {
+   "name": "Gangway",
+   "x": 0.17246,
+   "y": 0.85147,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DECK-NINE": {
+   "name": "Deck Nine",
+   "x": 0.17246,
+   "y": 0.91234,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ESCAPE-POD": {
+   "name": "Escape Pod",
+   "x": 0.13312,
+   "y": 0.91399,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "REACTOR-LOBBY": {
+   "name": "Reactor Lobby",
+   "x": 0.21262,
+   "y": 0.91234,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "UNDERWATER": {
+   "name": "Underwater",
+   "x": 0.07669,
+   "y": 0.91234,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "CRAG": {
+   "name": "Crag",
+   "x": 0.07669,
+   "y": 0.85147,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BALCONY": {
+   "name": "Balcony",
+   "x": 0.07669,
+   "y": 0.79061,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "WINDING-STAIR": {
+   "name": "Winding Stair",
+   "x": 0.07669,
+   "y": 0.72974,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "COURTYARD": {
+   "name": "Courtyard",
+   "x": 0.07669,
+   "y": 0.66887,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "WEST-WING": {
+   "name": "West Wing",
+   "x": 0.03652,
+   "y": 0.66887,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PLAIN-HALL": {
+   "name": "Plain Hall",
+   "x": 0.07669,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BOOTH-1": {
+   "name": "Booth 1",
+   "x": 0.07669,
+   "y": 0.23266,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "CONFERENCE-ROOM": {
+   "name": "Conference Room",
+   "x": 0.07669,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "REC-AREA": {
+   "name": "Rec Area",
+   "x": 0.07669,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "REC-CORRIDOR": {
+   "name": "Rec Corridor",
+   "x": 0.11685,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DORM-B": {
+   "name": "Dorm B",
+   "x": 0.11685,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-B": {
+   "name": "SanFac B",
+   "x": 0.11685,
+   "y": 0.23266,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DORM-A": {
+   "name": "Dorm A",
+   "x": 0.11685,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-A": {
+   "name": "SanFac A",
+   "x": 0.11685,
+   "y": 0.47613,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MESS-CORRIDOR": {
+   "name": "Mess Corridor",
+   "x": 0.15701,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "STORAGE-WEST": {
+   "name": "Storage West",
+   "x": 0.15701,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MESS-HALL": {
+   "name": "Mess Hall",
+   "x": 0.15701,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "KITCHEN": {
+   "name": "Kitchen",
+   "x": 0.15701,
+   "y": 0.47613,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DORM-CORRIDOR": {
+   "name": "Dorm Corridor",
+   "x": 0.19718,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DORM-D": {
+   "name": "Dorm D",
+   "x": 0.19718,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-D": {
+   "name": "SanFac D",
+   "x": 0.19718,
+   "y": 0.23266,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "DORM-C": {
+   "name": "Dorm C",
+   "x": 0.19718,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-C": {
+   "name": "SanFac C",
+   "x": 0.19718,
+   "y": 0.47613,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "CORRIDOR-JUNCTION": {
+   "name": "Corridor Junction",
+   "x": 0.31767,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ADMIN-CORRIDOR-S": {
+   "name": "Admin Corridor South",
+   "x": 0.31767,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-E": {
+   "name": "SanFac E",
+   "x": 0.35783,
+   "y": 0.29353,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ADMIN-CORRIDOR": {
+   "name": "Admin Corridor",
+   "x": 0.31767,
+   "y": 0.23266,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SYSTEMS-MONITORS": {
+   "name": "Systems Monitors",
+   "x": 0.2775,
+   "y": 0.23266,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ADMIN-CORRIDOR-N": {
+   "name": "Admin Corridor North",
+   "x": 0.31767,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PLAN-ROOM": {
+   "name": "Plan Room",
+   "x": 0.35783,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SMALL-OFFICE": {
+   "name": "Small Office",
+   "x": 0.2775,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LARGE-OFFICE": {
+   "name": "Large Office",
+   "x": 0.23734,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "TRANSPORTATION-SUPPLY": {
+   "name": "Transportation Supply",
+   "x": 0.31767,
+   "y": 0.08049,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MECH-CORRIDOR-N": {
+   "name": "Mech Corridor North",
+   "x": 0.31767,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "STORAGE-EAST": {
+   "name": "Storage East",
+   "x": 0.35783,
+   "y": 0.41526,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PHYSICAL-PLANT": {
+   "name": "Physical Plant",
+   "x": 0.2775,
+   "y": 0.44569,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MECH-CORRIDOR": {
+   "name": "Mech Corridor",
+   "x": 0.31767,
+   "y": 0.47613,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "REACTOR-CONTROL": {
+   "name": "Reactor Control",
+   "x": 0.35783,
+   "y": 0.47613,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "REACTOR-ELEVATOR": {
+   "name": "Reactor Elevator",
+   "x": 0.39882,
+   "y": 0.47778,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "REACTOR-ACCESS-STAIRS": {
+   "name": "Reactor Access Stairs",
+   "x": 0.35783,
+   "y": 0.53699,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MECH-CORRIDOR-S": {
+   "name": "Mech Corridor South",
+   "x": 0.31767,
+   "y": 0.53699,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "TOOL-ROOM": {
+   "name": "Tool Room",
+   "x": 0.2775,
+   "y": 0.59786,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MACHINE-SHOP": {
+   "name": "Machine Shop",
+   "x": 0.31767,
+   "y": 0.59786,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ROBOT-SHOP": {
+   "name": "Robot Shop",
+   "x": 0.35783,
+   "y": 0.59786,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ELEVATOR-LOBBY": {
+   "name": "Elevator Lobby",
+   "x": 0.39799,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BOOTH-2": {
+   "name": "Booth 2",
+   "x": 0.43816,
+   "y": 0.35439,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "UPPER-ELEVATOR": {
+   "name": "Upper Elevator",
+   "x": 0.39882,
+   "y": 0.29518,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "LOWER-ELEVATOR": {
+   "name": "Lower Elevator",
+   "x": 0.39882,
+   "y": 0.41691,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "UPPER-ELEVATOR@top": {
+   "name": "Upper Elevator",
+   "x": 0.52549,
+   "y": 0.14301,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "TOWER-CORE": {
+   "name": "Tower Core",
+   "x": 0.52466,
+   "y": 0.20223,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "COMM-ROOM": {
+   "name": "Comm Room",
+   "x": 0.59572,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "OBSERVATION-DECK": {
+   "name": "Observation Deck",
+   "x": 0.4845,
+   "y": 0.26309,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "HELIPAD": {
+   "name": "Helipad",
+   "x": 0.55556,
+   "y": 0.14136,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "HELICOPTER": {
+   "name": "Helicopter",
+   "x": 0.55638,
+   "y": 0.08215,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "LOWER-ELEVATOR@bottom": {
+   "name": "Lower Elevator",
+   "x": 0.27061,
+   "y": 0.8024,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "WAITING-AREA": {
+   "name": "Waiting Area",
+   "x": 0.26978,
+   "y": 0.73988,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "KALAMONTEE-PLATFORM": {
+   "name": "Kalamontee Platform",
+   "x": 0.30994,
+   "y": 0.73988,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SHUTTLE-CAR-BETTY": {
+   "name": "Shuttle Car Betty",
+   "x": 0.3911,
+   "y": 0.68067,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "BETTY-CONTROL-WEST": {
+   "name": "Betty Control West",
+   "x": 0.3501,
+   "y": 0.67902,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BETTY-CONTROL-EAST": {
+   "name": "Betty Control East",
+   "x": 0.43043,
+   "y": 0.67902,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SHUTTLE-CAR-ALFIE": {
+   "name": "Shuttle Car Alfie",
+   "x": 0.3911,
+   "y": 0.8024,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "ALFIE-CONTROL-WEST": {
+   "name": "Alfie Control West",
+   "x": 0.3501,
+   "y": 0.80075,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ALFIE-CONTROL-EAST": {
+   "name": "Alfie Control East",
+   "x": 0.43043,
+   "y": 0.80075,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LAWANDA-PLATFORM": {
+   "name": "Lawanda Platform",
+   "x": 0.47059,
+   "y": 0.73988,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "ESCALATOR": {
+   "name": "Escalator",
+   "x": 0.53053,
+   "y": 0.61308,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "FORK": {
+   "name": "Fork",
+   "x": 0.59108,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SYSTEMS-CORRIDOR-WEST": {
+   "name": "Systems Corridor West",
+   "x": 0.63125,
+   "y": 0.42541,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "INFIRMARY": {
+   "name": "Infirmary",
+   "x": 0.59108,
+   "y": 0.36454,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "REPAIR-ROOM": {
+   "name": "Repair Room",
+   "x": 0.63125,
+   "y": 0.36454,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SYSTEMS-CORRIDOR": {
+   "name": "Systems Corridor",
+   "x": 0.67141,
+   "y": 0.42541,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PLANETARY-DEFENSE": {
+   "name": "Planetary Defense",
+   "x": 0.67141,
+   "y": 0.36454,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SYSTEMS-CORRIDOR-EAST": {
+   "name": "Systems Corridor East",
+   "x": 0.71157,
+   "y": 0.42541,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PLANETARY-COURSE-CONTROL": {
+   "name": "Course Control",
+   "x": 0.71157,
+   "y": 0.36454,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PHYSICAL-PLANT-TWO": {
+   "name": "Physical Plant",
+   "x": 0.75174,
+   "y": 0.42541,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LIBRARY-LOBBY": {
+   "name": "Library Lobby",
+   "x": 0.71157,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LIBRARY": {
+   "name": "Library",
+   "x": 0.67141,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BOOTH-3": {
+   "name": "Booth 3",
+   "x": 0.75174,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PROJECT-CORRIDOR-WEST": {
+   "name": "Project Corridor West",
+   "x": 0.63125,
+   "y": 0.54714,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "SANFAC-F": {
+   "name": "SanFac F",
+   "x": 0.59108,
+   "y": 0.54714,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PROJECT-CORRIDOR": {
+   "name": "Project Corridor",
+   "x": 0.67141,
+   "y": 0.54714,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PROJECT-CORRIDOR-EAST": {
+   "name": "Project Corridor East",
+   "x": 0.71157,
+   "y": 0.54714,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "PROJCON-OFFICE": {
+   "name": "ProjCon Office",
+   "x": 0.67141,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "CRYO-ELEVATOR": {
+   "name": "Cryo-Elevator",
+   "x": 0.67224,
+   "y": 0.67053,
+   "w": 0.02483,
+   "h": 0.02536
+  },
+  "CRYO-ANTEROOM": {
+   "name": "Cryo-Anteroom",
+   "x": 0.67141,
+   "y": 0.73481,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "COMPUTER-ROOM": {
+   "name": "Computer Room",
+   "x": 0.71157,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MINI-BOOTH": {
+   "name": "Miniaturization Booth",
+   "x": 0.71157,
+   "y": 0.66887,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MAIN-LAB": {
+   "name": "Main Lab",
+   "x": 0.7919,
+   "y": 0.54714,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LAB-STORAGE": {
+   "name": "Lab Storage",
+   "x": 0.7919,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "RADIATION-LOCK-WEST": {
+   "name": "Radiation Lock West",
+   "x": 0.83206,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "RADIATION-LOCK-EAST": {
+   "name": "Radiation Lock East",
+   "x": 0.87223,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "RADIATION-LAB": {
+   "name": "Radiation Lab",
+   "x": 0.91239,
+   "y": 0.48627,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BIO-LOCK-WEST": {
+   "name": "Bio Lock West",
+   "x": 0.83206,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BIO-LOCK-EAST": {
+   "name": "Bio Lock East",
+   "x": 0.87223,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "BIO-LAB": {
+   "name": "Bio Lab",
+   "x": 0.91239,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "LAB-OFFICE": {
+   "name": "Lab Office",
+   "x": 0.95255,
+   "y": 0.60801,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "AUXILIARY-BOOTH": {
+   "name": "Auxiliary Booth",
+   "x": 0.95255,
+   "y": 0.66887,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "STATION-384": {
+   "name": "Station 384",
+   "x": 0.77645,
+   "y": 0.80734,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "STRIP-NEAR-STATION": {
+   "name": "Strip Near Station",
+   "x": 0.81662,
+   "y": 0.80734,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "MIDDLE-OF-STRIP": {
+   "name": "Middle of Strip",
+   "x": 0.81662,
+   "y": 0.74648,
+   "w": 0.02648,
+   "h": 0.02867
+  },
+  "STRIP-NEAR-RELAY": {
+   "name": "Strip Near Relay",
+   "x": 0.81662,
+   "y": 0.68561,
+   "w": 0.02648,
+   "h": 0.02867
+  }
+ },
+ "links": [
+  [
+   "ADMIN-CORRIDOR",
+   "ADMIN-CORRIDOR-N"
+  ],
+  [
+   "ADMIN-CORRIDOR",
+   "ADMIN-CORRIDOR-S"
+  ],
+  [
+   "ADMIN-CORRIDOR",
+   "SYSTEMS-MONITORS"
+  ],
+  [
+   "ADMIN-CORRIDOR-N",
+   "PLAN-ROOM"
+  ],
+  [
+   "ADMIN-CORRIDOR-N",
+   "SMALL-OFFICE"
+  ],
+  [
+   "ADMIN-CORRIDOR-N",
+   "TRANSPORTATION-SUPPLY"
+  ],
+  [
+   "ADMIN-CORRIDOR-S",
+   "CORRIDOR-JUNCTION"
+  ],
+  [
+   "ADMIN-CORRIDOR-S",
+   "SANFAC-E"
+  ],
+  [
+   "ALFIE-CONTROL-EAST",
+   "SHUTTLE-CAR-ALFIE"
+  ],
+  [
+   "ALFIE-CONTROL-WEST",
+   "SHUTTLE-CAR-ALFIE"
+  ],
+  [
+   "AUXILIARY-BOOTH",
+   "LAB-OFFICE"
+  ],
+  [
+   "AUXILIARY-BOOTH",
+   "STATION-384"
+  ],
+  [
+   "BALCONY",
+   "CRAG"
+  ],
+  [
+   "BALCONY",
+   "WINDING-STAIR"
+  ],
+  [
+   "BETTY-CONTROL-EAST",
+   "SHUTTLE-CAR-BETTY"
+  ],
+  [
+   "BETTY-CONTROL-WEST",
+   "SHUTTLE-CAR-BETTY"
+  ],
+  [
+   "BIO-LAB",
+   "BIO-LOCK-EAST"
+  ],
+  [
+   "BIO-LAB",
+   "LAB-OFFICE"
+  ],
+  [
+   "BIO-LOCK-EAST",
+   "BIO-LOCK-WEST"
+  ],
+  [
+   "BIO-LOCK-WEST",
+   "MAIN-LAB"
+  ],
+  [
+   "BOOTH-1",
+   "CONFERENCE-ROOM"
+  ],
+  [
+   "BOOTH-2",
+   "ELEVATOR-LOBBY"
+  ],
+  [
+   "BOOTH-3",
+   "LIBRARY-LOBBY"
+  ],
+  [
+   "BRIG",
+   "REACTOR-LOBBY"
+  ],
+  [
+   "COMM-ROOM",
+   "TOWER-CORE"
+  ],
+  [
+   "COMPUTER-ROOM",
+   "MAIN-LAB"
+  ],
+  [
+   "COMPUTER-ROOM",
+   "MINI-BOOTH"
+  ],
+  [
+   "COMPUTER-ROOM",
+   "PROJCON-OFFICE"
+  ],
+  [
+   "COMPUTER-ROOM",
+   "PROJECT-CORRIDOR-EAST"
+  ],
+  [
+   "CONFERENCE-ROOM",
+   "REC-AREA"
+  ],
+  [
+   "CORRIDOR-JUNCTION",
+   "DORM-CORRIDOR"
+  ],
+  [
+   "CORRIDOR-JUNCTION",
+   "ELEVATOR-LOBBY"
+  ],
+  [
+   "CORRIDOR-JUNCTION",
+   "MECH-CORRIDOR-N"
+  ],
+  [
+   "COURTYARD",
+   "PLAIN-HALL"
+  ],
+  [
+   "COURTYARD",
+   "WEST-WING"
+  ],
+  [
+   "COURTYARD",
+   "WINDING-STAIR"
+  ],
+  [
+   "CRAG",
+   "UNDERWATER"
+  ],
+  [
+   "CRYO-ANTEROOM",
+   "CRYO-ELEVATOR"
+  ],
+  [
+   "CRYO-ELEVATOR",
+   "PROJCON-OFFICE"
+  ],
+  [
+   "DECK-EIGHT",
+   "GANGWAY"
+  ],
+  [
+   "DECK-NINE",
+   "ESCAPE-POD"
+  ],
+  [
+   "DECK-NINE",
+   "GANGWAY"
+  ],
+  [
+   "DECK-NINE",
+   "REACTOR-LOBBY"
+  ],
+  [
+   "DORM-A",
+   "REC-CORRIDOR"
+  ],
+  [
+   "DORM-A",
+   "SANFAC-A"
+  ],
+  [
+   "DORM-B",
+   "REC-CORRIDOR"
+  ],
+  [
+   "DORM-B",
+   "SANFAC-B"
+  ],
+  [
+   "DORM-C",
+   "DORM-CORRIDOR"
+  ],
+  [
+   "DORM-C",
+   "SANFAC-C"
+  ],
+  [
+   "DORM-CORRIDOR",
+   "DORM-D"
+  ],
+  [
+   "DORM-CORRIDOR",
+   "MESS-CORRIDOR"
+  ],
+  [
+   "DORM-D",
+   "SANFAC-D"
+  ],
+  [
+   "ELEVATOR-LOBBY",
+   "LOWER-ELEVATOR"
+  ],
+  [
+   "ELEVATOR-LOBBY",
+   "UPPER-ELEVATOR"
+  ],
+  [
+   "ESCALATOR",
+   "FORK"
+  ],
+  [
+   "ESCALATOR",
+   "LAWANDA-PLATFORM"
+  ],
+  [
+   "ESCAPE-POD",
+   "UNDERWATER"
+  ],
+  [
+   "FORK",
+   "PROJECT-CORRIDOR-WEST"
+  ],
+  [
+   "FORK",
+   "SYSTEMS-CORRIDOR-WEST"
+  ],
+  [
+   "HELICOPTER",
+   "HELIPAD"
+  ],
+  [
+   "HELIPAD",
+   "TOWER-CORE"
+  ],
+  [
+   "INFIRMARY",
+   "SYSTEMS-CORRIDOR-WEST"
+  ],
+  [
+   "KALAMONTEE-PLATFORM",
+   "SHUTTLE-CAR-ALFIE"
+  ],
+  [
+   "KALAMONTEE-PLATFORM",
+   "SHUTTLE-CAR-BETTY"
+  ],
+  [
+   "KALAMONTEE-PLATFORM",
+   "WAITING-AREA"
+  ],
+  [
+   "KITCHEN",
+   "MESS-HALL"
+  ],
+  [
+   "LAB-STORAGE",
+   "MAIN-LAB"
+  ],
+  [
+   "LARGE-OFFICE",
+   "SMALL-OFFICE"
+  ],
+  [
+   "LAWANDA-PLATFORM",
+   "SHUTTLE-CAR-ALFIE"
+  ],
+  [
+   "LAWANDA-PLATFORM",
+   "SHUTTLE-CAR-BETTY"
+  ],
+  [
+   "LIBRARY",
+   "LIBRARY-LOBBY"
+  ],
+  [
+   "LIBRARY-LOBBY",
+   "PROJECT-CORRIDOR-EAST"
+  ],
+  [
+   "LIBRARY-LOBBY",
+   "SYSTEMS-CORRIDOR-EAST"
+  ],
+  [
+   "LOWER-ELEVATOR",
+   "LOWER-ELEVATOR@bottom"
+  ],
+  [
+   "LOWER-ELEVATOR@bottom",
+   "WAITING-AREA"
+  ],
+  [
+   "MACHINE-SHOP",
+   "MECH-CORRIDOR-S"
+  ],
+  [
+   "MACHINE-SHOP",
+   "ROBOT-SHOP"
+  ],
+  [
+   "MACHINE-SHOP",
+   "TOOL-ROOM"
+  ],
+  [
+   "MAIN-LAB",
+   "PROJECT-CORRIDOR-EAST"
+  ],
+  [
+   "MAIN-LAB",
+   "RADIATION-LOCK-WEST"
+  ],
+  [
+   "MECH-CORRIDOR",
+   "MECH-CORRIDOR-N"
+  ],
+  [
+   "MECH-CORRIDOR",
+   "MECH-CORRIDOR-S"
+  ],
+  [
+   "MECH-CORRIDOR",
+   "PHYSICAL-PLANT"
+  ],
+  [
+   "MECH-CORRIDOR",
+   "REACTOR-CONTROL"
+  ],
+  [
+   "MECH-CORRIDOR-N",
+   "PHYSICAL-PLANT"
+  ],
+  [
+   "MECH-CORRIDOR-N",
+   "STORAGE-EAST"
+  ],
+  [
+   "MECH-CORRIDOR-S",
+   "ROBOT-SHOP"
+  ],
+  [
+   "MECH-CORRIDOR-S",
+   "TOOL-ROOM"
+  ],
+  [
+   "MESS-CORRIDOR",
+   "MESS-HALL"
+  ],
+  [
+   "MESS-CORRIDOR",
+   "REC-CORRIDOR"
+  ],
+  [
+   "MESS-CORRIDOR",
+   "STORAGE-WEST"
+  ],
+  [
+   "MIDDLE-OF-STRIP",
+   "STRIP-NEAR-RELAY"
+  ],
+  [
+   "MIDDLE-OF-STRIP",
+   "STRIP-NEAR-STATION"
+  ],
+  [
+   "MINI-BOOTH",
+   "STATION-384"
+  ],
+  [
+   "OBSERVATION-DECK",
+   "TOWER-CORE"
+  ],
+  [
+   "PHYSICAL-PLANT-TWO",
+   "SYSTEMS-CORRIDOR-EAST"
+  ],
+  [
+   "PLAIN-HALL",
+   "REC-AREA"
+  ],
+  [
+   "PLAIN-HALL",
+   "REC-CORRIDOR"
+  ],
+  [
+   "PLANETARY-COURSE-CONTROL",
+   "SYSTEMS-CORRIDOR-EAST"
+  ],
+  [
+   "PLANETARY-DEFENSE",
+   "SYSTEMS-CORRIDOR"
+  ],
+  [
+   "PROJCON-OFFICE",
+   "PROJECT-CORRIDOR"
+  ],
+  [
+   "PROJECT-CORRIDOR",
+   "PROJECT-CORRIDOR-EAST"
+  ],
+  [
+   "PROJECT-CORRIDOR",
+   "PROJECT-CORRIDOR-WEST"
+  ],
+  [
+   "PROJECT-CORRIDOR-WEST",
+   "SANFAC-F"
+  ],
+  [
+   "RADIATION-LAB",
+   "RADIATION-LOCK-EAST"
+  ],
+  [
+   "RADIATION-LOCK-EAST",
+   "RADIATION-LOCK-WEST"
+  ],
+  [
+   "REACTOR-ACCESS-STAIRS",
+   "REACTOR-CONTROL"
+  ],
+  [
+   "REACTOR-CONTROL",
+   "REACTOR-ELEVATOR"
+  ],
+  [
+   "REC-AREA",
+   "REC-CORRIDOR"
+  ],
+  [
+   "REPAIR-ROOM",
+   "SYSTEMS-CORRIDOR-WEST"
+  ],
+  [
+   "STATION-384",
+   "STRIP-NEAR-STATION"
+  ],
+  [
+   "SYSTEMS-CORRIDOR",
+   "SYSTEMS-CORRIDOR-EAST"
+  ],
+  [
+   "SYSTEMS-CORRIDOR",
+   "SYSTEMS-CORRIDOR-WEST"
+  ],
+  [
+   "TOWER-CORE",
+   "UPPER-ELEVATOR@top"
+  ],
+  [
+   "UPPER-ELEVATOR",
+   "UPPER-ELEVATOR@top"
+  ]
+ ]
+}

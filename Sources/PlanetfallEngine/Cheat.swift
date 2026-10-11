@@ -58,6 +58,8 @@ public enum Cheat: String, CaseIterable, Sendable {
 
     public enum Request: Equatable, Sendable {
         case cheat(Cheat)
+        /// "cheat: map": show the full map. It changes nothing in the game.
+        case map
         /// "cheat: xyz" with a name that isn't a cheat.
         case unknown(String)
     }
@@ -73,9 +75,13 @@ public enum Cheat: String, CaseIterable, Sendable {
         var rest = words.dropFirst()
         if rest.first == "code" { rest = rest.dropFirst() }
         let name = rest.joined(separator: " ")
+        if mapNames.contains(name) { return .map }
         if let cheat = Cheat(rawValue: name) ?? spokenAliases[name] { return .cheat(cheat) }
         return .unknown(name)
     }
+
+    /// "cheat: map", and what speech-to-text makes of it.
+    static let mapNames: Set<String> = ["map", "maps", "the map"]
 
     /// Names speech-to-text tends to produce instead of the cheat's.
     static let spokenAliases: [String: Cheat] = [
@@ -87,6 +93,6 @@ public enum Cheat: String, CaseIterable, Sendable {
     ]
 
     static var list: String {
-        allCases.map { "cheat: \($0.rawValue)" }.joined(separator: ", ")
+        (allCases.map { "cheat: \($0.rawValue)" } + ["cheat: map"]).joined(separator: ", ")
     }
 }

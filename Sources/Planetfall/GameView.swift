@@ -15,6 +15,8 @@ struct GameView: View {
     @State private var pendingVoiceCommand: String?
     /// The portrait shown full-window, if any: a character in the room or the sidekick.
     @State private var closeup: Portrait?
+    /// The full map and its PDF ("cheat: map"), loaded once.
+    @State private var fullMap = MapOverlay.load()
     /// The achievement banner currently showing, if any.
     @State private var toast: Achievement?
     @FocusState private var inputFocused: Bool
@@ -83,6 +85,18 @@ struct GameView: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: closeup)
+        .overlay {
+            if session.isShowingMap, let (map, document) = fullMap {
+                MapOverlay(map: map, document: document, here: session.mapPosition.room) {
+                    session.isShowingMap = false
+                }
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: session.isShowingMap)
+        .onChange(of: session.isShowingMap) { _, showing in
+            if !showing { focusCommandLine() }
+        }
         .onChange(of: achievements?.latestUnlock) { _, unlocked in
             guard let unlocked else { return }
             toast = unlocked

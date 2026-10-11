@@ -94,6 +94,7 @@ final class GameLaunch {
         do {
             let session = try GameSession.makeDefault()
             session.achievements = achievements
+            session.map = Artwork.url("Map/planetfall-map.json").flatMap(GameMap.load(from:))
             // Created before start() so it sees the opening turn.
             let sidekick = Sidekick.makeDefault(session: session)
             self.sidekick = sidekick

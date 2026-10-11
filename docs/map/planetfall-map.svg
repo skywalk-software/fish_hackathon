@@ -4,7 +4,7 @@
 <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2a44"/></marker>
 <marker id="arrowStory" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7d3c98"/></marker>
 <marker id="arrowRide" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f7a8c"/></marker>
-<marker id="arrowLock" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<marker id="arrowLock" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563c9"/></marker>
 </defs>
 <g transform="translate(471.6,116.8)">
 <text x="1976.1" y="100" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-weight="500" letter-spacing="6" fill="#1f2a44"><tspan font-size="128">P</tspan><tspan font-size="96">LANET</tspan><tspan font-size="128">F</tspan><tspan font-size="96">ALL</tspan></text>
@@ -25,7 +25,7 @@
 <path d="M249.6,1564.0 C266.1,1564.0 282.7,1564.0 299.2,1564.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M153.6,1564.0 C136.1,1564.0 118.5,1564.0 101.0,1564.0" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="127.3" cy="1564.0" r="9" fill="#7d3c98"/>
-<text x="127.3" y="1568.0" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="127.3" y="1568.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M228.0,1538.0 C242.4,1511.8 160.8,1505.8 175.2,1479.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <text x="228.3" y="1529.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
 <text x="174.9" y="1493.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
@@ -43,12 +43,12 @@
 <text x="-172.3" y="1383.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
 <text x="-118.9" y="1419.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
 <circle cx="-145.6" cy="1398.4" r="9" fill="#7d3c98"/>
-<text x="-145.6" y="1402.4" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="-145.6" y="1402.4" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M-119.2,1317.2 C-104.8,1291.0 -186.4,1285.0 -172.0,1258.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <text x="-118.9" y="1309.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
 <text x="-172.3" y="1273.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
 <circle cx="-145.6" cy="1288.0" r="9" fill="#7d3c98"/>
-<text x="-145.6" y="1292.0" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="-145.6" y="1292.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M-145.6,1148.4 C-145.6,1172.8 -107.5,1185.5 -119.2,1206.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <text x="-143.0" y="1162.3" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">S/down</text>
 <text x="-117.0" y="1200.1" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
@@ -56,8 +56,8 @@
 <path d="M-145.6,1096.4 C-145.6,960.4 -145.6,824.4 -145.6,688.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M-145.6,636.4 C-145.6,616.9 -145.6,597.5 -145.6,578.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M-101.6,640.4 C-82.4,618.3 -63.2,596.1 -44.0,574.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
-<path d="M-145.6,467.6 C-145.6,487.1 -145.6,506.5 -145.6,526.0" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="-145.6" cy="496.8" r="9" fill="#c0392b"/>
+<path d="M-145.6,467.6 C-145.6,487.1 -145.6,506.5 -145.6,526.0" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="-145.6" cy="496.8" r="9" fill="#2563c9"/>
 <rect x="-149.6" y="495.8" width="8" height="6" rx="1" fill="#fff"/><path d="M-148.1,495.8 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
 <path d="M-97.6,552.0 C-81.1,552.0 -64.5,552.0 -48.0,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M-145.6,357.2 C-145.6,376.7 -145.6,396.1 -145.6,415.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
@@ -71,12 +71,12 @@
 <path d="M291.2,526.0 C291.2,506.5 291.2,487.1 291.2,467.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M291.2,415.6 C291.2,396.1 291.2,376.7 291.2,357.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M145.6,578.0 C145.6,597.5 145.6,616.9 145.6,636.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
-<path d="M145.6,526.0 C145.6,506.5 145.6,487.1 145.6,467.6" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="145.6" cy="496.8" r="9" fill="#c0392b"/>
+<path d="M145.6,526.0 C145.6,506.5 145.6,487.1 145.6,467.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="145.6" cy="496.8" r="9" fill="#2563c9"/>
 <rect x="141.6" y="495.8" width="8" height="6" rx="1" fill="#fff"/><path d="M143.1,495.8 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
 <path d="M243.2,552.0 C226.7,552.0 210.1,552.0 193.6,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
-<path d="M145.6,746.8 C145.6,727.3 145.6,707.9 145.6,688.4" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="145.6" cy="717.6" r="9" fill="#c0392b"/>
+<path d="M145.6,746.8 C145.6,727.3 145.6,707.9 145.6,688.4" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="145.6" cy="717.6" r="9" fill="#2563c9"/>
 <rect x="141.6" y="716.6" width="8" height="6" rx="1" fill="#fff"/><path d="M143.1,716.6 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
 <path d="M728.0,467.6 C728.0,487.1 728.0,506.5 728.0,526.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M728.0,578.0 C728.0,597.5 728.0,616.9 728.0,636.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
@@ -141,7 +141,7 @@
 <path d="M2010.4,986.0 C2010.4,966.5 2010.4,947.1 2010.4,927.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M2010.4,1099.4 C2010.4,1078.9 2010.4,1058.5 2010.4,1038.0" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="2010.4" cy="1068.7" r="9" fill="#7d3c98"/>
-<text x="2010.4" y="1072.7" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="2010.4" y="1072.7" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M2108.0,1012.0 C2091.5,1012.0 2074.9,1012.0 2058.4,1012.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M2156.0,986.0 C2156.0,966.5 2156.0,947.1 2156.0,927.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M2399.2,901.6 C2334.1,901.6 2269.1,901.6 2204.0,901.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
@@ -164,34 +164,34 @@
 <path d="M2439.2,1373.6 C2455.7,1373.6 2472.3,1373.6 2488.8,1373.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <path d="M2536.8,1289.2 C2536.8,1308.6 2536.8,1328.1 2536.8,1347.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="2536.8" cy="1318.4" r="9" fill="#7d3c98"/>
-<text x="2536.8" y="1322.4" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="2536.8" y="1322.4" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M2536.8,1237.2 C2536.8,1217.7 2536.8,1198.2 2536.8,1178.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="2536.8" cy="1208.0" r="9" fill="#7d3c98"/>
-<text x="2536.8" y="1212.0" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="2536.8" y="1212.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M680.0,552.0 C566.4,552.0 452.8,552.0 339.2,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
-<path d="M728.0,305.2 C728.0,267.3 728.0,229.5 728.0,191.6" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="728.0" cy="248.4" r="9" fill="#c0392b"/>
+<path d="M728.0,305.2 C728.0,267.3 728.0,229.5 728.0,191.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="728.0" cy="248.4" r="9" fill="#2563c9"/>
 <rect x="724.0" y="247.4" width="8" height="6" rx="1" fill="#fff"/><path d="M725.5,247.4 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
-<path d="M1019.2,526.0 C1019.2,505.5 1019.2,485.1 1019.2,464.6" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="1019.2" cy="495.3" r="9" fill="#c0392b"/>
+<path d="M1019.2,526.0 C1019.2,505.5 1019.2,485.1 1019.2,464.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="1019.2" cy="495.3" r="9" fill="#2563c9"/>
 <rect x="1015.2" y="494.3" width="8" height="6" rx="1" fill="#fff"/><path d="M1016.7,494.3 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
-<path d="M1019.2,578.0 C1019.2,598.5 1019.2,618.9 1019.2,639.4" fill="none" stroke="#c0392b" stroke-width="2.4"/>
-<circle cx="1019.2" cy="608.7" r="9" fill="#c0392b"/>
+<path d="M1019.2,578.0 C1019.2,598.5 1019.2,618.9 1019.2,639.4" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="1019.2" cy="608.7" r="9" fill="#2563c9"/>
 <rect x="1015.2" y="607.7" width="8" height="6" rx="1" fill="#fff"/><path d="M1016.7,607.7 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
 <path d="M554.4,1338.6 C554.4,1318.1 554.4,1297.7 554.4,1277.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
 <rect x="551.9" y="1299.9" width="5" height="16" fill="#1f2a44" transform="rotate(-90.0 554.4 1307.9)"/>
 <path d="M700.0,1225.2 C700.0,1165.2 991.2,1223.8 991.2,1163.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="845.6" cy="1194.5" r="9" fill="#7d3c98"/>
-<text x="845.6" y="1198.5" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="845.6" y="1198.5" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M700.0,1277.2 C700.0,1337.2 991.2,1278.6 991.2,1338.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="845.6" cy="1307.9" r="9" fill="#7d3c98"/>
-<text x="845.6" y="1311.9" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="845.6" y="1311.9" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M1282.4,1225.2 C1282.4,1165.2 991.2,1223.8 991.2,1163.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="1136.8" cy="1194.5" r="9" fill="#7d3c98"/>
-<text x="1136.8" y="1198.5" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="1136.8" y="1198.5" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M1282.4,1277.2 C1282.4,1337.2 991.2,1278.6 991.2,1338.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
 <circle cx="1136.8" cy="1307.9" r="9" fill="#7d3c98"/>
-<text x="1136.8" y="1311.9" font-size="12" text-anchor="middle" fill="#fff">★</text>
+<text x="1136.8" y="1311.9" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
 <path d="M56.0,1587.0 C56.0,1657.0 -145.6,1660.0 -145.6,1590.0" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)"/>
 <path d="M2010.4,1145.4 C2010.4,1175.4 2010.4,1186.0 2010.4,1216.0" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)"/>
 <path d="M2156.0,1148.4 C2156.0,1348.4 2143.2,1373.6 2343.2,1373.6" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)" marker-start="url(#arrowRide)"/>
@@ -477,20 +477,21 @@
 <rect x="2488.8" y="1126.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
 <text x="2536.8" y="1150.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Strip Near</text>
 <text x="2536.8" y="1163.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Relay</text>
+<circle cx="238.60" cy="1579.00" r="8.5" fill="#d62a1e" stroke="#ffffff" stroke-width="1.2"/><polygon points="238.60,1573.73 239.95,1577.48 243.94,1577.61 240.78,1580.05 241.90,1583.88 238.60,1581.63 235.30,1583.88 236.42,1580.05 233.26,1577.61 237.25,1577.48" fill="#ffffff"/>
 <text x="127.3" y="1526.0" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">opens when the ship explodes</text>
 <text x="-131.6" y="1402.4" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">floods on day 2</text>
 <text x="-131.6" y="1292.0" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">floods on day 4</text>
-<text x="-131.6" y="500.8" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">combination dial</text>
-<text x="159.6" y="500.8" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">padlock: key from the crevice</text>
-<text x="159.6" y="721.6" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">kitchen access card</text>
+<text x="-131.6" y="500.8" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">combination dial</text>
+<text x="159.6" y="500.8" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">padlock: key from the crevice</text>
+<text x="159.6" y="721.6" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">kitchen access card</text>
 <text x="947.9" y="734.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">button opens it</text>
 <text x="2024.4" y="1072.7" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">opens after the computer is fixed</text>
 <text x="2550.8" y="1322.4" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">south: blocked while the microbe attacks</text>
 <text x="2550.8" y="1212.0" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">south: blocked while the microbe attacks</text>
 <text x="509.6" y="536.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">a long, featureless hallway (160 moves of walking time)</text>
-<text x="742.0" y="252.4" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">rift: lay the ladder across</text>
-<text x="1033.2" y="499.3" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">upper elevator card</text>
-<text x="1033.2" y="612.7" font-size="9.5" text-anchor="start" fill="#c0392b" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">lower elevator card</text>
+<text x="742.0" y="252.4" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">rift: lay the ladder across</text>
+<text x="1033.2" y="499.3" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">upper elevator card</text>
+<text x="1033.2" y="612.7" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">lower elevator card</text>
 <text x="568.4" y="1311.9" font-size="9.5" text-anchor="start" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">call the elevator</text>
 <text x="845.6" y="1182.5" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Betty is here</text>
 <text x="845.6" y="1295.9" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Alfie is here</text>
@@ -629,23 +630,25 @@
 <text x="2853.9" y="346.9" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">SE</text>
 <text x="2709.7" y="346.9" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">SW</text>
 <text x="2709.7" y="202.7" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">NW</text>
-<text x="1988" y="169" font-size="15" font-weight="700" fill="#1f2a44">Legend</text>
-<path d="M1987.8,196.79999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/>
-<text x="2043.8" y="200.79999999999995" font-size="12.5" fill="#1f2a44">Open passage, leaving each room from the side you type. Tags mark up, down, in, out.</text>
-<path d="M1987.8,221.79999999999995 h44" stroke="#1f2a44" stroke-width="2.4" marker-end="url(#arrow)"/>
-<text x="2043.8" y="225.79999999999995" font-size="12.5" fill="#1f2a44">One-way: you can go this way but not back.</text>
-<path d="M1987.8,246.79999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/><rect x="2007.3" y="238.79999999999995" width="5" height="16" fill="#1f2a44"/>
-<text x="2043.8" y="250.79999999999995" font-size="12.5" fill="#1f2a44">Door that opens freely (or with a button)</text>
-<path d="M1987.8,271.79999999999995 h44" stroke="#c0392b" stroke-width="2.4"/><circle cx="2009.8" cy="271.79999999999995" r="9" fill="#c0392b"/>
-<rect x="2005.8" y="270.79999999999995" width="8" height="6" rx="1" fill="#fff"/><path d="M2007.3,270.79999999999995 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
-<text x="2043.8" y="275.79999999999995" font-size="12.5" fill="#1f2a44">Locked: needs an item or a puzzle solved (red line)</text>
-<path d="M1987.8,296.79999999999995 h44" stroke="#7d3c98" stroke-width="2.4"/><circle cx="2009.8" cy="296.79999999999995" r="9" fill="#7d3c98"/>
-<text x="2009.8" y="300.79999999999995" font-size="12" text-anchor="middle" fill="#fff">★</text>
-<text x="2043.8" y="300.79999999999995" font-size="12.5" fill="#1f2a44">Opens or closes with story events (purple line)</text>
-<path d="M1987.8,321.79999999999995 h44" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5"/>
-<text x="2043.8" y="325.79999999999995" font-size="12.5" fill="#1f2a44">Ride: elevator, shuttle, teleport, miniaturization</text>
-<path d="M1987.8,353.79999999999995 q14,0 22,-7 t22,-7" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
-<text x="2043.8" y="350.79999999999995" font-size="12.5" fill="#1f2a44">Up and down exits leave and enter at a slant</text>
-<path d="M1987.8,371.79999999999995 h22" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/><circle cx="2009.8" cy="371.79999999999995" r="3" fill="#7f8c8d"/>
-<text x="2043.8" y="375.79999999999995" font-size="12.5" fill="#1f2a44">Not an exit for you: a refusal, or a loop back to the same room</text>
+<text x="1988" y="156" font-size="15" font-weight="700" fill="#1f2a44">Legend</text>
+<circle cx="2009.80" cy="184.30" r="8.5" fill="#d62a1e" stroke="#ffffff" stroke-width="1.2"/><polygon points="2009.80,179.03 2011.15,182.78 2015.14,182.91 2011.98,185.35 2013.10,189.18 2009.80,186.93 2006.50,189.18 2007.62,185.35 2004.46,182.91 2008.45,182.78" fill="#ffffff"/>
+<text x="2043.8" y="188.29999999999995" font-size="12.5" fill="#1f2a44">You are here</text>
+<path d="M1987.8,209.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="2043.8" y="213.29999999999995" font-size="12.5" fill="#1f2a44">Open passage, leaving each room from the side you type. Tags mark up, down, in, out.</text>
+<path d="M1987.8,234.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="2043.8" y="238.29999999999995" font-size="12.5" fill="#1f2a44">One-way: you can go this way but not back.</text>
+<path d="M1987.8,259.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/><rect x="2007.3" y="251.29999999999995" width="5" height="16" fill="#1f2a44"/>
+<text x="2043.8" y="263.29999999999995" font-size="12.5" fill="#1f2a44">Door that opens freely (or with a button)</text>
+<path d="M1987.8,284.29999999999995 h44" stroke="#2563c9" stroke-width="2.4"/><circle cx="2009.8" cy="284.29999999999995" r="9" fill="#2563c9"/>
+<rect x="2005.8" y="283.29999999999995" width="8" height="6" rx="1" fill="#fff"/><path d="M2007.3,283.29999999999995 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+<text x="2043.8" y="288.29999999999995" font-size="12.5" fill="#1f2a44">Locked: needs an item or a puzzle solved (blue line)</text>
+<path d="M1987.8,309.29999999999995 h44" stroke="#7d3c98" stroke-width="2.4"/><circle cx="2009.8" cy="309.29999999999995" r="9" fill="#7d3c98"/>
+<text x="2009.8" y="313.79999999999995" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+<text x="2043.8" y="313.29999999999995" font-size="12.5" fill="#1f2a44">Opens or closes with story events (purple line)</text>
+<path d="M1987.8,334.29999999999995 h44" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="2043.8" y="338.29999999999995" font-size="12.5" fill="#1f2a44">Ride: elevator, shuttle, teleport, miniaturization</text>
+<path d="M1987.8,366.29999999999995 q14,0 22,-7 t22,-7" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="2043.8" y="363.29999999999995" font-size="12.5" fill="#1f2a44">Up and down exits leave and enter at a slant</text>
+<path d="M1987.8,384.29999999999995 h22" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/><circle cx="2009.8" cy="384.29999999999995" r="3" fill="#7f8c8d"/>
+<text x="2043.8" y="388.29999999999995" font-size="12.5" fill="#1f2a44">Not an exit for you: a refusal, or a loop back to the same room</text>
 </g></svg>

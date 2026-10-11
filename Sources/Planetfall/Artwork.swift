@@ -51,6 +51,11 @@ enum Artwork {
         return image
     }
 
+    /// A file in the Art folder by its path inside it ("Map/planetfall-map.pdf"), if it exists.
+    static func url(_ path: String) -> URL? {
+        roots.lazy.map { $0.appendingPathComponent(path) }.first { FileManager.default.fileExists(atPath: $0.path) }
+    }
+
     /// "Deck Nine" -> "deck-nine", "Escape Pod" -> "escape-pod".
     static func slug(for name: String) -> String {
         name.lowercased()

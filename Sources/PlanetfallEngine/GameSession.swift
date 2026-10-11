@@ -68,6 +68,13 @@ public final class GameSession {
     @ObservationIgnored public var achievements: AchievementStore?
     /// Ids of the active `StoryEvent`s, oldest first.
     public private(set) var storyEvents: [String] = []
+    /// The full map, for following which room on it the player is in (set by the app).
+    @ObservationIgnored public var map: GameMap?
+    /// Which room on the map the player is in.
+    public private(set) var mapPosition = MapPosition()
+    /// Whether the full map is showing ("cheat: map"). The map view clears it when closed.
+    public var isShowingMap = false
+
     /// The object the player is inside, from the object trace (e.g. "safety web"), or the
     /// room name when they're just standing in a room. Nil until the game reports a move.
     public private(set) var playerHolder: String?
@@ -232,6 +239,10 @@ public final class GameSession {
                 publish(GameTurn(text: text, status: status, prompt: .command))
             case .cheat(let cheat):
                 startCheat(cheat)
+            case .map:
+                // Shown by the app; the game doesn't see it and no time passes.
+                append(.system(id: takeID(), text: "Cheat: map."))
+                isShowingMap = true
             }
             return
         }
@@ -282,6 +293,7 @@ public final class GameSession {
         characterLocations = [:]
         storyEvents = []
         playerHolder = nil
+        mapPosition.reset()
         nap = nil
         earsPlugged = false
         isDead = false
@@ -422,6 +434,7 @@ public final class GameSession {
             characterLocations = [:]
             storyEvents = []
             playerHolder = nil
+            mapPosition.reset()
             earsPlugged = false
             isDead = false
         }
@@ -431,6 +444,7 @@ public final class GameSession {
                 playerHolder = String(args.dropFirst("player ".count))
             }
         }
+        if let map { mapPosition.update(with: turn, map: map) }
         StoryEvent.update(&storyEvents, with: turn.text)
         // A character switched on where they stand is now present there.
         if let here = turn.status?.location ?? status?.location {
