@@ -1,15 +1,20 @@
 import AppKit
-import PDFKit
 import PlanetfallEngine
 import SwiftUI
+import WebKit
 
-/// The full map ("cheat: map"), over the whole window. Zoom with a pinch, ⌘-scroll, the buttons,
-/// or ⌘+ / ⌘- / ⌘0; drag or scroll to move around. A red star marks the player's room, and the
-/// map opens centered on it.
+/// The map, over everything but the command line (so the player can keep playing with it open):
+/// what the player has explored ("map") or the whole map ("cheat: map"), both opening zoomed all
+/// the way out. Zoom with a pinch, ⌘-scroll, the buttons,
+/// or ⌘+ / ⌘- / ⌘0; drag or scroll to move around. A red star marks the player's room.
+///
+/// The map is Art/Map/planetfall-map.svg (from scripts/map), shown by WebKit so it looks exactly
+/// like the printed map. Its rooms, links, and regions are tagged (`data-room`, `data-link`...),
+/// so the explored map just hides what the player hasn't seen, plus every hint (`.clue`).
 struct MapOverlay: View {
-    let map: GameMap
-    let document: PDFDocument
-    /// The map room the player is in, if known.
+    let svg: String
+    let mode: GameSession.MapMode
+    let visited: Set<String>
     let here: String?
     let onClose: () -> Void
 
@@ -19,7 +24,7 @@ struct MapOverlay: View {
         ZStack {
             Color.black.opacity(0.92)
                 .ignoresSafeArea()
-            ZoomableMap(map: map, document: document, here: here, zoom: zoom)
+            MapWebView(svg: svg, state: MapWebView.State(mode: mode, visited: visited, here: here), zoom: zoom)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(Theme.accent, lineWidth: 2))
                 .overlay(alignment: .bottomTrailing) { zoomButtons.padding(12) }
@@ -54,11 +59,13 @@ struct MapOverlay: View {
 
     private var zoomButtons: some View {
         HStack(spacing: 0) {
-            zoomButton("minus", help: "Zoom out (⌘-)", key: "-") { zoom.zoom(by: 1 / 1.4) }
+            zoomButton("minus", help: "Zoom out (⌘-)", key: "-") { zoom.run("zoomBy(1 / 1.4)") }
             Divider().frame(height: 18)
-            zoomButton("plus", help: "Zoom in (⌘+)", key: "=") { zoom.zoom(by: 1.4) }
+            zoomButton("plus", help: "Zoom in (⌘+)", key: "=") { zoom.run("zoomBy(1.4)") }
             Divider().frame(height: 18)
-            zoomButton("arrow.up.left.and.arrow.down.right", help: "Show the whole map (⌘0)", key: "0") { zoom.fit() }
+            zoomButton("arrow.up.left.and.arrow.down.right", help: "Show the whole map (⌘0)", key: "0") {
+                zoom.run("fitWholeMap()")
+            }
         }
         .background(RoundedRectangle(cornerRadius: 8).fill(.black.opacity(0.55)))
     }
@@ -78,196 +85,265 @@ struct MapOverlay: View {
         .accessibilityLabel(help)
     }
 
-    /// The map's PDF and room data, from Art/Map (written by scripts/map/render.sh).
+    /// The tagged map SVG from Art/Map (written by scripts/map/render.sh).
     @MainActor
-    static func load() -> (GameMap, PDFDocument)? {
-        guard let json = Artwork.url("Map/planetfall-map.json"), let pdf = Artwork.url("Map/planetfall-map.pdf"),
-              let map = GameMap.load(from: json), let document = PDFDocument(url: pdf) else { return nil }
-        return (map, document)
+    static func loadSVG() -> String? {
+        Artwork.url("Map/planetfall-map.svg").flatMap { try? String(contentsOf: $0, encoding: .utf8) }
     }
 }
 
-/// Lets the SwiftUI buttons drive the scroll view's zoom.
+/// Lets the SwiftUI buttons drive the page's zoom.
 @MainActor
 final class MapZoom {
-    fileprivate weak var scrollView: MapScrollView?
+    fileprivate weak var webView: WKWebView?
 
-    func zoom(by factor: CGFloat) { scrollView?.zoom(by: factor) }
-    func fit() { scrollView?.fitWholeMap() }
+    func run(_ script: String) { webView?.evaluateJavaScript(script) }
 }
 
-private struct ZoomableMap: NSViewRepresentable {
-    let map: GameMap
-    let document: PDFDocument
-    let here: String?
+private struct MapWebView: NSViewRepresentable {
+    let svg: String
+    let state: State
     let zoom: MapZoom
 
-    func makeNSView(context: Context) -> MapScrollView {
-        let canvas = MapCanvas(map: map, page: document.page(at: 0))
-        canvas.here = here
-        let scrollView = MapScrollView(canvas: canvas)
-        zoom.scrollView = scrollView
-        return scrollView
-    }
+    struct State: Equatable {
+        var mode: GameSession.MapMode
+        var visited: Set<String>
+        var here: String?
 
-    func updateNSView(_ scrollView: MapScrollView, context: Context) {
-        scrollView.canvas.here = here
-    }
-}
-
-/// Scrolls and magnifies the map. Magnifying redraws the vector map, so it stays sharp.
-fileprivate final class MapScrollView: NSScrollView {
-    let canvas: MapCanvas
-    private var placedInitially = false
-
-    init(canvas: MapCanvas) {
-        self.canvas = canvas
-        super.init(frame: .zero)
-        documentView = canvas
-        hasVerticalScroller = true
-        hasHorizontalScroller = true
-        autohidesScrollers = true
-        allowsMagnification = true
-        maxMagnification = 4
-        backgroundColor = MapCanvas.paper
-        drawsBackground = true
-    }
-
-    required init?(coder: NSCoder) { nil }
-
-    /// Small enough to see the whole map, but never larger than actual size.
-    private var fitMagnification: CGFloat {
-        guard canvas.frame.width > 0, bounds.width > 0 else { return 1 }
-        return min(bounds.width / canvas.frame.width, bounds.height / canvas.frame.height, 1)
-    }
-
-    override func layout() {
-        super.layout()
-        minMagnification = fitMagnification
-        guard !placedInitially, bounds.width > 0 else { return }
-        placedInitially = true
-        // Open at a readable size, centered on the player.
-        magnification = max(fitMagnification, 1.4)
-        center(on: canvas.markerCenter ?? CGPoint(x: canvas.frame.midX, y: canvas.frame.midY))
-    }
-
-    func zoom(by factor: CGFloat) {
-        let visible = contentView.bounds
-        setMagnification(magnification * factor, centeredAt: CGPoint(x: visible.midX, y: visible.midY))
-    }
-
-    func fitWholeMap() {
-        magnification = fitMagnification
-        center(on: CGPoint(x: canvas.frame.midX, y: canvas.frame.midY))
-    }
-
-    /// Scrolls so `point` (in map coordinates) is in the middle of the view.
-    func center(on point: CGPoint) {
-        let size = contentView.bounds.size
-        contentView.scroll(to: CGPoint(x: point.x - size.width / 2, y: point.y - size.height / 2))
-        reflectScrolledClipView(contentView)
-    }
-
-    /// ⌘- or ⌥-scrolling zooms around the pointer (for a mouse, which can't pinch); plain
-    /// scrolling moves around.
-    override func scrollWheel(with event: NSEvent) {
-        guard !event.modifierFlags.intersection([.command, .option]).isEmpty else { return super.scrollWheel(with: event) }
-        let delta = event.hasPreciseScrollingDeltas ? event.scrollingDeltaY * 0.01 : event.scrollingDeltaY * 0.1
-        let point = canvas.convert(event.locationInWindow, from: nil)
-        setMagnification(magnification * exp(delta), centeredAt: point)
-    }
-}
-
-/// Draws the map page and the "you are here" star. Dragging moves the map.
-fileprivate final class MapCanvas: NSView {
-    static let paper = NSColor(red: 0.965, green: 0.945, blue: 0.894, alpha: 1)
-    private static let red = NSColor(red: 0.84, green: 0.165, blue: 0.118, alpha: 1)
-
-    let map: GameMap
-    let page: PDFPage?
-    var here: String? {
-        didSet { if here != oldValue { needsDisplay = true } }
-    }
-    private var dragStart: (mouse: CGPoint, origin: CGPoint)?
-
-    init(map: GameMap, page: PDFPage?) {
-        self.map = map
-        self.page = page
-        super.init(frame: CGRect(origin: .zero, size: page?.bounds(for: .mediaBox).size ?? CGSize(width: 1000, height: 500)))
-    }
-
-    required init?(coder: NSCoder) { nil }
-
-    // Top-left origin, like the map's own coordinates.
-    override var isFlipped: Bool { true }
-
-    /// Points per map pixel (the PDF keeps the map's proportions).
-    private var scale: CGFloat { bounds.width / map.width }
-
-    /// The middle of the marker, in this view's coordinates.
-    var markerCenter: CGPoint? {
-        guard let here, let room = map.rooms[here] else { return nil }
-        let inset = map.marker.inset * scale
-        return CGPoint(x: (room.x + room.w) * map.width * scale - inset,
-                       y: (room.y + room.h) * map.height * scale - inset)
-    }
-
-    override func draw(_ dirtyRect: NSRect) {
-        guard let context = NSGraphicsContext.current?.cgContext else { return }
-        Self.paper.setFill()
-        dirtyRect.fill()
-        if let page {
-            context.saveGState()
-            context.translateBy(x: 0, y: bounds.height)
-            context.scaleBy(x: 1, y: -1)
-            page.draw(with: .mediaBox, to: context)
-            context.restoreGState()
+        /// The page's `show(...)` call for this state.
+        var script: String {
+            let rooms = (try? JSONEncoder().encode(visited.sorted())).flatMap { String(data: $0, encoding: .utf8) } ?? "[]"
+            let room = (try? JSONEncoder().encode(here)).flatMap { String(data: $0, encoding: .utf8) } ?? "null"
+            return "show('\(mode == .full ? "full" : "explored")', \(rooms), \(room))"
         }
-        if let center = markerCenter { drawMarker(at: center, radius: map.marker.radius * scale) }
     }
 
-    /// A red disc with a white five-pointed star, matching the static map's.
-    private func drawMarker(at center: CGPoint, radius r: CGFloat) {
-        let disc = NSBezierPath(ovalIn: CGRect(x: center.x - r, y: center.y - r, width: 2 * r, height: 2 * r))
-        Self.red.setFill()
-        disc.fill()
-        NSColor.white.setStroke()
-        disc.lineWidth = 1.2 * scale
-        disc.stroke()
-        let star = NSBezierPath()
-        for i in 0..<10 {
-            let angle = (-90 + 36 * CGFloat(i)) * .pi / 180
-            let radius = r * (i.isMultiple(of: 2) ? 0.66 : 0.27)
-            let point = CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle) + r * 0.04)
-            if i == 0 { star.move(to: point) } else { star.line(to: point) }
+    func makeNSView(context: Context) -> WKWebView {
+        let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        webView.navigationDelegate = context.coordinator
+        webView.underPageBackgroundColor = NSColor(red: 0.965, green: 0.945, blue: 0.894, alpha: 1)
+        webView.setValue(false, forKey: "drawsBackground")
+        webView.loadHTMLString(Self.page(svg: svg), baseURL: nil)
+        zoom.webView = webView
+        context.coordinator.pending = state
+        return webView
+    }
+
+    func updateNSView(_ webView: WKWebView, context: Context) {
+        context.coordinator.apply(state, to: webView)
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator() }
+
+    @MainActor
+    final class Coordinator: NSObject, WKNavigationDelegate {
+        var pending: State?
+        private var loaded = false
+        private var shown: State?
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            loaded = true
+            if let pending { apply(pending, to: webView) }
+            webView.evaluateJavaScript("openView()")
         }
-        star.close()
-        NSColor.white.setFill()
-        star.fill()
+
+        func apply(_ state: State, to webView: WKWebView) {
+            guard loaded else { pending = state; return }
+            guard state != shown else { return }
+            shown = state
+            webView.evaluateJavaScript(state.script)
+        }
     }
 
-    override func resetCursorRects() {
-        addCursorRect(visibleRect, cursor: dragStart == nil ? .openHand : .closedHand)
-    }
+    /// The SVG in a page that scales it (redrawn as vectors, so sharp at any zoom), pans by
+    /// dragging, and shows or hides its tagged parts.
+    static func page(svg: String) -> String {
+        """
+        <!doctype html><html><head><meta charset="utf-8"><style>
+        html, body { margin: 0; background: #f6f1e4; -webkit-user-select: none; user-select: none; cursor: grab; }
+        /* A map smaller than the window sits in the middle of it. */
+        body { display: flex; min-width: 100vw; min-height: 100vh; }
+        body.dragging { cursor: grabbing; }
+        svg { display: block; margin: auto; flex: none; }
+        .explored .clue, .explored .chrome { display: none; }
+        /* Story-gated passages look like any other on the explored map (purple would be a hint). */
+        .explored .story-line { stroke: #1f2a44; }
+        .explored .story-line[marker-end] { marker-end: url(#arrow); }
+        </style></head><body>
+        \(svg)
+        <script>
+        const svg = document.querySelector('svg');
+        const FULL_W = +svg.getAttribute('width'), FULL_H = +svg.getAttribute('height');
+        // The size of the part being shown: all of it, or (explored) a crop around what's been seen.
+        let W = FULL_W, H = FULL_H;
+        const INSET = 11, RADIUS = 8.5, PAD = 40;
+        // The rooms and links are drawn inside a translate(x, y) group.
+        const [OX, OY] = (svg.querySelector('g[transform]').getAttribute('transform').match(/[-\\d.]+/g) || [0, 0]).map(Number);
+        let scale = 1;
+        const fitScale = () => Math.min(innerWidth / W, innerHeight / H, 1);
 
-    override func mouseDown(with event: NSEvent) {
-        guard let clip = enclosingScrollView?.contentView else { return }
-        dragStart = (event.locationInWindow, clip.bounds.origin)
-        window?.invalidateCursorRects(for: self)
-    }
+        // Zoom to s, keeping the map point under (cx, cy) in the window where it is.
+        function setScale(s, cx, cy) {
+          s = Math.max(fitScale(), Math.min(4, s));
+          const x = (scrollX + cx) / scale, y = (scrollY + cy) / scale;
+          scale = s;
+          svg.setAttribute('width', W * s);
+          svg.setAttribute('height', H * s);
+          scrollTo(x * s - cx, y * s - cy);
+        }
+        function zoomBy(f) { setScale(scale * f, innerWidth / 2, innerHeight / 2); }
+        function fitWholeMap() { setScale(fitScale(), 0, 0); scrollTo(0, 0); }
+        // Both maps open zoomed all the way out: everything explored, or the whole map.
+        function openView() { fitWholeMap(); }
 
-    override func mouseDragged(with event: NSEvent) {
-        guard let start = dragStart, let scrollView = enclosingScrollView else { return }
-        let magnification = scrollView.magnification
-        let dx = (event.locationInWindow.x - start.mouse.x) / magnification
-        let dy = (event.locationInWindow.y - start.mouse.y) / magnification
-        // The window's y grows upward; this view's grows downward.
-        scrollView.contentView.scroll(to: CGPoint(x: start.origin.x - dx, y: start.origin.y + dy))
-        scrollView.reflectScrolledClipView(scrollView.contentView)
-    }
+        // Everything ("full"), or only explored rooms and the links, rides and regions between them.
+        function show(mode, visited, room) {
+          const seen = new Set(visited), explored = mode === 'explored';
+          document.body.classList.toggle('explored', explored);
+          const set = (el, on) => { el.style.display = on ? '' : 'none'; };
+          document.querySelectorAll('[data-room]').forEach(el => set(el, !explored || seen.has(el.dataset.room)));
+          document.querySelectorAll('[data-link]').forEach(el => {
+            whole(el);
+            if (!explored) return set(el, true);
+            const [a, b] = el.dataset.link.split(' ');
+            if (seen.has(a) && seen.has(b)) return set(el, true);
+            // An exit from a room the player has seen, to one they haven't: just its start, so they
+            // know they can go that way but not where it leads. (Rides only show once both ends are seen.)
+            const from = seen.has(a) ? a : seen.has(b) ? b : null;
+            set(el, from && !el.classList.contains('ride') && stub(el, from));
+          });
+          document.querySelectorAll('[data-region]').forEach(el =>
+            set(el, !explored || el.dataset.rooms.split(' ').some(r => seen.has(r))));
+          document.querySelectorAll('[data-any]').forEach(el => set(el, !explored || seen.has(el.dataset.any)));
+          const here = document.getElementById('here');
+          const box = room && document.querySelector(`[data-room="${room}"] rect`);
+          let marker = null;
+          if (box) {
+            const x = +box.getAttribute('x') + +box.getAttribute('width') - INSET;
+            const y = +box.getAttribute('y') + +box.getAttribute('height') - INSET;
+            here.setAttribute('transform', `translate(${x} ${y})`);
+            here.style.display = '';
+            marker = { x: x - RADIUS, y: y - RADIUS, width: 2 * RADIUS, height: 2 * RADIUS };
+          } else {
+            here.style.display = 'none';
+          }
+          fitRegions(explored ? seen : null);
+          crop(explored ? marker : null);
+        }
 
-    override func mouseUp(with event: NSEvent) {
-        dragStart = nil
-        window?.invalidateCursorRects(for: self)
+        // How much of an exit's line shows before it fades into the unexplored.
+        const STUB = 46;
+
+        // Shows only the end of a link's line at `room`; false if it isn't an exit from there (a
+        // one-way passage coming in). Remembers the visible part's box for cropping.
+        function stub(el, room) {
+          const path = el.querySelector('path');
+          const len = path.getTotalLength(), box = roomBox(room);
+          const c = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+          const p0 = path.getPointAtLength(0), p1 = path.getPointAtLength(len);
+          const fromStart = Math.hypot(p0.x - c.x, p0.y - c.y) <= Math.hypot(p1.x - c.x, p1.y - c.y);
+          const oneWay = path.hasAttribute('marker-end') && !path.hasAttribute('marker-start');
+          if (oneWay && !fromStart) return false;
+          const shown = Math.min(len * 0.5, STUB);
+          path.style.strokeDasharray = `${shown} ${len}`;
+          path.style.strokeDashoffset = fromStart ? 0 : -(len - shown);
+          path.style.markerEnd = path.style.markerStart = 'none';
+          path.style.stroke = '#1f2a44';   // a locked (blue) or story (purple) color would be a hint
+          // Keep an up/down tag at this end; hide the rest (gates, the far tag, labels).
+          const near = fromStart ? p0 : p1;
+          [...el.children].forEach(child => {
+            if (child === path) return;
+            const keep = child.tagName === 'text' &&
+              Math.hypot(+child.getAttribute('x') - near.x, +child.getAttribute('y') - near.y) < shown + 12;
+            if (!keep) child.style.display = 'none';
+          });
+          const points = [];
+          for (let i = 0; i <= 8; i++) points.push(path.getPointAtLength(fromStart ? shown * i / 8 : len - shown * i / 8));
+          el.stubBox = union(points.map(p => ({ x: p.x - 2, y: p.y - 2, width: 4, height: 4 })));
+          el.stubFrom = room;
+          return true;
+        }
+        // Undoes `stub`.
+        function whole(el) {
+          if (!el.stubBox) return;
+          const path = el.querySelector('path');
+          path.style.strokeDasharray = path.style.strokeDashoffset = path.style.markerEnd = path.style.markerStart = '';
+          path.style.stroke = '';
+          [...el.children].forEach(child => child.style.display = '');
+          el.stubBox = el.stubFrom = null;
+        }
+
+        // A room's box, from its rect (in the translated group's coordinates).
+        function roomBox(id) {
+          const r = document.querySelector(`[data-room="${id}"] rect`);
+          return r && { x: +r.getAttribute('x'), y: +r.getAttribute('y'), width: +r.getAttribute('width'), height: +r.getAttribute('height') };
+        }
+        function union(boxes) {
+          boxes = boxes.filter(b => b && b.width + b.height > 0);
+          if (!boxes.length) return null;
+          const x0 = Math.min(...boxes.map(b => b.x)), y0 = Math.min(...boxes.map(b => b.y));
+          const x1 = Math.max(...boxes.map(b => b.x + b.width)), y1 = Math.max(...boxes.map(b => b.y + b.height));
+          return { x: x0, y: y0, width: x1 - x0, height: y1 - y0 };
+        }
+
+        // On the explored map each region's box hugs just the rooms seen in it; the full map
+        // puts the boxes back.
+        function fitRegions(seen) {
+          document.querySelectorAll('[data-region]').forEach(g => {
+            const rect = g.querySelector('rect'), title = g.querySelector('text');
+            if (!g.dataset.box) g.dataset.box = JSON.stringify([rect.getAttribute('x'), rect.getAttribute('y'),
+              rect.getAttribute('width'), rect.getAttribute('height'), title.getAttribute('x'), title.getAttribute('y')]);
+            const [x, y, w, h, tx, ty] = JSON.parse(g.dataset.box);
+            const inside = seen ? g.dataset.rooms.split(' ').filter(r => seen.has(r)) : [];
+            const stubs = [...document.querySelectorAll('[data-link]')]
+              .filter(el => el.stubBox && inside.includes(el.stubFrom)).map(el => el.stubBox);
+            const rooms = inside.length ? union([...inside.map(roomBox), ...stubs]) : null;
+            const b = rooms ? { x: rooms.x - 16, y: rooms.y - 30, w: rooms.width + 32, h: rooms.height + 46 }
+                            : { x: +x, y: +y, w: +w, h: +h };
+            rect.setAttribute('x', b.x); rect.setAttribute('y', b.y);
+            rect.setAttribute('width', b.w); rect.setAttribute('height', b.h);
+            title.setAttribute('x', rooms ? b.x + 12 : tx); title.setAttribute('y', rooms ? b.y + 19 : ty);
+          });
+        }
+
+        // The explored map is only as big as what's been seen (plus a margin); the full map is all of it.
+        function crop(marker) {
+          let area = null;
+          if (document.body.classList.contains('explored')) {
+            const shown = [...document.querySelectorAll('[data-room], [data-link], [data-region], [data-any]')]
+              .filter(el => el.style.display !== 'none').map(el => el.stubBox || el.getBBox());
+            area = union(marker ? [...shown, marker] : shown);
+          }
+          if (area) {
+            W = area.width + 2 * PAD; H = area.height + 2 * PAD;
+            svg.setAttribute('viewBox', `${OX + area.x - PAD} ${OY + area.y - PAD} ${W} ${H}`);
+          } else {
+            W = FULL_W; H = FULL_H;
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+          }
+          setScale(scale, 0, 0);
+        }
+
+        // ⌘-, ⌥- or ctrl-scroll (and a pinch) zooms around the pointer; plain scrolling moves.
+        addEventListener('wheel', e => {
+          if (!(e.metaKey || e.altKey || e.ctrlKey)) return;
+          e.preventDefault();
+          setScale(scale * Math.exp(-e.deltaY * 0.01), e.clientX, e.clientY);
+        }, { passive: false });
+        let pinchFrom = 1;
+        addEventListener('gesturestart', e => { e.preventDefault(); pinchFrom = scale; });
+        addEventListener('gesturechange', e => { e.preventDefault(); setScale(pinchFrom * e.scale, e.clientX, e.clientY); });
+
+        // Dragging moves the map.
+        let drag = null;
+        addEventListener('mousedown', e => { drag = { x: e.clientX, y: e.clientY }; document.body.classList.add('dragging'); });
+        addEventListener('mousemove', e => {
+          if (!drag) return;
+          scrollBy(drag.x - e.clientX, drag.y - e.clientY);
+          drag = { x: e.clientX, y: e.clientY };
+        });
+        addEventListener('mouseup', () => { drag = null; document.body.classList.remove('dragging'); });
+        </script></body></html>
+        """
     }
 }

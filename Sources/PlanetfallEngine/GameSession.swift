@@ -72,8 +72,13 @@ public final class GameSession {
     @ObservationIgnored public var map: GameMap?
     /// Which room on the map the player is in.
     public private(set) var mapPosition = MapPosition()
-    /// Whether the full map is showing ("cheat: map"). The map view clears it when closed.
-    public var isShowingMap = false
+    /// Which map is showing, if any: what the player has explored ("map") or all of it
+    /// ("cheat: map"). The map view clears it when closed.
+    public var shownMap: MapMode?
+
+    public enum MapMode: Sendable, Equatable {
+        case explored, full
+    }
 
     /// The object the player is inside, from the object trace (e.g. "safety web"), or the
     /// room name when they're just standing in a room. Nil until the game reports a move.
@@ -228,6 +233,11 @@ public final class GameSession {
     public func send(_ line: String) {
         guard isRunning, let stdin, nap == nil, cheatRun == nil else { return }
         let line = line.replacingOccurrences(of: "\n", with: " ")
+        if MapCommand.matches(line) {
+            // Just opens the map: the game, the voices, and SNARK-9 never hear about it.
+            shownMap = .explored
+            return
+        }
         append(.command(id: takeID(), text: line))
         if let request = Cheat.request(in: line) {
             emit(.command(line))
@@ -242,7 +252,7 @@ public final class GameSession {
             case .map:
                 // Shown by the app; the game doesn't see it and no time passes.
                 append(.system(id: takeID(), text: "Cheat: map."))
-                isShowingMap = true
+                shownMap = .full
             }
             return
         }

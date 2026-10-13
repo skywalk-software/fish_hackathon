@@ -1,0 +1,1152 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3625" height="1814" viewBox="0 0 3625 1814" font-family="Avenir Next, Helvetica Neue, Helvetica, sans-serif">
+<rect width="100%" height="100%" fill="#f6f1e4"/>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2a44"/></marker>
+<marker id="arrowStory" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7d3c98"/></marker>
+<marker id="arrowRide" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f7a8c"/></marker>
+<marker id="arrowLock" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563c9"/></marker>
+</defs>
+<g transform="translate(471.6,116.8)">
+<text class="chrome" x="1976.1" y="100" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-weight="500" letter-spacing="6" fill="#1f2a44"><tspan font-size="128">P</tspan><tspan font-size="96">LANET</tspan><tspan font-size="128">F</tspan><tspan font-size="96">ALL</tspan></text>
+<g data-region="S.P.S. Feinstein" data-rooms="DECK-EIGHT BRIG GANGWAY DECK-NINE ESCAPE-POD REACTOR-LOBBY">
+<rect x="-8" y="1231" width="433" height="406" rx="18" fill="#5b7fa6" fill-opacity="0.10" stroke="#5b7fa6" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="4" y="1250" font-size="14" font-weight="700" letter-spacing="1.2" fill="#5b7fa6">S.P.S. FEINSTEIN</text>
+</g>
+<g data-region="Coast &amp; Castle" data-rooms="UNDERWATER CRAG BALCONY WINDING-STAIR COURTYARD WEST-WING">
+<rect x="-412" y="1066" width="374" height="571" rx="18" fill="#4f8f8a" fill-opacity="0.10" stroke="#4f8f8a" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="-400" y="1085" font-size="14" font-weight="700" letter-spacing="1.2" fill="#4f8f8a">COAST &amp; CASTLE</text>
+</g>
+<g data-region="Kalamontee Complex" data-rooms="PLAIN-HALL BOOTH-1 CONFERENCE-ROOM REC-AREA REC-CORRIDOR DORM-B SANFAC-B DORM-A SANFAC-A MESS-CORRIDOR STORAGE-WEST MESS-HALL KITCHEN DORM-CORRIDOR DORM-D SANFAC-D DORM-C SANFAC-C CORRIDOR-JUNCTION ADMIN-CORRIDOR-S SANFAC-E ADMIN-CORRIDOR SYSTEMS-MONITORS ADMIN-CORRIDOR-N PLAN-ROOM SMALL-OFFICE LARGE-OFFICE TRANSPORTATION-SUPPLY MECH-CORRIDOR-N STORAGE-EAST PHYSICAL-PLANT MECH-CORRIDOR REACTOR-CONTROL REACTOR-ELEVATOR REACTOR-ACCESS-STAIRS MECH-CORRIDOR-S TOOL-ROOM MACHINE-SHOP ROBOT-SHOP ELEVATOR-LOBBY BOOTH-2 UPPER-ELEVATOR LOWER-ELEVATOR">
+<rect x="-210" y="-57" width="1438" height="1092" rx="18" fill="#8a7a4f" fill-opacity="0.10" stroke="#8a7a4f" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="-198" y="-38" font-size="14" font-weight="700" letter-spacing="1.2" fill="#8a7a4f">KALAMONTEE COMPLEX</text>
+</g>
+<g data-region="Tower" data-rooms="UPPER-ELEVATOR@top TOWER-CORE COMM-ROOM OBSERVATION-DECK HELIPAD HELICOPTER">
+<rect x="1269" y="-57" width="531" height="485" rx="18" fill="#8a6a9a" fill-opacity="0.10" stroke="#8a6a9a" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="1281" y="-38" font-size="14" font-weight="700" letter-spacing="1.2" fill="#8a6a9a">TOWER</text>
+</g>
+<g data-region="Shuttle Line" data-rooms="LOWER-ELEVATOR@bottom WAITING-AREA KALAMONTEE-PLATFORM SHUTTLE-CAR-BETTY BETTY-CONTROL-WEST BETTY-CONTROL-EAST SHUTTLE-CAR-ALFIE ALFIE-CONTROL-WEST ALFIE-CONTROL-EAST LAWANDA-PLATFORM">
+<rect x="490" y="1085" width="856" height="319" rx="18" fill="#6a8a5a" fill-opacity="0.10" stroke="#6a8a5a" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="502" y="1104" font-size="14" font-weight="700" letter-spacing="1.2" fill="#6a8a5a">SHUTTLE LINE</text>
+</g>
+<g data-region="Lawanda Complex" data-rooms="FORK SYSTEMS-CORRIDOR-WEST INFIRMARY REPAIR-ROOM SYSTEMS-CORRIDOR PLANETARY-DEFENSE SYSTEMS-CORRIDOR-EAST PLANETARY-COURSE-CONTROL PHYSICAL-PLANT-TWO LIBRARY-LOBBY LIBRARY BOOTH-3 PROJECT-CORRIDOR-WEST SANFAC-F PROJECT-CORRIDOR PROJECT-CORRIDOR-EAST PROJCON-OFFICE CRYO-ELEVATOR CRYO-ANTEROOM COMPUTER-ROOM MINI-BOOTH MAIN-LAB LAB-STORAGE RADIATION-LOCK-WEST RADIATION-LOCK-EAST RADIATION-LAB BIO-LOCK-WEST BIO-LOCK-EAST BIO-LAB LAB-OFFICE AUXILIARY-BOOTH">
+<rect x="1655" y="458" width="1438" height="1007" rx="18" fill="#9a6a5a" fill-opacity="0.10" stroke="#9a6a5a" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="1667" y="477" font-size="14" font-weight="700" letter-spacing="1.2" fill="#9a6a5a">LAWANDA COMPLEX</text>
+</g>
+<g data-region="Inside the Computer (miniaturized)" data-rooms="STATION-384 STRIP-NEAR-STATION MIDDLE-OF-STRIP STRIP-NEAR-RELAY">
+<rect x="2327" y="1096" width="456" height="319" rx="18" fill="#5a6a9a" fill-opacity="0.10" stroke="#5a6a9a" stroke-opacity="0.55" stroke-width="1.5"/>
+<text x="2339" y="1115" font-size="14" font-weight="700" letter-spacing="1.2" fill="#5a6a9a">INSIDE THE COMPUTER (MINIATURIZED)</text>
+</g>
+<g data-link="DECK-NINE REACTOR-LOBBY">
+<path d="M249.6,1564.0 C266.1,1564.0 282.7,1564.0 299.2,1564.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DECK-NINE ESCAPE-POD">
+<path class="story-line" d="M153.6,1564.0 C136.1,1564.0 118.5,1564.0 101.0,1564.0" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="127.3" cy="1564.0" r="9" fill="#7d3c98"/>
+<text x="127.3" y="1568.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="DECK-NINE GANGWAY">
+<path d="M228.0,1538.0 C242.4,1511.8 160.8,1505.8 175.2,1479.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="228.3" y="1529.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+<text x="174.9" y="1493.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+</g>
+<g data-link="DECK-EIGHT GANGWAY">
+<path d="M175.2,1369.2 C160.8,1395.4 242.4,1401.4 228.0,1427.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="174.9" y="1383.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+<text x="228.3" y="1419.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+</g>
+<g data-link="ALFIE-CONTROL-EAST SHUTTLE-CAR-ALFIE">
+<path d="M1088.8,1361.6 C1068.8,1361.6 1056.2,1361.6 1036.2,1361.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ALFIE-CONTROL-WEST SHUTTLE-CAR-ALFIE">
+<path d="M893.6,1361.6 C913.6,1361.6 926.2,1361.6 946.2,1361.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BETTY-CONTROL-EAST SHUTTLE-CAR-BETTY">
+<path d="M1088.8,1140.8 C1068.8,1140.8 1056.2,1140.8 1036.2,1140.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BETTY-CONTROL-WEST SHUTTLE-CAR-BETTY">
+<path d="M893.6,1140.8 C913.6,1140.8 926.2,1140.8 946.2,1140.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="CRAG UNDERWATER">
+<path d="M-172.0,1479.6 C-186.4,1505.8 -104.8,1511.8 -119.2,1538.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="-172.3" y="1493.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+<text x="-118.9" y="1529.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+</g>
+<g data-link="BALCONY CRAG">
+<path class="story-line" d="M-172.0,1369.2 C-186.4,1395.4 -104.8,1401.4 -119.2,1427.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<text x="-172.3" y="1383.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+<text x="-118.9" y="1419.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+<g class="clue">
+<circle cx="-145.6" cy="1398.4" r="9" fill="#7d3c98"/>
+<text x="-145.6" y="1402.4" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="BALCONY WINDING-STAIR">
+<path class="story-line" d="M-119.2,1317.2 C-104.8,1291.0 -186.4,1285.0 -172.0,1258.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<text x="-118.9" y="1309.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+<text x="-172.3" y="1273.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+<g class="clue">
+<circle cx="-145.6" cy="1288.0" r="9" fill="#7d3c98"/>
+<text x="-145.6" y="1292.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="COURTYARD WINDING-STAIR">
+<path d="M-145.6,1148.4 C-145.6,1172.8 -107.5,1185.5 -119.2,1206.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="-143.0" y="1162.3" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">S/down</text>
+<text x="-117.0" y="1200.1" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+</g>
+<g data-link="COURTYARD WEST-WING">
+<path d="M-193.6,1122.4 C-210.1,1122.4 -226.7,1122.4 -243.2,1122.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="COURTYARD PLAIN-HALL">
+<path d="M-145.6,1096.4 C-145.6,960.4 -145.6,824.4 -145.6,688.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PLAIN-HALL REC-AREA">
+<path d="M-145.6,636.4 C-145.6,616.9 -145.6,597.5 -145.6,578.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PLAIN-HALL REC-CORRIDOR">
+<path d="M-101.6,640.4 C-82.4,618.3 -63.2,596.1 -44.0,574.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="CONFERENCE-ROOM REC-AREA">
+<path d="M-145.6,467.6 C-145.6,487.1 -145.6,506.5 -145.6,526.0" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="-145.6" cy="496.8" r="9" fill="#2563c9"/>
+<rect x="-149.6" y="495.8" width="8" height="6" rx="1" fill="#fff"/><path d="M-148.1,495.8 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="REC-AREA REC-CORRIDOR">
+<path d="M-97.6,552.0 C-81.1,552.0 -64.5,552.0 -48.0,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BOOTH-1 CONFERENCE-ROOM">
+<path d="M-145.6,357.2 C-145.6,376.7 -145.6,396.1 -145.6,415.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-B REC-CORRIDOR">
+<path d="M0.0,467.6 C0.0,487.1 0.0,506.5 0.0,526.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-A REC-CORRIDOR">
+<path d="M0.0,636.4 C0.0,616.9 0.0,597.5 0.0,578.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MESS-CORRIDOR REC-CORRIDOR">
+<path d="M97.6,552.0 C81.1,552.0 64.5,552.0 48.0,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-A SANFAC-A">
+<path d="M0.0,688.4 C0.0,707.9 0.0,727.3 0.0,746.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-B SANFAC-B">
+<path d="M0.0,415.6 C0.0,396.1 0.0,376.7 0.0,357.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-C DORM-CORRIDOR">
+<path d="M291.2,636.4 C291.2,616.9 291.2,597.5 291.2,578.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-C SANFAC-C">
+<path d="M291.2,688.4 C291.2,707.9 291.2,727.3 291.2,746.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-CORRIDOR DORM-D">
+<path d="M291.2,526.0 C291.2,506.5 291.2,487.1 291.2,467.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="DORM-D SANFAC-D">
+<path d="M291.2,415.6 C291.2,396.1 291.2,376.7 291.2,357.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MESS-CORRIDOR MESS-HALL">
+<path d="M145.6,578.0 C145.6,597.5 145.6,616.9 145.6,636.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MESS-CORRIDOR STORAGE-WEST">
+<path d="M145.6,526.0 C145.6,506.5 145.6,487.1 145.6,467.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="145.6" cy="496.8" r="9" fill="#2563c9"/>
+<rect x="141.6" y="495.8" width="8" height="6" rx="1" fill="#fff"/><path d="M143.1,495.8 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="DORM-CORRIDOR MESS-CORRIDOR">
+<path d="M243.2,552.0 C226.7,552.0 210.1,552.0 193.6,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="KITCHEN MESS-HALL">
+<path d="M145.6,746.8 C145.6,727.3 145.6,707.9 145.6,688.4" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="145.6" cy="717.6" r="9" fill="#2563c9"/>
+<rect x="141.6" y="716.6" width="8" height="6" rx="1" fill="#fff"/><path d="M143.1,716.6 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="ADMIN-CORRIDOR-S CORRIDOR-JUNCTION">
+<path d="M728.0,467.6 C728.0,487.1 728.0,506.5 728.0,526.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="CORRIDOR-JUNCTION MECH-CORRIDOR-N">
+<path d="M728.0,578.0 C728.0,597.5 728.0,616.9 728.0,636.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="CORRIDOR-JUNCTION ELEVATOR-LOBBY">
+<path d="M776.0,552.0 C841.1,552.0 906.1,552.0 971.2,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR ADMIN-CORRIDOR-S">
+<path d="M728.0,357.2 C728.0,376.7 728.0,396.1 728.0,415.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR-S SANFAC-E">
+<path d="M776.0,441.6 C792.5,441.6 809.1,441.6 825.6,441.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR SYSTEMS-MONITORS">
+<path d="M680.0,331.2 C663.5,331.2 646.9,331.2 630.4,331.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR-N TRANSPORTATION-SUPPLY">
+<path d="M728.0,139.6 C728.0,120.1 728.0,100.7 728.0,81.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR-N PLAN-ROOM">
+<path d="M776.0,165.6 C792.5,165.6 809.1,165.6 825.6,165.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR-N SMALL-OFFICE">
+<path d="M680.0,165.6 C663.5,165.6 646.9,165.6 630.4,165.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="LARGE-OFFICE SMALL-OFFICE">
+<path d="M484.8,165.6 C501.3,165.6 517.9,165.6 534.4,165.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR-N STORAGE-EAST">
+<path d="M776.0,662.4 C792.5,662.4 809.1,662.4 825.6,662.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR-N PHYSICAL-PLANT">
+<path d="M680.0,662.4 C656.0,662.4 643.3,678.7 626.4,695.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR MECH-CORRIDOR-N">
+<path d="M728.0,746.8 C728.0,727.3 728.0,707.9 728.0,688.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR REACTOR-CONTROL">
+<path d="M776.0,772.8 C792.5,772.8 809.1,772.8 825.6,772.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR PHYSICAL-PLANT">
+<path d="M680.0,772.8 C656.0,772.8 643.3,756.5 626.4,739.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR MECH-CORRIDOR-S">
+<path d="M728.0,798.8 C728.0,818.3 728.0,837.7 728.0,857.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR-S TOOL-ROOM">
+<path d="M684.0,905.2 C664.8,927.3 645.6,949.5 626.4,971.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MACHINE-SHOP MECH-CORRIDOR-S">
+<path d="M728.0,967.6 C728.0,948.1 728.0,928.7 728.0,909.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MECH-CORRIDOR-S ROBOT-SHOP">
+<path d="M772.0,905.2 C791.2,927.3 810.4,949.5 829.6,971.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="REACTOR-CONTROL REACTOR-ELEVATOR">
+<path d="M921.6,772.8 C939.1,772.8 956.7,772.8 974.2,772.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="945.4" y="764.8" width="5" height="16" fill="#1f2a44" transform="rotate(0.0 947.9 772.8)"/>
+</g>
+<g data-link="REACTOR-ACCESS-STAIRS REACTOR-CONTROL">
+<path d="M900.0,857.2 C914.4,831.0 832.8,825.0 847.2,798.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="900.3" y="849.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+<text x="846.9" y="813.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+</g>
+<g data-link="MACHINE-SHOP TOOL-ROOM">
+<path d="M680.0,993.6 C663.5,993.6 646.9,993.6 630.4,993.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MACHINE-SHOP ROBOT-SHOP">
+<path d="M776.0,993.6 C792.5,993.6 809.1,993.6 825.6,993.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BOOTH-2 ELEVATOR-LOBBY">
+<path d="M1116.8,552.0 C1100.3,552.0 1083.7,552.0 1067.2,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="TOWER-CORE UPPER-ELEVATOR@top">
+<path d="M1478.4,250.0 C1478.4,229.5 1478.4,209.1 1478.4,188.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="HELIPAD TOWER-CORE">
+<path d="M1564.0,191.6 C1548.8,219.3 1520.0,222.3 1504.8,250.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="1555.8" y="206.2" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">down</text>
+<text x="1513.0" y="241.4" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">up</text>
+</g>
+<g data-link="OBSERVATION-DECK TOWER-CORE">
+<path d="M1376.8,364.4 C1396.0,342.3 1415.2,320.1 1434.4,298.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="COMM-ROOM TOWER-CORE">
+<path d="M1692.0,187.6 C1635.5,209.7 1578.9,231.9 1522.4,254.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="HELICOPTER HELIPAD">
+<path d="M1590.4,78.2 C1590.4,98.7 1590.4,119.1 1590.4,139.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="1597.4" y="111.9" font-size="9.5" text-anchor="start" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">in / out</text>
+</g>
+<g data-link="KALAMONTEE-PLATFORM WAITING-AREA">
+<path d="M652.0,1251.2 C635.5,1251.2 618.9,1251.2 602.4,1251.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ESCALATOR LAWANDA-PLATFORM">
+<path d="M1330.4,1251.2 L1338.4,1251.2 Q1354.4,1251.2 1359.3,1236.0 L1422.8,1036.4 Q1427.7,1021.2 1443.7,1021.2 L1451.7,1021.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="1429.7" y="1016.2" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">W/down</text>
+<text x="1350.4" y="1268.2" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">E/up</text>
+</g>
+<g data-link="ESCALATOR FORK">
+<path d="M1547.7,1021.2 L1555.7,1021.2 Q1571.7,1021.2 1576.7,1006.0 L1642.2,806.4 Q1647.2,791.2 1663.2,791.2 L1671.2,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="1567.7" y="1038.2" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">E/up</text>
+<text x="1649.2" y="786.2" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">W/down</text>
+</g>
+<g data-link="FORK SYSTEMS-CORRIDOR-WEST">
+<path d="M1763.2,769.2 C1782.4,747.1 1801.6,724.9 1820.8,702.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="FORK PROJECT-CORRIDOR-WEST">
+<path d="M1763.2,813.2 C1782.4,835.3 1801.6,857.5 1820.8,879.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="INFIRMARY SYSTEMS-CORRIDOR-WEST">
+<path d="M1763.2,592.4 C1782.4,614.5 1801.6,636.7 1820.8,658.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="REPAIR-ROOM SYSTEMS-CORRIDOR-WEST">
+<path d="M1864.8,596.4 C1864.8,615.9 1864.8,635.3 1864.8,654.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="1864.8" y="608.7" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">S/up</text>
+<text x="1864.8" y="648.5" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3" paint-order="stroke" font-weight="600">N/down</text>
+</g>
+<g data-link="SYSTEMS-CORRIDOR SYSTEMS-CORRIDOR-WEST">
+<path d="M1962.4,680.8 C1945.9,680.8 1929.3,680.8 1912.8,680.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PLANETARY-DEFENSE SYSTEMS-CORRIDOR">
+<path d="M2010.4,596.4 C2010.4,615.9 2010.4,635.3 2010.4,654.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="SYSTEMS-CORRIDOR SYSTEMS-CORRIDOR-EAST">
+<path d="M2058.4,680.8 C2074.9,680.8 2091.5,680.8 2108.0,680.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="LIBRARY-LOBBY SYSTEMS-CORRIDOR-EAST">
+<path d="M2156.0,765.2 C2156.0,745.7 2156.0,726.3 2156.0,706.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PLANETARY-COURSE-CONTROL SYSTEMS-CORRIDOR-EAST">
+<path d="M2156.0,596.4 C2156.0,615.9 2156.0,635.3 2156.0,654.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PHYSICAL-PLANT-TWO SYSTEMS-CORRIDOR-EAST">
+<path d="M2253.6,680.8 C2237.1,680.8 2220.5,680.8 2204.0,680.8" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="LIBRARY LIBRARY-LOBBY">
+<path d="M2058.4,791.2 C2074.9,791.2 2091.5,791.2 2108.0,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="LIBRARY-LOBBY PROJECT-CORRIDOR-EAST">
+<path d="M2156.0,817.2 C2156.0,836.7 2156.0,856.1 2156.0,875.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BOOTH-3 LIBRARY-LOBBY">
+<path d="M2253.6,791.2 C2237.1,791.2 2220.5,791.2 2204.0,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PROJECT-CORRIDOR-WEST SANFAC-F">
+<path d="M1816.8,901.6 C1800.3,901.6 1783.7,901.6 1767.2,901.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PROJECT-CORRIDOR PROJECT-CORRIDOR-WEST">
+<path d="M1962.4,901.6 C1945.9,901.6 1929.3,901.6 1912.8,901.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PROJECT-CORRIDOR PROJECT-CORRIDOR-EAST">
+<path d="M2058.4,901.6 C2074.9,901.6 2091.5,901.6 2108.0,901.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="PROJCON-OFFICE PROJECT-CORRIDOR">
+<path d="M2010.4,986.0 C2010.4,966.5 2010.4,947.1 2010.4,927.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="CRYO-ELEVATOR PROJCON-OFFICE">
+<path class="story-line" d="M2010.4,1099.4 C2010.4,1078.9 2010.4,1058.5 2010.4,1038.0" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="2010.4" cy="1068.7" r="9" fill="#7d3c98"/>
+<text x="2010.4" y="1072.7" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="COMPUTER-ROOM PROJCON-OFFICE">
+<path d="M2108.0,1012.0 C2091.5,1012.0 2074.9,1012.0 2058.4,1012.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="COMPUTER-ROOM PROJECT-CORRIDOR-EAST">
+<path d="M2156.0,986.0 C2156.0,966.5 2156.0,947.1 2156.0,927.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MAIN-LAB PROJECT-CORRIDOR-EAST">
+<path d="M2399.2,901.6 C2334.1,901.6 2269.1,901.6 2204.0,901.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="COMPUTER-ROOM MINI-BOOTH">
+<path d="M2156.0,1038.0 C2156.0,1057.5 2156.0,1076.9 2156.0,1096.4" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="COMPUTER-ROOM MAIN-LAB">
+<path d="M2200.0,990.0 C2267.7,967.9 2335.5,945.7 2403.2,923.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="LAB-STORAGE MAIN-LAB">
+<path d="M2447.2,986.0 C2447.2,966.5 2447.2,947.1 2447.2,927.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BIO-LOCK-WEST MAIN-LAB">
+<path d="M2544.8,1012.0 C2505.5,1012.0 2519.0,951.4 2491.2,923.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="2511.2" y="970.2" width="5" height="16" fill="#1f2a44" transform="rotate(-104.8 2513.7 978.2)"/>
+</g>
+<g data-link="MAIN-LAB RADIATION-LOCK-WEST">
+<path d="M2491.2,879.6 C2519.0,851.8 2505.5,791.2 2544.8,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="2511.2" y="817.0" width="5" height="16" fill="#1f2a44" transform="rotate(-74.6 2513.7 825.0)"/>
+</g>
+<g data-link="BIO-LOCK-EAST BIO-LOCK-WEST">
+<path d="M2690.4,1012.0 C2673.9,1012.0 2657.3,1012.0 2640.8,1012.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="BIO-LAB BIO-LOCK-EAST">
+<path d="M2836.0,1012.0 C2819.5,1012.0 2802.9,1012.0 2786.4,1012.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="2808.7" y="1004.0" width="5" height="16" fill="#1f2a44" transform="rotate(180.0 2811.2 1012.0)"/>
+</g>
+<g data-link="RADIATION-LOCK-EAST RADIATION-LOCK-WEST">
+<path d="M2690.4,791.2 C2673.9,791.2 2657.3,791.2 2640.8,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="RADIATION-LAB RADIATION-LOCK-EAST">
+<path d="M2836.0,791.2 C2819.5,791.2 2802.9,791.2 2786.4,791.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="2808.7" y="783.2" width="5" height="16" fill="#1f2a44" transform="rotate(-180.0 2811.2 791.2)"/>
+</g>
+<g data-link="BIO-LAB LAB-OFFICE">
+<path d="M2932.0,1012.0 C2948.5,1012.0 2965.1,1012.0 2981.6,1012.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="2954.3" y="1004.0" width="5" height="16" fill="#1f2a44" transform="rotate(0.0 2956.8 1012.0)"/>
+</g>
+<g data-link="AUXILIARY-BOOTH LAB-OFFICE">
+<path d="M3029.6,1096.4 C3029.6,1076.9 3029.6,1057.5 3029.6,1038.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="STATION-384 STRIP-NEAR-STATION">
+<path d="M2439.2,1373.6 C2455.7,1373.6 2472.3,1373.6 2488.8,1373.6" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="MIDDLE-OF-STRIP STRIP-NEAR-STATION">
+<path class="story-line" d="M2536.8,1289.2 C2536.8,1308.6 2536.8,1328.1 2536.8,1347.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="2536.8" cy="1318.4" r="9" fill="#7d3c98"/>
+<text x="2536.8" y="1322.4" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="MIDDLE-OF-STRIP STRIP-NEAR-RELAY">
+<path class="story-line" d="M2536.8,1237.2 C2536.8,1217.7 2536.8,1198.2 2536.8,1178.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="2536.8" cy="1208.0" r="9" fill="#7d3c98"/>
+<text x="2536.8" y="1212.0" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="CORRIDOR-JUNCTION DORM-CORRIDOR">
+<path d="M680.0,552.0 C566.4,552.0 452.8,552.0 339.2,552.0" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+</g>
+<g data-link="ADMIN-CORRIDOR ADMIN-CORRIDOR-N">
+<path d="M728.0,305.2 C728.0,267.3 728.0,229.5 728.0,191.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="728.0" cy="248.4" r="9" fill="#2563c9"/>
+<rect x="724.0" y="247.4" width="8" height="6" rx="1" fill="#fff"/><path d="M725.5,247.4 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="ELEVATOR-LOBBY UPPER-ELEVATOR">
+<path d="M1019.2,526.0 C1019.2,505.5 1019.2,485.1 1019.2,464.6" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="1019.2" cy="495.3" r="9" fill="#2563c9"/>
+<rect x="1015.2" y="494.3" width="8" height="6" rx="1" fill="#fff"/><path d="M1016.7,494.3 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="ELEVATOR-LOBBY LOWER-ELEVATOR">
+<path d="M1019.2,578.0 C1019.2,598.5 1019.2,618.9 1019.2,639.4" fill="none" stroke="#2563c9" stroke-width="2.4"/>
+<circle cx="1019.2" cy="608.7" r="9" fill="#2563c9"/>
+<rect x="1015.2" y="607.7" width="8" height="6" rx="1" fill="#fff"/><path d="M1016.7,607.7 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+</g>
+<g data-link="LOWER-ELEVATOR@bottom WAITING-AREA">
+<path d="M554.4,1338.6 C554.4,1318.1 554.4,1297.7 554.4,1277.2" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<rect x="551.9" y="1299.9" width="5" height="16" fill="#1f2a44" transform="rotate(-90.0 554.4 1307.9)"/>
+</g>
+<g data-link="KALAMONTEE-PLATFORM SHUTTLE-CAR-BETTY">
+<path class="story-line" d="M700.0,1225.2 C700.0,1165.2 991.2,1223.8 991.2,1163.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="845.6" cy="1194.5" r="9" fill="#7d3c98"/>
+<text x="845.6" y="1198.5" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="KALAMONTEE-PLATFORM SHUTTLE-CAR-ALFIE">
+<path class="story-line" d="M700.0,1277.2 C700.0,1337.2 991.2,1278.6 991.2,1338.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="845.6" cy="1307.9" r="9" fill="#7d3c98"/>
+<text x="845.6" y="1311.9" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="LAWANDA-PLATFORM SHUTTLE-CAR-BETTY">
+<path class="story-line" d="M1282.4,1225.2 C1282.4,1165.2 991.2,1223.8 991.2,1163.8" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="1136.8" cy="1194.5" r="9" fill="#7d3c98"/>
+<text x="1136.8" y="1198.5" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g data-link="LAWANDA-PLATFORM SHUTTLE-CAR-ALFIE">
+<path class="story-line" d="M1282.4,1277.2 C1282.4,1337.2 991.2,1278.6 991.2,1338.6" fill="none" stroke="#7d3c98" stroke-width="2.4"/>
+<g class="clue">
+<circle cx="1136.8" cy="1307.9" r="9" fill="#7d3c98"/>
+<text x="1136.8" y="1311.9" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+</g>
+</g>
+<g class="ride" data-link="ESCAPE-POD UNDERWATER">
+<path d="M56.0,1587.0 C56.0,1657.0 -145.6,1660.0 -145.6,1590.0" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="CRYO-ELEVATOR CRYO-ANTEROOM">
+<path d="M2010.4,1145.4 C2010.4,1175.4 2010.4,1186.0 2010.4,1216.0" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="MINI-BOOTH STATION-384">
+<path d="M2156.0,1148.4 C2156.0,1348.4 2143.2,1373.6 2343.2,1373.6" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)" marker-start="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="REACTOR-LOBBY BRIG">
+<path d="M347.2,1538.0 C347.2,1508.0 347.2,1399.2 347.2,1369.2" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" marker-end="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="UPPER-ELEVATOR UPPER-ELEVATOR@top">
+<path d="M1019.2,418.6 L1019.2,165.6 L1433.4,165.6" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" stroke-linejoin="round" marker-end="url(#arrowRide)" marker-start="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="LOWER-ELEVATOR LOWER-ELEVATOR@bottom">
+<path d="M1064.2,662.4 L1204.0,662.4 L1204.0,1062.6 L448.0,1062.6 L448.0,1361.6 L509.4,1361.6" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" stroke-linejoin="round" marker-end="url(#arrowRide)" marker-start="url(#arrowRide)"/>
+</g>
+<g class="ride" data-link="STATION-384 AUXILIARY-BOOTH">
+<path d="M2391.2,1399.6 L2391.2,1437.0 L3029.6,1437.0 L3029.6,1148.4" fill="none" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5" stroke-linejoin="round" marker-end="url(#arrowRide)"/>
+</g>
+<g data-any="SHUTTLE-CAR-BETTY">
+<path d="M700,1141 H1282" stroke="#1f7a8c" stroke-width="10" stroke-opacity="0.10" stroke-linecap="round"/>
+<path d="M700,1137 H1282" stroke="#1f7a8c" stroke-width="1.3" stroke-opacity="0.75"/>
+<path d="M700,1145 H1282" stroke="#1f7a8c" stroke-width="1.3" stroke-opacity="0.75"/>
+<path d="M700,1133 V1149" stroke="#1f7a8c" stroke-width="3" stroke-linecap="round"/>
+<path d="M1282,1133 V1149" stroke="#1f7a8c" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g data-any="SHUTTLE-CAR-ALFIE">
+<path d="M700,1362 H1282" stroke="#1f7a8c" stroke-width="10" stroke-opacity="0.10" stroke-linecap="round"/>
+<path d="M700,1358 H1282" stroke="#1f7a8c" stroke-width="1.3" stroke-opacity="0.75"/>
+<path d="M700,1366 H1282" stroke="#1f7a8c" stroke-width="1.3" stroke-opacity="0.75"/>
+<path d="M700,1354 V1370" stroke="#1f7a8c" stroke-width="3" stroke-linecap="round"/>
+<path d="M1282,1354 V1370" stroke="#1f7a8c" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g class="clue">
+<path d="M1864.8,544.4 L1864.8,522.4" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="1864.8" cy="522.4" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M-193.6,1564.0 L-215.6,1564.0" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="-215.6" cy="1564.0" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M728.0,29.2 L728.0,7.2" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="728.0" cy="7.2" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M847.2,909.2 L836.6,928.5" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="836.6" cy="928.5" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M2584.8,1152.8 L2606.8,1152.8" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="2606.8" cy="1152.8" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M347.2,1590.0 L347.2,1612.0" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="347.2" cy="1612.0" r="3" fill="#7f8c8d"/>
+</g>
+<g class="clue">
+<path d="M201.6,1317.2 L201.6,1295.2" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/>
+<circle cx="201.6" cy="1295.2" r="3" fill="#7f8c8d"/>
+</g>
+<g data-room="DECK-EIGHT">
+<rect x="153.6" y="1317.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="201.6" y="1347.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Deck Eight</text>
+</g>
+<g data-room="BRIG">
+<rect x="299.2" y="1317.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="347.2" y="1347.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Brig</text>
+</g>
+<g data-room="GANGWAY">
+<rect x="153.6" y="1427.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="201.6" y="1457.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Gangway</text>
+</g>
+<g data-room="DECK-NINE">
+<rect x="153.6" y="1538.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="201.6" y="1568.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Deck Nine</text>
+</g>
+<g data-room="ESCAPE-POD">
+<rect x="11.0" y="1541.0" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="56.0" y="1568.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Escape Pod</text>
+</g>
+<g data-room="REACTOR-LOBBY">
+<rect x="299.2" y="1538.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="347.2" y="1568.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Reactor Lobby</text>
+</g>
+<g data-room="UNDERWATER">
+<rect x="-193.6" y="1538.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="1568.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Underwater</text>
+</g>
+<g data-room="CRAG">
+<rect x="-193.6" y="1427.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="1457.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Crag</text>
+</g>
+<g data-room="BALCONY">
+<rect x="-193.6" y="1317.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="1347.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Balcony</text>
+</g>
+<g data-room="WINDING-STAIR">
+<rect x="-193.6" y="1206.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="1236.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Winding Stair</text>
+</g>
+<g data-room="COURTYARD">
+<rect x="-193.6" y="1096.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="1126.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Courtyard</text>
+</g>
+<g data-room="WEST-WING">
+<rect x="-339.2" y="1096.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-291.2" y="1126.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">West Wing</text>
+</g>
+<g data-room="PLAIN-HALL">
+<rect x="-193.6" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="666.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Plain Hall</text>
+</g>
+<g data-room="BOOTH-1">
+<rect x="-193.6" y="305.2" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="335.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Booth 1</text>
+</g>
+<g data-room="CONFERENCE-ROOM">
+<rect x="-193.6" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="439.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Conference</text>
+<text x="-145.6" y="452.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Room</text>
+</g>
+<g data-room="REC-AREA">
+<rect x="-193.6" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="-145.6" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Rec Area</text>
+</g>
+<g data-room="REC-CORRIDOR">
+<rect x="-48.0" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="0.0" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Rec Corridor</text>
+</g>
+<g data-room="DORM-B">
+<rect x="-48.0" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="0.0" y="445.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Dorm B</text>
+</g>
+<g data-room="SANFAC-B">
+<rect x="-48.0" y="305.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="0.0" y="335.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac B</text>
+</g>
+<g data-room="DORM-A">
+<rect x="-48.0" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="0.0" y="666.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Dorm A</text>
+</g>
+<g data-room="SANFAC-A">
+<rect x="-48.0" y="746.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="0.0" y="776.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac A</text>
+</g>
+<g data-room="MESS-CORRIDOR">
+<rect x="97.6" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="145.6" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Mess Corridor</text>
+</g>
+<g data-room="STORAGE-WEST">
+<rect x="97.6" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="145.6" y="445.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Storage West</text>
+</g>
+<g data-room="MESS-HALL">
+<rect x="97.6" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="145.6" y="666.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Mess Hall</text>
+</g>
+<g data-room="KITCHEN">
+<rect x="97.6" y="746.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="145.6" y="776.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Kitchen</text>
+</g>
+<g data-room="DORM-CORRIDOR">
+<rect x="243.2" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="291.2" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Dorm Corridor</text>
+</g>
+<g data-room="DORM-D">
+<rect x="243.2" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="291.2" y="445.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Dorm D</text>
+</g>
+<g data-room="SANFAC-D">
+<rect x="243.2" y="305.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="291.2" y="335.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac D</text>
+</g>
+<g data-room="DORM-C">
+<rect x="243.2" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="291.2" y="666.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Dorm C</text>
+</g>
+<g data-room="SANFAC-C">
+<rect x="243.2" y="746.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="291.2" y="776.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac C</text>
+</g>
+<g data-room="CORRIDOR-JUNCTION">
+<rect x="680.0" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="549.5" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor</text>
+<text x="728.0" y="562.5" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Junction</text>
+</g>
+<g data-room="ADMIN-CORRIDOR-S">
+<rect x="680.0" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="439.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Admin Corridor</text>
+<text x="728.0" y="452.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">South</text>
+</g>
+<g data-room="SANFAC-E">
+<rect x="825.6" y="415.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="445.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac E</text>
+</g>
+<g data-room="ADMIN-CORRIDOR">
+<rect x="680.0" y="305.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="335.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Admin Corridor</text>
+</g>
+<g data-room="SYSTEMS-MONITORS">
+<rect x="534.4" y="305.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="582.4" y="328.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Systems</text>
+<text x="582.4" y="341.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Monitors</text>
+</g>
+<g data-room="ADMIN-CORRIDOR-N">
+<rect x="680.0" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="163.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Admin Corridor</text>
+<text x="728.0" y="176.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">North</text>
+</g>
+<g data-room="PLAN-ROOM">
+<rect x="825.6" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="169.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Plan Room</text>
+</g>
+<g data-room="SMALL-OFFICE">
+<rect x="534.4" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="582.4" y="169.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Small Office</text>
+</g>
+<g data-room="LARGE-OFFICE">
+<rect x="388.8" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="436.8" y="169.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Large Office</text>
+</g>
+<g data-room="TRANSPORTATION-SUPPLY">
+<rect x="680.0" y="29.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="52.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Transportation</text>
+<text x="728.0" y="65.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Supply (dark)</text>
+</g>
+<g data-room="MECH-CORRIDOR-N">
+<rect x="680.0" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="659.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Mech Corridor</text>
+<text x="728.0" y="672.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">North</text>
+</g>
+<g data-room="STORAGE-EAST">
+<rect x="825.6" y="636.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="666.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Storage East</text>
+</g>
+<g data-room="PHYSICAL-PLANT">
+<rect x="534.4" y="691.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="582.4" y="721.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Physical Plant</text>
+</g>
+<g data-room="MECH-CORRIDOR">
+<rect x="680.0" y="746.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="776.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Mech Corridor</text>
+</g>
+<g data-room="REACTOR-CONTROL">
+<rect x="825.6" y="746.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="770.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Reactor</text>
+<text x="873.6" y="783.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Control</text>
+</g>
+<g data-room="REACTOR-ELEVATOR">
+<rect x="974.2" y="749.8" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1019.2" y="770.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Reactor</text>
+<text x="1019.2" y="783.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Elevator</text>
+</g>
+<g data-room="REACTOR-ACCESS-STAIRS">
+<rect x="825.6" y="857.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="880.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Reactor Access</text>
+<text x="873.6" y="893.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Stairs</text>
+</g>
+<g data-room="MECH-CORRIDOR-S">
+<rect x="680.0" y="857.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="880.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Mech Corridor</text>
+<text x="728.0" y="893.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">South</text>
+</g>
+<g data-room="TOOL-ROOM">
+<rect x="534.4" y="967.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="582.4" y="997.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Tool Room</text>
+</g>
+<g data-room="MACHINE-SHOP">
+<rect x="680.0" y="967.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="728.0" y="997.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Machine Shop</text>
+</g>
+<g data-room="ROBOT-SHOP">
+<rect x="825.6" y="967.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="873.6" y="997.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Robot Shop</text>
+</g>
+<g data-room="ELEVATOR-LOBBY">
+<rect x="971.2" y="526.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1019.2" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Elevator Lobby</text>
+</g>
+<g data-room="BOOTH-2">
+<rect x="1116.8" y="526.0" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1164.8" y="556.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Booth 2</text>
+</g>
+<g data-room="UPPER-ELEVATOR">
+<rect x="974.2" y="418.6" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1019.2" y="439.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Upper Elevator</text>
+<text x="1019.2" y="451.1" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">blue door</text>
+</g>
+<g data-room="LOWER-ELEVATOR">
+<rect x="974.2" y="639.4" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1019.2" y="659.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Lower Elevator</text>
+<text x="1019.2" y="671.9" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">red door</text>
+</g>
+<g data-room="UPPER-ELEVATOR@top">
+<rect x="1433.4" y="142.6" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1478.4" y="163.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Upper Elevator</text>
+<text x="1478.4" y="175.1" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">at the top</text>
+</g>
+<g data-room="TOWER-CORE">
+<rect x="1430.4" y="250.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1478.4" y="280.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Tower Core</text>
+</g>
+<g data-room="COMM-ROOM">
+<rect x="1688.0" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1736.0" y="169.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Comm Room</text>
+</g>
+<g data-room="OBSERVATION-DECK">
+<rect x="1284.8" y="360.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1332.8" y="383.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Observation</text>
+<text x="1332.8" y="396.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Deck</text>
+</g>
+<g data-room="HELIPAD">
+<rect x="1542.4" y="139.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1590.4" y="169.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Helipad</text>
+</g>
+<g data-room="HELICOPTER">
+<rect x="1545.4" y="32.2" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1590.4" y="59.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Helicopter</text>
+</g>
+<g data-room="LOWER-ELEVATOR@bottom">
+<rect x="509.4" y="1338.6" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="554.4" y="1359.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Lower Elevator</text>
+<text x="554.4" y="1371.1" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">at the bottom</text>
+</g>
+<g data-room="WAITING-AREA">
+<rect x="506.4" y="1225.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="554.4" y="1255.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Waiting Area</text>
+</g>
+<g data-room="KALAMONTEE-PLATFORM">
+<rect x="652.0" y="1225.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="700.0" y="1248.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Kalamontee</text>
+<text x="700.0" y="1261.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Platform</text>
+</g>
+<g data-room="SHUTTLE-CAR-BETTY">
+<rect x="946.2" y="1117.8" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="991.2" y="1131.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Shuttle Car</text>
+<text x="991.2" y="1144.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Betty</text>
+<text x="991.2" y="1156.8" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">starts east</text>
+</g>
+<g data-room="BETTY-CONTROL-WEST">
+<rect x="797.6" y="1114.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="845.6" y="1138.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Betty Control</text>
+<text x="845.6" y="1151.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">West</text>
+</g>
+<g data-room="BETTY-CONTROL-EAST">
+<rect x="1088.8" y="1114.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1136.8" y="1138.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Betty Control</text>
+<text x="1136.8" y="1151.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">East</text>
+</g>
+<g data-room="SHUTTLE-CAR-ALFIE">
+<rect x="946.2" y="1338.6" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="991.2" y="1352.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Shuttle Car</text>
+<text x="991.2" y="1365.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Alfie</text>
+<text x="991.2" y="1377.6" font-size="9" font-style="italic" text-anchor="middle" fill="#1f2a44" opacity="0.7">starts west</text>
+</g>
+<g data-room="ALFIE-CONTROL-WEST">
+<rect x="797.6" y="1335.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="845.6" y="1359.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Alfie Control</text>
+<text x="845.6" y="1372.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">West</text>
+</g>
+<g data-room="ALFIE-CONTROL-EAST">
+<rect x="1088.8" y="1335.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1136.8" y="1359.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Alfie Control</text>
+<text x="1136.8" y="1372.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">East</text>
+</g>
+<g data-room="LAWANDA-PLATFORM">
+<rect x="1234.4" y="1225.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1282.4" y="1248.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Lawanda</text>
+<text x="1282.4" y="1261.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Platform</text>
+</g>
+<g data-room="ESCALATOR">
+<rect x="1451.7" y="995.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1499.7" y="1025.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Escalator</text>
+</g>
+<g data-room="FORK">
+<rect x="1671.2" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1719.2" y="795.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Fork</text>
+</g>
+<g data-room="SYSTEMS-CORRIDOR-WEST">
+<rect x="1816.8" y="654.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1864.8" y="678.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Systems</text>
+<text x="1864.8" y="691.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor West</text>
+</g>
+<g data-room="INFIRMARY">
+<rect x="1671.2" y="544.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1719.2" y="574.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Infirmary</text>
+</g>
+<g data-room="REPAIR-ROOM">
+<rect x="1816.8" y="544.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1864.8" y="574.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Repair Room</text>
+</g>
+<g data-room="SYSTEMS-CORRIDOR">
+<rect x="1962.4" y="654.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="678.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Systems</text>
+<text x="2010.4" y="691.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor</text>
+</g>
+<g data-room="PLANETARY-DEFENSE">
+<rect x="1962.4" y="544.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="567.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Planetary</text>
+<text x="2010.4" y="580.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Defense</text>
+</g>
+<g data-room="SYSTEMS-CORRIDOR-EAST">
+<rect x="2108.0" y="654.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="678.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Systems</text>
+<text x="2156.0" y="691.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor East</text>
+</g>
+<g data-room="PLANETARY-COURSE-CONTROL">
+<rect x="2108.0" y="544.4" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="574.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Course Control</text>
+</g>
+<g data-room="PHYSICAL-PLANT-TWO">
+<rect x="2253.6" y="654.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2301.6" y="684.8" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Physical Plant</text>
+</g>
+<g data-room="LIBRARY-LOBBY">
+<rect x="2108.0" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="795.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Library Lobby</text>
+</g>
+<g data-room="LIBRARY">
+<rect x="1962.4" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="795.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Library</text>
+</g>
+<g data-room="BOOTH-3">
+<rect x="2253.6" y="765.2" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2301.6" y="795.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Booth 3</text>
+</g>
+<g data-room="PROJECT-CORRIDOR-WEST">
+<rect x="1816.8" y="875.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1864.8" y="899.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Project</text>
+<text x="1864.8" y="912.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor West</text>
+</g>
+<g data-room="SANFAC-F">
+<rect x="1671.2" y="875.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="1719.2" y="905.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">SanFac F</text>
+</g>
+<g data-room="PROJECT-CORRIDOR">
+<rect x="1962.4" y="875.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="899.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Project</text>
+<text x="2010.4" y="912.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor</text>
+</g>
+<g data-room="PROJECT-CORRIDOR-EAST">
+<rect x="2108.0" y="875.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="899.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Project</text>
+<text x="2156.0" y="912.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Corridor East</text>
+</g>
+<g data-room="PROJCON-OFFICE">
+<rect x="1962.4" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">ProjCon Office</text>
+</g>
+<g data-room="CRYO-ELEVATOR">
+<rect x="1965.4" y="1099.4" width="90" height="46" rx="14" fill="#e3f1f4" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="1126.4" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Cryo-Elevator</text>
+</g>
+<g data-room="CRYO-ANTEROOM">
+<rect x="1962.4" y="1216.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2010.4" y="1246.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Cryo-Anteroom</text>
+</g>
+<g data-room="COMPUTER-ROOM">
+<rect x="2108.0" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Computer Room</text>
+</g>
+<g data-room="MINI-BOOTH">
+<rect x="2108.0" y="1096.4" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2156.0" y="1119.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Miniaturization</text>
+<text x="2156.0" y="1132.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Booth</text>
+</g>
+<g data-room="MAIN-LAB">
+<rect x="2399.2" y="875.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2447.2" y="905.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Main Lab</text>
+</g>
+<g data-room="LAB-STORAGE">
+<rect x="2399.2" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2447.2" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Lab Storage</text>
+</g>
+<g data-room="RADIATION-LOCK-WEST">
+<rect x="2544.8" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2592.8" y="788.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Radiation Lock</text>
+<text x="2592.8" y="801.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">West</text>
+</g>
+<g data-room="RADIATION-LOCK-EAST">
+<rect x="2690.4" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2738.4" y="788.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Radiation Lock</text>
+<text x="2738.4" y="801.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">East</text>
+</g>
+<g data-room="RADIATION-LAB">
+<rect x="2836.0" y="765.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2884.0" y="795.2" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Radiation Lab</text>
+</g>
+<g data-room="BIO-LOCK-WEST">
+<rect x="2544.8" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2592.8" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Bio Lock West</text>
+</g>
+<g data-room="BIO-LOCK-EAST">
+<rect x="2690.4" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2738.4" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Bio Lock East</text>
+</g>
+<g data-room="BIO-LAB">
+<rect x="2836.0" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2884.0" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Bio Lab</text>
+</g>
+<g data-room="LAB-OFFICE">
+<rect x="2981.6" y="986.0" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="3029.6" y="1016.0" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Lab Office</text>
+</g>
+<g data-room="AUXILIARY-BOOTH">
+<rect x="2981.6" y="1096.4" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="3029.6" y="1119.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Auxiliary</text>
+<text x="3029.6" y="1132.9" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Booth</text>
+</g>
+<g data-room="STATION-384">
+<rect x="2343.2" y="1347.6" width="96" height="52" rx="7" fill="#e8eefc" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2391.2" y="1377.6" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Station 384</text>
+</g>
+<g data-room="STRIP-NEAR-STATION">
+<rect x="2488.8" y="1347.6" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2536.8" y="1371.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Strip Near</text>
+<text x="2536.8" y="1384.1" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Station</text>
+</g>
+<g data-room="MIDDLE-OF-STRIP">
+<rect x="2488.8" y="1237.2" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2536.8" y="1260.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Middle of</text>
+<text x="2536.8" y="1273.7" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Strip</text>
+</g>
+<g data-room="STRIP-NEAR-RELAY">
+<rect x="2488.8" y="1126.8" width="96" height="52" rx="7" fill="#ffffff" stroke="#1f2a44" stroke-width="1.6"/>
+<text x="2536.8" y="1150.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Strip Near</text>
+<text x="2536.8" y="1163.3" font-size="11.5" font-weight="600" text-anchor="middle" fill="#1f2a44">Relay</text>
+</g>
+<g id="here" style="display:none"><circle cx="0.00" cy="0.00" r="8.5" fill="#d62a1e" stroke="#ffffff" stroke-width="1.2"/><polygon points="0.00,-5.27 1.35,-1.52 5.34,-1.39 2.18,1.05 3.30,4.88 0.00,2.63 -3.30,4.88 -2.18,1.05 -5.34,-1.39 -1.35,-1.52" fill="#ffffff"/></g>
+<text class="clue" x="127.3" y="1526.0" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">opens when the ship explodes</text>
+<text class="clue" x="-131.6" y="1402.4" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">floods on day 2</text>
+<text class="clue" x="-131.6" y="1292.0" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">floods on day 4</text>
+<text class="clue" x="-131.6" y="500.8" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">combination dial</text>
+<text class="clue" x="159.6" y="500.8" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">padlock: key from the crevice</text>
+<text class="clue" x="159.6" y="721.6" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">kitchen access card</text>
+<text class="clue" x="947.9" y="734.8" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">button opens it</text>
+<text class="clue" x="2024.4" y="1072.7" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">opens after the computer is fixed</text>
+<text class="clue" x="2550.8" y="1322.4" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">south: blocked while the microbe attacks</text>
+<text class="clue" x="2550.8" y="1212.0" font-size="9.5" text-anchor="start" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">south: blocked while the microbe attacks</text>
+<text class="clue" x="509.6" y="536.0" font-size="9.5" text-anchor="middle" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">a long, featureless hallway (160 moves of walking time)</text>
+<text class="clue" x="742.0" y="252.4" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">rift: lay the ladder across</text>
+<text class="clue" x="1033.2" y="499.3" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">upper elevator card</text>
+<text class="clue" x="1033.2" y="612.7" font-size="9.5" text-anchor="start" fill="#2563c9" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">lower elevator card</text>
+<text class="clue" x="568.4" y="1311.9" font-size="9.5" text-anchor="start" fill="#1f2a44" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">call the elevator</text>
+<text class="clue" x="845.6" y="1182.5" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Betty is here</text>
+<text class="clue" x="845.6" y="1295.9" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Alfie is here</text>
+<text class="clue" x="1136.8" y="1182.5" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Betty is here</text>
+<text class="clue" x="1136.8" y="1295.9" font-size="9.5" text-anchor="middle" fill="#7d3c98" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">when Alfie is here</text>
+<text class="clue" x="-30.8" y="1663.0" font-size="9.5" text-anchor="start" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">the pod launches and sinks offshore</text>
+<text class="clue" x="2024.4" y="1184.7" font-size="9.5" text-anchor="start" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">endgame: the elevator descends</text>
+<text class="clue" x="2188.6" y="1340.0" font-size="9.5" text-anchor="start" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">type 384 (miniaturization card)</text>
+<text class="clue" x="361.2" y="1457.6" font-size="9.5" text-anchor="start" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">Blather drags you here</text>
+<text class="clue" x="1220.8" y="155.6" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">blue elevator: up / down</text>
+<text class="clue" x="784.0" y="1052.6" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">red elevator: down / up</text>
+<text class="clue" x="2755.2" y="1427.0" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">once the computer is fixed, you return here</text>
+<text class="clue" x="991.2" y="1243.2" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">shuttle line: put the shuttle card in a control cabin and ride</text>
+<text class="clue" x="1864.8" y="500.4" font-size="9.5" text-anchor="middle" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">robot-sized door: Floyd only</text>
+<text class="clue" x="-223.6" y="1564.0" font-size="9.5" text-anchor="end" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">N, S, W, down: you swim in place</text>
+<text class="clue" x="728.0" y="-14.8" font-size="9.5" text-anchor="middle" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">N, E, W: lost in the dark</text>
+<text class="clue" x="833.7" y="925.2" font-size="9.5" text-anchor="middle" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">down: the stairs loop</text>
+<text class="clue" x="2612.8" y="1152.8" font-size="9.5" text-anchor="start" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">the relay (sealed)</text>
+<text class="clue" x="347.2" y="1624.0" font-size="9.5" text-anchor="middle" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">E, S: Blather blocks you</text>
+<text class="clue" x="201.6" y="1273.2" font-size="9.5" text-anchor="middle" fill="#7f8c8d" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">N, E, W: Blather blocks you</text>
+<text class="clue" x="-145.6" y="369.2" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">teleport (card)</text>
+<text class="clue" x="1164.8" y="590.0" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">teleport (card)</text>
+<text class="clue" x="2301.6" y="829.2" font-size="9.5" text-anchor="middle" fill="#1f7a8c" stroke="#f6f1e4" stroke-width="3.5" paint-order="stroke" font-weight="600">teleport (card)</text>
+<g class="chrome">
+<polygon points="2859.4,301.9 2813.9,347.4 2749.7,347.4 2704.2,301.9 2704.2,237.7 2749.7,192.2 2813.9,192.2 2859.4,237.7" fill="#f6f1e4" stroke="#1f2a44" stroke-width="5" stroke-linejoin="miter"/>
+<polygon points="2851.1,298.5 2810.5,339.1 2753.1,339.1 2712.5,298.5 2712.5,241.1 2753.1,200.5 2810.5,200.5 2851.1,241.1" fill="none" stroke="#1f2a44" stroke-width="1.4"/>
+<line x1="2781.8" y1="217.8" x2="2781.8" y2="201.8" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2786.5" y1="216.0" x2="2787.5" y2="205.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2791.2" y1="216.6" x2="2793.1" y2="205.8" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2795.8" y1="217.6" x2="2798.6" y2="207.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2800.3" y1="219.1" x2="2804.0" y2="208.7" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2804.6" y1="220.9" x2="2809.3" y2="210.9" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2808.8" y1="223.0" x2="2814.3" y2="213.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2812.8" y1="225.6" x2="2819.1" y2="216.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2816.5" y1="228.4" x2="2823.6" y2="220.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2818.6" y1="233.0" x2="2829.9" y2="221.7" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2823.2" y1="235.1" x2="2831.6" y2="228.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2826.0" y1="238.8" x2="2835.0" y2="232.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2828.6" y1="242.8" x2="2838.1" y2="237.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2830.7" y1="247.0" x2="2840.7" y2="242.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2832.5" y1="251.3" x2="2842.9" y2="247.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2834.0" y1="255.8" x2="2844.6" y2="253.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2835.0" y1="260.4" x2="2845.8" y2="258.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2835.6" y1="265.1" x2="2846.6" y2="264.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2833.8" y1="269.8" x2="2849.8" y2="269.8" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2835.6" y1="274.5" x2="2846.6" y2="275.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2835.0" y1="279.2" x2="2845.8" y2="281.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2834.0" y1="283.8" x2="2844.6" y2="286.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2832.5" y1="288.3" x2="2842.9" y2="292.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2830.7" y1="292.6" x2="2840.7" y2="297.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2828.6" y1="296.8" x2="2838.1" y2="302.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2826.0" y1="300.8" x2="2835.0" y2="307.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2823.2" y1="304.5" x2="2831.6" y2="311.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2818.6" y1="306.6" x2="2829.9" y2="317.9" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2816.5" y1="311.2" x2="2823.6" y2="319.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2812.8" y1="314.0" x2="2819.1" y2="323.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2808.8" y1="316.6" x2="2814.3" y2="326.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2804.6" y1="318.7" x2="2809.3" y2="328.7" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2800.3" y1="320.5" x2="2804.0" y2="330.9" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2795.8" y1="322.0" x2="2798.6" y2="332.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2791.2" y1="323.0" x2="2793.1" y2="333.8" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2786.5" y1="323.6" x2="2787.5" y2="334.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2781.8" y1="321.8" x2="2781.8" y2="337.8" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2777.1" y1="323.6" x2="2776.1" y2="334.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2772.4" y1="323.0" x2="2770.5" y2="333.8" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2767.8" y1="322.0" x2="2765.0" y2="332.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2763.3" y1="320.5" x2="2759.6" y2="330.9" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2759.0" y1="318.7" x2="2754.3" y2="328.7" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2754.8" y1="316.6" x2="2749.3" y2="326.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2750.8" y1="314.0" x2="2744.5" y2="323.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2747.1" y1="311.2" x2="2740.0" y2="319.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2745.0" y1="306.6" x2="2733.7" y2="317.9" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2740.4" y1="304.5" x2="2732.0" y2="311.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2737.6" y1="300.8" x2="2728.6" y2="307.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2735.0" y1="296.8" x2="2725.5" y2="302.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2732.9" y1="292.6" x2="2722.9" y2="297.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2731.1" y1="288.3" x2="2720.7" y2="292.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2729.6" y1="283.8" x2="2719.0" y2="286.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2728.6" y1="279.2" x2="2717.8" y2="281.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2728.0" y1="274.5" x2="2717.0" y2="275.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2729.8" y1="269.8" x2="2713.8" y2="269.8" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2728.0" y1="265.1" x2="2717.0" y2="264.1" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2728.6" y1="260.4" x2="2717.8" y2="258.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2729.6" y1="255.8" x2="2719.0" y2="253.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2731.1" y1="251.3" x2="2720.7" y2="247.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2732.9" y1="247.0" x2="2722.9" y2="242.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2735.0" y1="242.8" x2="2725.5" y2="237.3" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2737.6" y1="238.8" x2="2728.6" y2="232.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2740.4" y1="235.1" x2="2732.0" y2="228.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2745.0" y1="233.0" x2="2733.7" y2="221.7" stroke="#1f2a44" stroke-width="1.6"/>
+<line x1="2747.1" y1="228.4" x2="2740.0" y2="220.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2750.8" y1="225.6" x2="2744.5" y2="216.6" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2754.8" y1="223.0" x2="2749.3" y2="213.5" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2759.0" y1="220.9" x2="2754.3" y2="210.9" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2763.3" y1="219.1" x2="2759.6" y2="208.7" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2767.8" y1="217.6" x2="2765.0" y2="207.0" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2772.4" y1="216.6" x2="2770.5" y2="205.8" stroke="#1f2a44" stroke-width="0.9"/>
+<line x1="2777.1" y1="216.0" x2="2776.1" y2="205.0" stroke="#1f2a44" stroke-width="0.9"/>
+<path d="M2781.8,269.8 L2796.6,242.2 L2827.1,224.5 L2809.4,255.0 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2807.3,244.3 L2818.6,233.0" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2809.4,284.6 L2827.1,315.1 L2796.6,297.4 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2807.3,295.3 L2818.6,306.6" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2767.0,297.4 L2736.5,315.1 L2754.2,284.6 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2756.3,295.3 L2745.0,306.6" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2754.2,255.0 L2736.5,224.5 L2767.0,242.2 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2756.3,244.3 L2745.0,233.0" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2770.8,239.8 L2781.8,169.8 L2792.8,239.8 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2781.8,233.8 L2781.8,181.8" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2811.8,258.8 L2881.8,269.8 L2811.8,280.8 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2817.8,269.8 L2869.8,269.8" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2792.8,299.8 L2781.8,369.8 L2770.8,299.8 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2781.8,305.8 L2781.8,357.8" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M2781.8,269.8 L2751.8,280.8 L2681.8,269.8 L2751.8,258.8 z" fill="#1f2a44" stroke="#1f2a44" stroke-width="1" stroke-linejoin="miter"/>
+<path d="M2745.8,269.8 L2693.8,269.8" stroke="#f6f1e4" stroke-width="1.6" stroke-linecap="round"/>
+<circle cx="2781.8" cy="269.79999999999995" r="31" fill="#1f2a44"/>
+<circle cx="2781.8" cy="269.79999999999995" r="26" fill="#f6f1e4"/>
+<circle cx="2781.8" cy="269.79999999999995" r="22" fill="#1f2a44"/>
+<path d="M2784.9,258.2 L2787.0,250.5" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2790.3,261.3 L2795.9,255.7" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2793.4,266.7 L2801.1,264.6" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2793.4,272.9 L2801.1,275.0" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2790.3,278.3 L2795.9,283.9" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2784.9,281.4 L2787.0,289.1" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2778.7,281.4 L2776.6,289.1" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2773.3,278.3 L2767.7,283.9" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2770.2,272.9 L2762.5,275.0" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2770.2,266.7 L2762.5,264.6" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2773.3,261.3 L2767.7,255.7" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<path d="M2778.7,258.2 L2776.6,250.5" stroke="#f6f1e4" stroke-width="3.2" stroke-linecap="round"/>
+<circle cx="2781.8" cy="269.79999999999995" r="10" fill="#f6f1e4"/>
+<circle cx="2781.8" cy="269.79999999999995" r="7" fill="#1f2a44"/>
+<text x="2781.8" y="161.8" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="24" text-anchor="middle" fill="#1f2a44">N</text>
+<text x="2897.8" y="277.8" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="24" text-anchor="middle" fill="#1f2a44">E</text>
+<text x="2781.8" y="393.8" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="24" text-anchor="middle" fill="#1f2a44">S</text>
+<text x="2665.8" y="277.8" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="24" text-anchor="middle" fill="#1f2a44">W</text>
+<text x="2853.9" y="202.7" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">NE</text>
+<text x="2853.9" y="346.9" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">SE</text>
+<text x="2709.7" y="346.9" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">SW</text>
+<text x="2709.7" y="202.7" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-size="13" text-anchor="middle" fill="#1f2a44" opacity="0.8">NW</text>
+<text x="1988" y="156" font-size="15" font-weight="700" fill="#1f2a44">Legend</text>
+<circle cx="2009.80" cy="184.30" r="8.5" fill="#d62a1e" stroke="#ffffff" stroke-width="1.2"/><polygon points="2009.80,179.03 2011.15,182.78 2015.14,182.91 2011.98,185.35 2013.10,189.18 2009.80,186.93 2006.50,189.18 2007.62,185.35 2004.46,182.91 2008.45,182.78" fill="#ffffff"/>
+<text x="2043.8" y="188.29999999999995" font-size="12.5" fill="#1f2a44">You are here</text>
+<path d="M1987.8,209.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="2043.8" y="213.29999999999995" font-size="12.5" fill="#1f2a44">Open passage, leaving each room from the side you type. Tags mark up, down, in, out.</text>
+<path d="M1987.8,234.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4" marker-end="url(#arrow)"/>
+<text x="2043.8" y="238.29999999999995" font-size="12.5" fill="#1f2a44">One-way: you can go this way but not back.</text>
+<path d="M1987.8,259.29999999999995 h44" stroke="#1f2a44" stroke-width="2.4"/><rect x="2007.3" y="251.29999999999995" width="5" height="16" fill="#1f2a44"/>
+<text x="2043.8" y="263.29999999999995" font-size="12.5" fill="#1f2a44">Door that opens freely (or with a button)</text>
+<path d="M1987.8,284.29999999999995 h44" stroke="#2563c9" stroke-width="2.4"/><circle cx="2009.8" cy="284.29999999999995" r="9" fill="#2563c9"/>
+<rect x="2005.8" y="283.29999999999995" width="8" height="6" rx="1" fill="#fff"/><path d="M2007.3,283.29999999999995 v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>
+<text x="2043.8" y="288.29999999999995" font-size="12.5" fill="#1f2a44">Locked: needs an item or a puzzle solved (blue line)</text>
+<path d="M1987.8,309.29999999999995 h44" stroke="#7d3c98" stroke-width="2.4"/><circle cx="2009.8" cy="309.29999999999995" r="9" fill="#7d3c98"/>
+<text x="2009.8" y="313.79999999999995" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">?</text>
+<text x="2043.8" y="313.29999999999995" font-size="12.5" fill="#1f2a44">Opens or closes with story events (purple line)</text>
+<path d="M1987.8,334.29999999999995 h44" stroke="#1f7a8c" stroke-width="2.2" stroke-dasharray="7 5"/>
+<text x="2043.8" y="338.29999999999995" font-size="12.5" fill="#1f2a44">Ride: elevator, shuttle, teleport, miniaturization</text>
+<path d="M1987.8,366.29999999999995 q14,0 22,-7 t22,-7" fill="none" stroke="#1f2a44" stroke-width="2.4"/>
+<text x="2043.8" y="363.29999999999995" font-size="12.5" fill="#1f2a44">Up and down exits leave and enter at a slant</text>
+<path d="M1987.8,384.29999999999995 h22" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3 3"/><circle cx="2009.8" cy="384.29999999999995" r="3" fill="#7f8c8d"/>
+<text x="2043.8" y="388.29999999999995" font-size="12.5" fill="#1f2a44">Not an exit for you: a refusal, or a loop back to the same room</text>
+</g>
+</g></svg>

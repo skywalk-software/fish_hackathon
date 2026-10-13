@@ -365,15 +365,18 @@ def render(notes, path=None, mark_start=False):
     A('</defs>')
     A(f'<g transform="translate({ox:.1f},{oy:.1f})">')
     # Futura's P has a side bearing; pull the title left so its ink starts at the legend's edge
-    A(f'<text x="{LEGEND_AT[0] - TITLE_BIG * 0.0915:.1f}" y="{TITLE_BASE:.0f}" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-weight="500" '
+    A(f'<text class="chrome" x="{LEGEND_AT[0] - TITLE_BIG * 0.0915:.1f}" y="{TITLE_BASE:.0f}" font-family="Futura, Futura PT, Century Gothic, sans-serif" font-weight="500" '
       f'letter-spacing="6" fill="{C["ink"]}"><tspan font-size="{TITLE_BIG}">P</tspan><tspan font-size="{TITLE_SMALL}">LANET</tspan>'
       f'<tspan font-size="{TITLE_BIG}">F</tspan><tspan font-size="{TITLE_SMALL}">ALL</tspan></text>')
 
     # regions
     for title, members, tint in REGIONS:
         x0, y0, x1, y1 = RECTS[title]
+        inside = ' '.join(r for r in POS if region_of(r) == title)
+        A(f'<g data-region="{html.escape(title)}" data-rooms="{inside}">')
         A(f'<rect x="{x0:.0f}" y="{y0:.0f}" width="{x1 - x0:.0f}" height="{y1 - y0:.0f}" rx="18" fill="{tint}" fill-opacity="0.10" stroke="{tint}" stroke-opacity="0.55" stroke-width="1.5"/>')
         A(f'<text x="{x0 + 12:.0f}" y="{y0 + 19:.0f}" font-size="14" font-weight="700" letter-spacing="1.2" fill="{tint}">{html.escape(title.upper())}</text>')
+        A('</g>')
 
     labels = []   # drawn last so they sit on top
 
@@ -387,6 +390,7 @@ def render(notes, path=None, mark_start=False):
             A(f'<rect x="{x - 2.5:.1f}" y="{y - 8:.1f}" width="5" height="16" fill="{col}" transform="rotate({ang:.1f} {x:.1f} {y:.1f})"/>')
         else:
             glyph = {'lock': '\U0001F512', 'story': '?', 'floyd': '⚙'}.get(kind, '?')
+            if kind == 'story': A('<g class="clue">')   # a hint: hidden on the explored map
             A(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="{col}"/>')
             if kind == 'lock':
                 # a padlock drawn in lines (emoji don't print reliably)
@@ -394,6 +398,7 @@ def render(notes, path=None, mark_start=False):
                   f'<path d="M{x - 2.5:.1f},{y - 1:.1f} v-2.5 a2.5,2.5 0 0 1 5,0 v2.5" fill="none" stroke="#fff" stroke-width="1.6"/>')
             else:
                 A(f'<text x="{x:.1f}" y="{y + 4:.1f}" font-size="13" font-weight="800" text-anchor="middle" fill="#fff">{glyph}</text>')
+            if kind == 'story': A('</g>')
         if text:
             (sx, sy), (ex, ey) = pts[0], pts[3]
             side = abs(ey - sy) > abs(ex - sx)
@@ -430,6 +435,7 @@ def render(notes, path=None, mark_start=False):
                 (x0, y0_), (x3, y3) = pts[0], pts[3]
                 pts = ((x0, y0_), (x0 + (x3 - x0) / 3, y0_ + (y3 - y0_) / 3),
                        (x0 + 2 * (x3 - x0) / 3, y0_ + 2 * (y3 - y0_) / 3), (x3, y3))
+        A(f'<g data-link="{a} {b}">')
         gates = L_['gates']
         col = C['line']
         dash = ''
@@ -444,7 +450,8 @@ def render(notes, path=None, mark_start=False):
             A(f'<path d="{escalator_path(lo_p, hi_p)}" fill="none" stroke="{col}" stroke-width="{width}"/>')
             tag_at = {lo: (lo_p[0] + 20, lo_p[1] + 14), hi: (hi_p[0] - 22, hi_p[1] - 8)}
         else:
-            A(f'<path d="{path_d(pts)}" fill="none" stroke="{col}" stroke-width="{width}"{dash}{marker}/>')
+            story = ' class="story-line"' if col == C['story'] else ''
+            A(f'<path{story} d="{path_d(pts)}" fill="none" stroke="{col}" stroke-width="{width}"{dash}{marker}/>')
         # direction tags at each end when the link is bent or vertical
         # Compass exits read from the drawing. Tags mark up/down (with every direction that end
         # accepts, e.g. "S/down") and links you can only take with in/out.
@@ -474,6 +481,7 @@ def render(notes, path=None, mark_start=False):
         for i, g in enumerate(gates):
             gate_marker(pts, g, 0.5 + 0.12 * i)
         OWNER[0] = None
+        A('</g>')
         if (a, b) in [tuple(sorted(['DORM-CORRIDOR', 'CORRIDOR-JUNCTION']))]:
             x, y = bez(pts, 0.5)
             labels.append((x, y - 4, 'a long, featureless hallway (160 moves of walking time)', C['ink'], False))
@@ -482,8 +490,10 @@ def render(notes, path=None, mark_start=False):
     LABEL_AT = {'UPPER-ELEVATOR': 0.3, 'STATION-384': 0.93}
     for a, da, b, db, reach, text, one in RIDES:
         pts = curve(port(a, da), da, port(b, db), db, reach)
+        A(f'<g class="ride" data-link="{a} {b}">')
         m = ' marker-end="url(#arrowRide)"' if one else ' marker-end="url(#arrowRide)" marker-start="url(#arrowRide)"'
         A(f'<path d="{path_d(pts)}" fill="none" stroke="{C["ride"]}" stroke-width="2.2" stroke-dasharray="7 5"{m}/>')
+        A('</g>')
         x, y = bez(pts, LABEL_AT.get(a, 0.5))
         if a == 'ESCAPE-POD': y += 18   # under the dip, clear of the boxes
         x2, y2 = bez(pts, LABEL_AT.get(a, 0.5) + 0.02)
@@ -492,8 +502,10 @@ def render(notes, path=None, mark_start=False):
     for a, da, way, b, db, text, (lx_, ly_) in SHAFTS:
         pts = [port(a, da)] + [(x * GX, y * GY) for x, y in way] + [port(b, db)]
         d = 'M' + ' L'.join(f'{x:.1f},{y:.1f}' for x, y in pts)
+        A(f'<g class="ride" data-link="{a} {b}">')
         A(f'<path d="{d}" fill="none" stroke="{C["ride"]}" stroke-width="2.2" stroke-dasharray="7 5" stroke-linejoin="round" '
           f'marker-end="url(#arrowRide)"' + ('' if a in ONE_WAY_SHAFTS else ' marker-start="url(#arrowRide)"') + '/>')
+        A('</g>')
         labels.append((lx_ * GX, ly_ * GY + 2, text, C['ride'], lx_ * GX == pts[1][0]))
 
     # shuttle track: rails between the platforms, passing both cars' rows
@@ -501,20 +513,24 @@ def render(notes, path=None, mark_start=False):
     for yrow, car in ((POS['SHUTTLE-CAR-BETTY'][1], 'Betty'), (POS['SHUTTLE-CAR-ALFIE'][1], 'Alfie')):
         y = yrow * GY
         x0, x1 = k1[0], k2[0]
+        A(f'<g data-any="SHUTTLE-CAR-{car.upper()}">')
         # a maglev guideway: a soft glow between two thin rails, capped at each platform
         A(f'<path d="M{x0:.0f},{y:.0f} H{x1:.0f}" stroke="{C["ride"]}" stroke-width="10" stroke-opacity="0.10" stroke-linecap="round"/>')
         for dy in (-4, 4):
             A(f'<path d="M{x0:.0f},{y + dy:.0f} H{x1:.0f}" stroke="{C["ride"]}" stroke-width="1.3" stroke-opacity="0.75"/>')
         for x in (x0, x1):
             A(f'<path d="M{x:.0f},{y - 8:.0f} V{y + 8:.0f}" stroke="{C["ride"]}" stroke-width="3" stroke-linecap="round"/>')
+        A('</g>')
     labels.append(((k1[0] + k2[0]) / 2, k1[1] + 4, 'shuttle line: put the shuttle card in a control cabin and ride', C['ride'], False))
 
     # stubs
     for r, d, text in STUBS:
         p = port(r, d); v = VEC[d]; n = math.hypot(*v)
         q = (p[0] + v[0] / n * 22, p[1] + v[1] / n * 22)
+        A('<g class="clue">')
         A(f'<path d="M{p[0]:.1f},{p[1]:.1f} L{q[0]:.1f},{q[1]:.1f}" stroke="{C["stub"]}" stroke-width="2" stroke-dasharray="3 3"/>')
         A(f'<circle cx="{q[0]:.1f}" cy="{q[1]:.1f}" r="3" fill="{C["stub"]}"/>')
+        A('</g>')
         if d == 'WEST':   # read leftward from the stub's end
             labels.append((q[0] + 6, q[1] - 4, text, C['stub'], 'end', r))
         elif d == 'EAST':   # read rightward from the stub's end
@@ -539,6 +555,7 @@ def render(notes, path=None, mark_start=False):
         booth = r in ('BOOTH-1', 'BOOTH-2', 'BOOTH-3', 'MINI-BOOTH', 'AUXILIARY-BOOTH', 'STATION-384')
         if special_room: kind_fill = '#e3f1f4'
         if booth: kind_fill = '#e8eefc'
+        A(f'<g data-room="{r}">')
         A(f'<rect x="{cx - bw/2:.1f}" y="{cy - bh/2:.1f}" width="{bw}" height="{bh}" rx="{14 if special_room else 7}" fill="{kind_fill}" stroke="{stroke}" stroke-width="1.6"/>')
         lines = wrap(NAMES[r])
         sub = SUBTITLE.get(r)
@@ -549,10 +566,13 @@ def render(notes, path=None, mark_start=False):
             A(f'<text x="{cx:.1f}" y="{y0 + i * 13:.1f}" font-size="11.5" font-weight="600" text-anchor="middle" fill="{C["ink"]}">{html.escape(ln)}</text>')
         if sub:
             A(f'<text x="{cx:.1f}" y="{y0 + len(lines) * 13 - 1:.1f}" font-size="9" font-style="italic" text-anchor="middle" fill="{C["ink"]}" opacity="0.7">{html.escape(sub)}</text>')
+        A('</g>')
 
     if mark_start:   # the static map shows where the game starts
         cx, cy = center(START); w, h = size(START)
         A(you_are_here(cx + w / 2 - HERE_INSET, cy + h / 2 - HERE_INSET))
+    else:   # the game moves this one onto the player's room
+        A(f'<g id="here" style="display:none">{you_are_here(0, 0)}</g>')
 
     # labels on top
     for r, text in BADGES.items():
@@ -567,9 +587,11 @@ def render(notes, path=None, mark_start=False):
             w = len(text) * 5.5
             x0 = {'middle': x - w / 2, 'start': x, 'end': x - w}[anchor]
             owned.append((region_of(owner[0]), (x0, y - 22, x0 + w, y - 9)))
-        A(f'<text x="{x:.1f}" y="{y - 12:.1f}" font-size="9.5" text-anchor="{anchor}" fill="{col}" '
+        A(f'<text class="clue" x="{x:.1f}" y="{y - 12:.1f}" font-size="9.5" text-anchor="{anchor}" fill="{col}" '
           f'stroke="{C["bg"]}" stroke-width="3.5" paint-order="stroke" font-weight="600">{html.escape(text)}</text>')
 
+    # The title, compass, and legend only appear on the full map.
+    A('<g class="chrome">')
     # compass rose: octagonal frame, tick ring, eight-point star, ship's-wheel hub
     def octagon(cx, cy, r):
         return ' '.join(f'{cx + r * math.cos(math.radians(22.5 + 45 * i)):.1f},{cy + r * math.sin(math.radians(22.5 + 45 * i)):.1f}' for i in range(8))
@@ -654,6 +676,7 @@ def render(notes, path=None, mark_start=False):
             A(f'<path d="M{x},{y} h22" stroke="{C["stub"]}" stroke-width="2" stroke-dasharray="3 3"/><circle cx="{x + 22}" cy="{y}" r="3" fill="{C["stub"]}"/>')
         A(f'<text x="{x + 56}" y="{y + 4}" font-size="12.5" fill="{C["ink"]}">{html.escape(text)}</text>')
 
+    A('</g>')   # chrome
     A('</g></svg>')
     if path: open(path, 'w').write('\n'.join(out))
     if path and mark_start:

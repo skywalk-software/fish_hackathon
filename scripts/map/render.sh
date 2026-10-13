@@ -1,6 +1,6 @@
 #!/bin/sh
-# Renders the map SVGs to PNG and PDF with headless Chrome: planetfall-map (marked with where the
-# game starts) for docs/map, and planetfall-map-base (no marker) for the game's own copy in Art/Map.
+# Renders planetfall-map.svg (marked with where the game starts) to PNG and PDF with headless
+# Chrome, and moves the unmarked copy into Art/Map for the game.
 cd "$(dirname "$0")/../../docs/map"
 CH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 render() {  # $1 = SVG name without extension; $2 = also make a PNG
@@ -18,10 +18,10 @@ HTML
   rm -f page.html
 }
 render planetfall-map png
-render planetfall-map-base
 ls -la planetfall-map.png planetfall-map.pdf
-# The game app shows the unmarked map (cheat: map) and places its own marker from the JSON.
+# The game shows the unmarked SVG ("map" and "cheat: map"): it moves its own marker onto the
+# player's room and hides what they haven't explored, using the data-room/data-link tags.
 mkdir -p ../../Art/Map
-cp planetfall-map-base.pdf ../../Art/Map/planetfall-map.pdf
+mv planetfall-map-base.svg ../../Art/Map/planetfall-map.svg
 cp planetfall-map.json ../../Art/Map/
-rm -f planetfall-map-base.svg planetfall-map-base.pdf
+rm -f ../../Art/Map/planetfall-map.pdf

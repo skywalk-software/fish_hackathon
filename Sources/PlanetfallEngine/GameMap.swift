@@ -74,6 +74,21 @@ public struct GameMap: Decodable, Sendable {
     }
 }
 
+/// "MAP" (and "show map", "look at the map"...): show the part of the map the player has
+/// explored. Handled by the app; the game doesn't know the word.
+public enum MapCommand {
+    public static func matches(_ line: String) -> Bool {
+        let filler: Set<String> = ["the", "my", "me", "a", "at", "please", "game"]
+        let words = line.lowercased()
+            .components(separatedBy: CharacterSet.letters.inverted)
+            .filter { !$0.isEmpty && !filler.contains($0) }
+        guard let last = words.last, ["map", "maps"].contains(last) else { return false }
+        let verbs: Set<String> = ["show", "open", "view", "see", "check", "display", "look", "read", "examine",
+                                  "consult", "pull", "bring", "up"]
+        return words.dropLast().allSatisfy { verbs.contains($0) }
+    }
+}
+
 /// Follows which room on the map the player is in.
 ///
 /// The game reports where the player goes by name (dfrotz's object trace says
@@ -83,10 +98,15 @@ public struct GameMap: Decodable, Sendable {
 /// An elevator the player is riding switches ends when its door opens at the other one.
 public struct MapPosition: Equatable, Sendable {
     /// The map room id the player is in, or nil before the game has said.
-    public private(set) var room: String?
+    public private(set) var room: String? {
+        didSet { if let room { visited.insert(room) } }
+    }
+    /// Every map room the player has been in since the game started: what the "map" command shows.
+    public private(set) var visited: Set<String> = []
 
     public init(room: String? = nil) {
         self.room = room
+        if let room { visited = [room] }
     }
 
     /// The game prints this when an elevator the player is in arrives.
@@ -127,5 +147,6 @@ public struct MapPosition: Equatable, Sendable {
 
     public mutating func reset() {
         room = nil
+        visited = []
     }
 }

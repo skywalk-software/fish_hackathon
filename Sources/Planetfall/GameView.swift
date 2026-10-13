@@ -15,88 +15,92 @@ struct GameView: View {
     @State private var pendingVoiceCommand: String?
     /// The portrait shown full-window, if any: a character in the room or the sidekick.
     @State private var closeup: Portrait?
-    /// The full map and its PDF ("cheat: map"), loaded once.
-    @State private var fullMap = MapOverlay.load()
+    /// The map's SVG ("map", "cheat: map"), loaded once.
+    @State private var mapSVG = MapOverlay.loadSVG()
     /// The achievement banner currently showing, if any.
     @State private var toast: Achievement?
     @FocusState private var inputFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
-            StatusBar(status: session.status)
+            // Everything above the command line. Closeups and the map cover only this, so the
+            // player can keep typing (moving, talking to characters) while they're open.
             VStack(spacing: 0) {
-                RoomArtView(location: session.status?.location, artTags: session.artTags)
-                    // Sleeping darkens the room over the nap. The explosion snaps it back
-                    // instantly; the ambassador's wheezing fades it back in.
-                    .overlay {
-                        Color.black
-                            .opacity(session.isNapping ? 0.85 : 0)
-                            .allowsHitTesting(false)
-                            .animation(napDimAnimation, value: session.isNapping)
+                StatusBar(status: session.status)
+                VStack(spacing: 0) {
+                    RoomArtView(location: session.status?.location, artTags: session.artTags)
+                        // Sleeping darkens the room over the nap. The explosion snaps it back
+                        // instantly; the ambassador's wheezing fades it back in.
+                        .overlay {
+                            Color.black
+                                .opacity(session.isNapping ? 0.85 : 0)
+                                .allowsHitTesting(false)
+                                .animation(napDimAnimation, value: session.isNapping)
+                        }
+                        // Dying tints the room red over a second; it clears when you restart or restore.
+                        .overlay {
+                            Color.red
+                                .opacity(session.isDead ? 0.38 : 0)
+                                .allowsHitTesting(false)
+                                .animation(session.isDead ? .easeIn(duration: 1) : .easeOut(duration: 0.4),
+                                           value: session.isDead)
+                        }
+                    Divider()
+                    TranscriptTextView(entries: session.transcript)
+                }
+                // Characters in the room appear as portraits over the top corner, so room
+                // art never has to be drawn with and without each character.
+                .overlay(alignment: .topTrailing) {
+                    CharacterInsets(characters: session.presentCharacters, speakingID: voices?.speakingCharacterID,
+                                    openness: voices?.mouthOpenness ?? 0) { character in
+                        closeup = Portrait(artID: character.id, name: character.name)
                     }
-                    // Dying tints the room red over a second; it clears when you restart or restore.
-                    .overlay {
-                        Color.red
-                            .opacity(session.isDead ? 0.38 : 0)
-                            .allowsHitTesting(false)
-                            .animation(session.isDead ? .easeIn(duration: 1) : .easeOut(duration: 0.4),
-                                       value: session.isDead)
+                }
+                // New achievements, top-left so they don't cover character portraits.
+                .overlay(alignment: .topLeading) {
+                    if let toast {
+                        AchievementToast(achievement: toast) { self.toast = nil }
+                            .padding(16)
+                            .transition(.move(edge: .top).combined(with: .opacity))
                     }
-                Divider()
-                TranscriptTextView(entries: session.transcript)
-            }
-            // Characters in the room appear as portraits over the top corner, so room
-            // art never has to be drawn with and without each character.
-            .overlay(alignment: .topTrailing) {
-                CharacterInsets(characters: session.presentCharacters, speakingID: voices?.speakingCharacterID,
-                                openness: voices?.mouthOpenness ?? 0) { character in
-                    closeup = Portrait(artID: character.id, name: character.name)
+                }
+                .animation(.spring(duration: 0.4), value: toast)
+                if let sidekick, sidekick.isEnabled {
+                    Divider()
+                    SidekickBar(sidekick: sidekick,
+                                glow: voices?.speakingCharacterID == sidekick.persona.artID ? voices?.mouthOpenness ?? 0 : 0) {
+                        closeup = Portrait(artID: sidekick.persona.artID, name: sidekick.persona.name)
+                    }
                 }
             }
-            // New achievements, top-left so they don't cover character portraits.
-            .overlay(alignment: .topLeading) {
-                if let toast {
-                    AchievementToast(achievement: toast) { self.toast = nil }
-                        .padding(16)
-                        .transition(.move(edge: .top).combined(with: .opacity))
+            .overlay {
+                if let closeup, let image = Artwork.character(closeup.artID) {
+                    CharacterCloseup(name: closeup.name, image: image, jaw: PortraitJaw.byCharacter[closeup.artID],
+                                     glow: PortraitGlow.byCharacter[closeup.artID],
+                                     speaker: PortraitSpeaker.byCharacter[closeup.artID],
+                                     openness: voices?.speakingCharacterID == closeup.artID ? voices?.mouthOpenness ?? 0 : 0) {
+                        self.closeup = nil
+                    }
+                        .transition(.opacity)
                 }
             }
-            .animation(.spring(duration: 0.4), value: toast)
-            if let sidekick, sidekick.isEnabled {
-                Divider()
-                SidekickBar(sidekick: sidekick,
-                            glow: voices?.speakingCharacterID == sidekick.persona.artID ? voices?.mouthOpenness ?? 0 : 0) {
-                    closeup = Portrait(artID: sidekick.persona.artID, name: sidekick.persona.name)
+            .animation(.easeInOut(duration: 0.25), value: closeup)
+            .overlay {
+                if let mode = session.shownMap, let mapSVG {
+                    MapOverlay(svg: mapSVG, mode: mode, visited: session.mapPosition.visited,
+                               here: session.mapPosition.room) {
+                        session.shownMap = nil
+                    }
+                    .transition(.opacity)
                 }
             }
+            .animation(.easeInOut(duration: 0.25), value: session.shownMap)
             Divider()
             inputBar
         }
         .background(Theme.background)
-        .overlay {
-            if let closeup, let image = Artwork.character(closeup.artID) {
-                CharacterCloseup(name: closeup.name, image: image, jaw: PortraitJaw.byCharacter[closeup.artID],
-                                 glow: PortraitGlow.byCharacter[closeup.artID],
-                                 speaker: PortraitSpeaker.byCharacter[closeup.artID],
-                                 openness: voices?.speakingCharacterID == closeup.artID ? voices?.mouthOpenness ?? 0 : 0) {
-                    self.closeup = nil
-                }
-                    .transition(.opacity)
-            }
-        }
-        .animation(.easeInOut(duration: 0.25), value: closeup)
-        .overlay {
-            if session.isShowingMap, let (map, document) = fullMap {
-                MapOverlay(map: map, document: document, here: session.mapPosition.room) {
-                    session.isShowingMap = false
-                }
-                .transition(.opacity)
-            }
-        }
-        .animation(.easeInOut(duration: 0.25), value: session.isShowingMap)
-        .onChange(of: session.isShowingMap) { _, showing in
-            if !showing { focusCommandLine() }
-        }
+        // Keep (or put back) the cursor in the command line whenever the map opens or closes.
+        .onChange(of: session.shownMap) { _, _ in focusCommandLine() }
         .onChange(of: achievements?.latestUnlock) { _, unlocked in
             guard let unlocked else { return }
             toast = unlocked

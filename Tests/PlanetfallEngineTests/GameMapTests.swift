@@ -76,6 +76,26 @@ struct MapPositionTests {
         #expect(map.neighbors(of: "PHYSICAL-PLANT").contains("MECH-CORRIDOR-N"))
     }
 
+    @Test func remembersEveryRoomVisitedUntilReset() {
+        var position = MapPosition()
+        for room in ["Mech Corridor North", "Physical Plant", "Mech Corridor North"] {
+            position.update(with: moved(to: room), map: map)
+        }
+        #expect(position.visited == ["MECH-CORRIDOR-N", "PHYSICAL-PLANT"])
+        position.reset()
+        #expect(position.visited.isEmpty)
+    }
+
+    @Test func recognizesTheMapCommand() {
+        for line in ["map", "MAP", "show map", "Show me the map.", "look at the map", "open map", "view my map"] {
+            #expect(MapCommand.matches(line), "\(line)")
+            #expect(AppCommands.recognizes(line), "\(line)")
+        }
+        for line in ["drop map", "map room", "take the map", "cheat: map", "north"] {
+            #expect(!MapCommand.matches(line), "\(line)")
+        }
+    }
+
     @Test func cheatMapAsksForTheMap() {
         #expect(Cheat.request(in: "cheat: map") == .map)
         #expect(Cheat.request(in: "Cheat, map.") == .map)
@@ -108,8 +128,14 @@ struct MapPositionGameTests {
         try await play("west")
         #expect(session.mapPosition.room == "MACHINE-SHOP")
 
+        session.send("map")
+        #expect(session.shownMap == .explored)
+        #expect(session.mapPosition.visited.isSuperset(of: ["ROBOT-SHOP", "MACHINE-SHOP"]))
+        #expect(!session.mapPosition.visited.contains("TOWER-CORE"))
+        session.shownMap = nil
+
         session.send("cheat: map")
-        #expect(session.isShowingMap)
+        #expect(session.shownMap == .full)
         #expect(session.mapPosition.room == "MACHINE-SHOP")
         #expect(session.status?.location == "Machine Shop")
     }

@@ -65,5 +65,6 @@ public enum AppCommands {
     /// check, since words like "ears", "nap", and "cheat" aren't in the game's dictionary.
     public static func recognizes(_ line: String) -> Bool {
         EarPlugs.command(in: line) != nil || Nap.isNapCommand(line) || Cheat.request(in: line) != nil
+            || MapCommand.matches(line)
     }
 }
